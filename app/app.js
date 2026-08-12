@@ -265,7 +265,9 @@
         $("#wo-count").textContent = "COMPLETE";
         const p = PROGRAMS[pid], nx = FMP.next(pid);
         const allDone = FMP.done(pid).length >= p.days.length;
+        FML.complete(pid, day);
         $("#wo-done-nav").innerHTML =
+          `<a href="#/logbook/${pid}/${day}" class="press border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged">Review logbook</a>` +
           `<a href="#/program/${pid}" class="press border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged">Back to program</a>` +
           (allDone
             ? `<a href="#/today" class="press bg-ember rounded-lg px-6 py-3 text-sm font-semibold" style="color:var(--c-furnace)">Week complete — back to Today</a>`
@@ -276,8 +278,25 @@
         pulseStreak(true);
       };
       $("#wo-rest-skip").addEventListener("click", closeRestW);
+      const captureLog = () => {
+        const st = steps[i];
+        if (/reps$/.test(st.e.v)) {
+          const sets = [];
+          $$("#wo-set-rows > div", view).forEach((rw) => {
+            const done = rw.querySelector(".wo-check").classList.contains("bg-ember");
+            if (done) {
+              const inp = rw.querySelectorAll("input");
+              sets.push({ lb: inp[0].value || "0", reps: inp[1].value || "0" });
+            }
+          });
+          FML.log(pid, day, i, sets.length ? { n: st.e.n, sets } : { n: st.e.n, val: st.e.v });
+        } else {
+          FML.log(pid, day, i, { n: st.e.n, val: st.e.v });
+        }
+      };
       $("#wo-next").addEventListener("click", () => {
         const st = steps[i];
+        captureLog();
         if (i === steps.length - 1) { finish(); return; }
         i++;
         renderStep();

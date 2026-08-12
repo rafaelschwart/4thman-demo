@@ -357,6 +357,26 @@ const FMP = {
   },
 };
 
+/* ---- Logbook store: per program/day, entries in workout step order ---- */
+const FML = {
+  key: "fm-logbook",
+  load() { try { return JSON.parse(localStorage.getItem(this.key)) || {}; } catch (e) { return {}; } },
+  save(s) { try { localStorage.setItem(this.key, JSON.stringify(s)); } catch (e) {} },
+  day(pid, d) { const s = this.load(); return (s[pid] && s[pid][d]) || { entries: {}, completedAt: null }; },
+  log(pid, d, stepIdx, entry) {
+    const s = this.load();
+    s[pid] = s[pid] || {}; s[pid][d] = s[pid][d] || { entries: {}, completedAt: null };
+    s[pid][d].entries[stepIdx] = entry;
+    this.save(s);
+  },
+  complete(pid, d) {
+    const s = this.load();
+    s[pid] = s[pid] || {}; s[pid][d] = s[pid][d] || { entries: {}, completedAt: null };
+    s[pid][d].completedAt = new Date().toISOString().slice(0, 10);
+    this.save(s);
+  },
+};
+
 /* Flatten a session into an ordered, traceable exercise sequence */
 const flatWorkout = (pid, di) => {
   const S = sessOf(pid, di);
@@ -678,34 +698,58 @@ logbook: {
     const [id, dn] = (param || "foundations/1").split("/");
     const p = PROGRAMS[id] || PROGRAMS.foundations;
     const di = Math.min(Math.max(parseInt(dn || "1") - 1, 0), p.days.length - 1);
-    const S = sessOf(id, di);
-    const row = (n) => `
-      <div class="flex items-center justify-between bg-iron border border-whisper rounded-xl px-5 py-4 mb-3">
-        <div><p class="font-mono text-xs tracking-widest font-semibold mb-1">${n.toUpperCase()}</p>
-        <p class="text-sm text-ash">No logs recorded</p></div>${ICON("chevron_right", "text-ash")}
+    const steps = flatWorkout(id, di);
+    const book = FML.day(id, di + 1);
+    const row = (st, idx) => {
+      const rec = book.entries[idx];
+      let detail = '<p class="text-sm text-ash">No logs recorded</p>';
+      let logged = false;
+      if (rec) {
+        logged = true;
+        if (rec.sets && rec.sets.length) {
+          detail = '<p class="font-mono text-sm">' + rec.sets.map((x) => x.lb + " lb × " + x.reps).join(' <span class="text-ash">·</span> ') + "</p>";
+        } else {
+          detail = '<p class="font-mono text-sm">' + (rec.val || st.e.v) + ' <span class="text-ash">— completed</span></p>';
+        }
+      }
+      return `
+      <div class="flex items-center justify-between bg-iron border ${logged ? "border-ember/40" : "border-whisper"} rounded-xl px-5 py-4 mb-3">
+        <div class="min-w-0">
+          <p class="font-mono text-xs tracking-widest font-semibold mb-1">${st.e.n.toUpperCase()}</p>
+          ${detail}
+        </div>
+        ${logged ? `<span class="w-6 h-6 shrink-0 rounded-full bg-ember flex items-center justify-center" style="color:var(--c-furnace)">${ICON("check")}</span>` : ICON("chevron_right", "text-ash shrink-0")}
       </div>`;
-    const group = (label, names) => `
-      <div class="v-stagger mb-8">
-        <div class="flex items-center justify-between mb-3"><p class="text-lg font-semibold">${label}</p>${ICON("expand_less", "text-ash")}</div>
-        ${names.map(row).join("")}
-      </div>`;
+    };
+    // group consecutive steps by block label, preserving workout order
     const groups = [];
-    groups.push(group("Warm-up", S.warm.items.map((e) => e.n)));
-    S.sets.forEach((g) => {
-      const names = [];
-      for (let r = 0; r < Math.min(g.rounds, 3); r++) g.items.forEach((e) => names.push(e.n));
-      groups.push(group(g.head, names));
+    steps.forEach((st, idx) => {
+      const last = groups[groups.length - 1];
+      if (last && last.label === st.label) last.rows.push(row(st, idx));
+      else groups.push({ label: st.label, rows: [row(st, idx)] });
     });
-    groups.push(group("Cool-down", S.cool.items.map((e) => e.n)));
+    const cap = (l) => l.charAt(0) + l.slice(1).toLowerCase().replace(/(^|[ -])([a-z])/g, (m) => m.toUpperCase());
+    const loggedCount = Object.keys(book.entries).length;
     return `
   <div class="v-stagger flex items-center gap-3 mb-6">
     <a href="#/session/${id}/${di + 1}" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("close")}</a>
     <p class="font-mono text-xs tracking-[0.2em] text-ash mx-auto pr-9 text-center flex-1">REVIEW LOGBOOK</p>
   </div>
-  <div class="max-w-2xl">
+  <div class="max-w-2xl mx-auto">
     <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-1">${p.days[di].t}</h2>
-    <p class="v-stagger text-ash text-sm mb-10">${p.name}: Week ${p.week || 1}, Day ${di + 1}</p>
-    ${groups.join("")}
+    <p class="v-stagger text-ash text-sm mb-3">${p.name}: Week ${p.week || 1}, Day ${di + 1}</p>
+    <div class="v-stagger flex items-center gap-3 mb-8">
+      ${book.completedAt
+        ? `<span class="font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-2 py-1">COMPLETED ${book.completedAt}</span>`
+        : `<span class="font-mono text-[10px] tracking-widest text-ash border border-whisper rounded px-2 py-1">NOT STARTED</span>`}
+      <span class="font-mono text-xs text-ash">${loggedCount}/${steps.length} EXERCISES LOGGED</span>
+      ${loggedCount === 0 ? `<a href="#/workout/${id}/${di + 1}" class="text-sm text-ember hover:underline ml-auto">Start &amp; log this session</a>` : ""}
+    </div>
+    ${groups.map((g) => `
+    <div class="v-stagger mb-8">
+      <div class="flex items-center justify-between mb-3"><p class="text-lg font-semibold">${cap(g.label)}</p>${ICON("expand_less", "text-ash")}</div>
+      ${g.rows.join("")}
+    </div>`).join("")}
   </div>`; },
 },
 
