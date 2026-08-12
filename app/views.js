@@ -406,6 +406,62 @@ const flatWorkout = (pid, di) => {
   return steps;
 };
 
+/* ---------- coach roster: one source of truth for dashboard + client detail ---------- */
+const CLIENTS = {
+  nguyen: { id:"nguyen", img:"client-nguyen", n:"S. Nguyen", plan:"ESSENTIAL", price:"$97", st:"bad", stl:"SLIPPING", statusWord:"Slipping",
+    since:"JUN 2026", comp:41, streak:"0", last:"6 DAYS AGO", prog:"Foundations of Iron · WK 2/4", week:[1,0,0,1,0,0,0],
+    secs:[["TRAIN",30],["NUTRITION",55],["FAITH",10],["COMMUNITY",0]],
+    tip:"Opened the app twice this week, logged nothing. The drop started when Week 2 added morning sessions — offer the evening variant.", tone:"bad",
+    vol:"4,120 LB", wt:"+0.8 LB",
+    sessions:[["W2 · D1 · Push","6 DAYS AGO · 31 MIN","CUT SHORT — LEFT AT WARM-UP"],
+              ["W1 · D4 · Full","9 DAYS AGO · 55 MIN","SQUAT 5×5 @ 135"],
+              ["W1 · D2 · Pull","11 DAYS AGO · 48 MIN","ROWS 4×10 @ 95"]],
+    review:null, reviewNote:"No review submitted for 2 weeks. Last one flagged early mornings as the obstacle." },
+  alvarez: { id:"alvarez", img:"client-alvarez", n:"D. Alvarez", plan:"ESSENTIAL", price:"$97", st:"bad", stl:"SLIPPING", statusWord:"Slipping",
+    since:"MAR 2026", comp:55, streak:"2", last:"4 DAYS AGO", prog:"Furnace Conditioning · WK 3/4", week:[1,1,0,1,0,0,0],
+    secs:[["TRAIN",62],["NUTRITION",8],["FAITH",40],["COMMUNITY",25]],
+    tip:"Trains, but hasn't logged a meal in 12 days and weight trend went flat. Nutrition is the conversation.", tone:"bad",
+    vol:"7,660 LB", wt:"0.0 LB",
+    sessions:[["W3 · D3 · Conditioning","4 DAYS AGO · 42 MIN","AIR BIKE 10×30S HARD"],
+              ["W3 · D1 · Circuit","6 DAYS AGO · 39 MIN","KB SWINGS 5×20 @ 53"],
+              ["W2 · D4 · Full","8 DAYS AGO · 51 MIN","SLED 6×20M HEAVY"]],
+    review:{ wk:"W2", quote:"Training is fine. Eating on the road is where I lose it.", when:"SUBMITTED MON 6:15 AM" } },
+  ortega: { id:"ortega", img:"client-ortega", n:"R. Ortega", plan:"ESSENTIAL", price:"$97", st:"ash", stl:"PAUSED", statusWord:"Paused",
+    since:"FEB 2026", comp:62, streak:"—", last:"PAUSED", prog:"Steward the Temple · WK 1/4", week:[0,0,0,0,0,0,0], pay:"CARD DECLINED",
+    secs:[["TRAIN",0],["NUTRITION",0],["FAITH",65],["COMMUNITY",30]],
+    tip:"Paused after a travel week and his card declined on renewal. Still reads the Faith track daily — the door is open.", tone:"ash",
+    vol:"—", wt:"—",
+    sessions:[],
+    review:null, reviewNote:"Paused since JUL 28. Faith track opened every morning this week — a win-back nudge lands Friday." },
+  marcus: { id:"marcus", img:"client-marcus", n:"Marcus T.", plan:"ELITE", price:"$147", st:"ok", stl:"ON TRACK", statusWord:"Active",
+    since:"MAY 2026", comp:87, streak:"23", last:"TODAY", prog:"Foundations of Iron · WK 3/4", week:[1,1,1,0,1,1,1],
+    secs:[["TRAIN",92],["NUTRITION",80],["FAITH",88],["COMMUNITY",60]],
+    tip:"Bench PR at 205 after a month stalled. 23-day streak across training and faith — flag it in his weekly review.", tone:"ok",
+    vol:"12,480 LB", wt:"−1.2 LB",
+    sessions:[["W3 · D2 · Push","TODAY · 52 MIN","4×8 @ 205 BENCH — PR"],
+              ["W3 · D1 · Pull","2 DAYS AGO · 49 MIN","ROWS 4×10 @ 155"],
+              ["W2 · D4 · Full","5 DAYS AGO · 61 MIN","SQUAT 5×5 @ 225"]],
+    review:{ wk:"W2", quote:"Best week yet. Struggled with evening reading habit — done by 9 PM or it doesn't happen.", when:"SUBMITTED SUN 8:14 PM" } },
+  whitfield: { id:"whitfield", img:"client-whitfield", n:"J. Whitfield", plan:"ELITE", price:"$147", st:"ok", stl:"ON TRACK", statusWord:"Active",
+    since:"JAN 2026", comp:94, streak:"41", last:"YESTERDAY", prog:"Iron Sharpens Iron · WK 4/4", week:[1,1,1,1,1,0,1],
+    secs:[["TRAIN",96],["NUTRITION",74],["FAITH",90],["COMMUNITY",95]],
+    tip:"Finishes Iron Sharpens Iron on Sunday and leads the 5 AM crew. Assign his next block now, before the gap.", tone:"ok",
+    vol:"15,220 LB", wt:"−0.4 LB",
+    sessions:[["W4 · D5 · Brotherhood","YESTERDAY · 45 MIN","PARTNER WOD — 5 AM CREW"],
+              ["W4 · D3 · Carry","3 DAYS AGO · 40 MIN","FARMER CARRY 6×40M @ 70"],
+              ["W4 · D1 · Pull","5 DAYS AGO · 50 MIN","WEIGHTED PULL-UPS 5×5 @ +25"]],
+    review:{ wk:"W3", quote:"Strongest block yet. The 5 AM crew kept me honest all four weeks.", when:"SUBMITTED SUN 7:02 PM" } },
+  boateng: { id:"boateng", img:"client-boateng", n:"K. Boateng", plan:"ELITE", price:"$147", st:"ok", stl:"ON TRACK", statusWord:"Active",
+    since:"JUL 2026", comp:81, streak:"12", last:"TODAY", prog:"The Fourth Man Protocol · WK 1/4", week:[1,1,0,1,1,1,0],
+    secs:[["TRAIN",85],["NUTRITION",66],["FAITH",50],["COMMUNITY",70]],
+    tip:"Strong first week on the Protocol at 81%. Faith engagement is his low surface — a nudge lands well now.", tone:"ok",
+    vol:"9,840 LB", wt:"−2.1 LB",
+    sessions:[["W1 · D4 · Engine","TODAY · 38 MIN","ROWER 8×500M @ 1:52"],
+              ["W1 · D2 · Push","2 DAYS AGO · 44 MIN","THRUSTERS 4×12 @ 35S"],
+              ["W1 · D1 · Foundation","4 DAYS AGO · 47 MIN","GOBLET SQUAT 4×10 @ 53"]],
+    review:{ wk:"W1", quote:"First week hurt in the right way. The rower owns me for now.", when:"SUBMITTED SUN 9:40 PM" } },
+};
+
 const VIEWS = {
 
 overview: { title: "Overview", phase2: false, html: () => {
@@ -1797,32 +1853,7 @@ coach: { title: "Coach — Dashboard", phase2: false, html: `
       <p class="font-mono text-3xl ${c}"><span class="count" data-to="${v}">0</span></p>
     </div>`).join("")}
   </div>
-  ${[
-    { img:"client-nguyen", n:"S. Nguyen", plan:"ESSENTIAL", st:"bad", stl:"SLIPPING", comp:41, streak:"0",
-      last:"6 DAYS AGO", prog:"Foundations of Iron · WK 2/4", week:[1,0,0,1,0,0,0],
-      secs:[["TRAIN",30],["NUTRITION",55],["FAITH",10],["COMMUNITY",0]],
-      tip:"Opened the app twice this week, logged nothing. The drop started when Week 2 added morning sessions — offer the evening variant.", tone:"bad" },
-    { img:"client-alvarez", n:"D. Alvarez", plan:"ESSENTIAL", st:"bad", stl:"SLIPPING", comp:55, streak:"2",
-      last:"4 DAYS AGO", prog:"Furnace Conditioning · WK 3/4", week:[1,1,0,1,0,0,0],
-      secs:[["TRAIN",62],["NUTRITION",8],["FAITH",40],["COMMUNITY",25]],
-      tip:"Trains, but hasn't logged a meal in 12 days and weight trend went flat. Nutrition is the conversation.", tone:"bad" },
-    { img:"client-ortega", n:"R. Ortega", plan:"ESSENTIAL", st:"ash", stl:"PAUSED", comp:62, streak:"—",
-      last:"PAUSED", prog:"Steward the Temple · WK 1/4", week:[0,0,0,0,0,0,0], pay:"CARD DECLINED",
-      secs:[["TRAIN",0],["NUTRITION",0],["FAITH",65],["COMMUNITY",30]],
-      tip:"Paused after a travel week and his card declined on renewal. Still reads the Faith track daily — the door is open.", tone:"ash" },
-    { img:"client-marcus", n:"Marcus T.", plan:"ELITE", st:"ok", stl:"ON TRACK", comp:87, streak:"23",
-      last:"TODAY", prog:"Foundations of Iron · WK 3/4", week:[1,1,1,0,1,1,1],
-      secs:[["TRAIN",92],["NUTRITION",80],["FAITH",88],["COMMUNITY",60]],
-      tip:"Bench PR at 205 after a month stalled. 23-day streak across training and faith — flag it in his weekly review.", tone:"ok" },
-    { img:"client-whitfield", n:"J. Whitfield", plan:"ELITE", st:"ok", stl:"ON TRACK", comp:94, streak:"41",
-      last:"YESTERDAY", prog:"Iron Sharpens Iron · WK 4/4", week:[1,1,1,1,1,0,1],
-      secs:[["TRAIN",96],["NUTRITION",74],["FAITH",90],["COMMUNITY",95]],
-      tip:"Finishes Iron Sharpens Iron on Sunday and leads the 5 AM crew. Assign his next block now, before the gap.", tone:"ok" },
-    { img:"client-boateng", n:"K. Boateng", plan:"ELITE", st:"ok", stl:"ON TRACK", comp:81, streak:"12",
-      last:"TODAY", prog:"The Fourth Man Protocol · WK 1/4", week:[1,1,0,1,1,1,0],
-      secs:[["TRAIN",85],["NUTRITION",66],["FAITH",50],["COMMUNITY",70]],
-      tip:"Strong first week on the Protocol at 81%. Faith engagement is his low surface — a nudge lands well now.", tone:"ok" },
-  ].map((c,ci)=>`
+  ${Object.values(CLIENTS).map((c,ci)=>`
   ${ci===0?'<p class="v-stagger font-mono text-xs tracking-widest text-bad mb-4 mt-2">NEEDS ATTENTION · 3</p><div class="grid grid-cols-3 gap-5 mb-10">':""}
   ${ci===3?'</div><p class="v-stagger font-mono text-xs tracking-widest text-ok mb-4">ON TRACK · 3</p><div class="grid grid-cols-3 gap-5 mb-4">':""}
     <section class="v-stagger bg-iron border ${c.st==="bad"?"border-bad/40":"border-whisper"} rounded-xl p-5 flex flex-col">
@@ -1859,64 +1890,99 @@ coach: { title: "Coach — Dashboard", phase2: false, html: `
         <span class="font-mono text-[10px] tracking-widest text-ash">STREAK <span class="text-bone">${c.streak}</span> · ${c.last}</span>
         <span class="flex gap-2">
           <a href="#/messages" class="press font-mono text-[10px] tracking-widest border border-whisper rounded-lg px-3 py-2 hover:bg-forged">MESSAGE</a>
-          <a href="#/client" class="press font-mono text-[10px] tracking-widest ${c.st==="bad"?"bg-ember":"border border-whisper hover:bg-forged"} rounded-lg px-3 py-2" ${c.st==="bad"?'style="color:var(--c-furnace)"':""}>OPEN</a>
+          <a href="#/client/${c.id}" class="press font-mono text-[10px] tracking-widest ${c.st==="bad"?"bg-ember":"border border-whisper hover:bg-forged"} rounded-lg px-3 py-2" ${c.st==="bad"?'style="color:var(--c-furnace)"':""}>OPEN</a>
         </span>
       </div>
     </section>
   ${ci===5?"</div>":""}`).join("")}`,
 },
 
-client: { title: "Coach — Marcus T.", phase2: false, html: `
+client: { title: (id) => "Coach — " + ((CLIENTS[id] || CLIENTS.marcus).n), phase2: false, html: (id) => {
+  const c = CLIENTS[id] || CLIENTS.marcus;
+  const stColor = c.st === "ok" ? "ok" : c.st === "bad" ? "bad" : "ash";
+  return `
+  <div class="v-stagger flex items-center gap-2.5 mb-7 overflow-x-auto pb-1">
+    ${Object.values(CLIENTS).map((o) => `
+    <a href="#/client/${o.id}" title="${o.n}" class="shrink-0 flex items-center gap-2 rounded-full border ${o.id === c.id ? "border-ember/60 bg-forged pr-4" : "border-whisper hover:bg-forged"} p-1">
+      <img src="assets/${o.img}.png" onerror="this.style.display='none'" alt="${o.n}" class="w-8 h-8 rounded-full object-cover"/>
+      ${o.id === c.id ? `<span class="text-xs font-medium">${o.n}</span>` : ""}
+    </a>`).join("")}
+  </div>
   <div class="v-stagger flex items-center justify-between mb-8">
     <div class="flex items-center gap-4">
-      <img src="assets/client-marcus.png" onerror="this.style.display='none'" alt="Marcus T." class="w-12 h-12 rounded-full object-cover border border-whisper"/>
-      <div><h2 class="text-2xl font-semibold tracking-tight">Marcus T.</h2>
-        <p class="text-ash text-sm">ELITE · $147/MO · <span class="text-ok">Active</span> · Member since <span class="font-mono">MAY 2026</span></p></div>
+      <span class="relative shrink-0">
+        <img src="assets/${c.img}.png" onerror="this.style.display='none'" alt="${c.n}" class="w-14 h-14 rounded-full object-cover border border-whisper"/>
+        <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 bg-${stColor}" style="border-color:var(--c-furnace)"></span>
+      </span>
+      <div><h2 class="text-2xl font-semibold tracking-tight">${c.n}</h2>
+        <p class="text-ash text-sm">${c.plan} · ${c.price}/MO · <span class="text-${stColor}">${c.statusWord}</span> · Member since <span class="font-mono">${c.since}</span>${c.pay ? ` · <span class="font-mono text-[10px] tracking-widest text-bad border border-bad/40 rounded px-1.5 py-0.5">${c.pay}</span>` : ""}</p></div>
     </div>
     <a href="#/messages" class="press border border-whisper rounded-lg px-5 py-2.5 text-sm hover:bg-forged">Message</a>
   </div>
   <div class="grid grid-cols-[1fr_360px] gap-8">
     <div>
+      <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-3">SECTION ENGAGEMENT · 30 DAYS</p>
+      <div class="v-stagger grid grid-cols-4 gap-4 mb-8">
+        ${c.secs.map(([sl, sv]) => `
+        <div class="bg-iron border border-whisper rounded-xl p-4">
+          <p class="font-mono text-2xl mb-2"><span class="count" data-to="${sv}">0</span>%</p>
+          <div class="h-1 rounded bg-forged mb-2"><div class="bar-fill h-1 rounded ${sv < 25 ? "bg-bad" : "bg-ember"}" data-w="${sv}%"></div></div>
+          <p class="font-mono text-[9px] tracking-widest text-ash">${sl}</p>
+        </div>`).join("")}
+      </div>
       <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-3">DAILY SIX · LAST 7 DAYS</p>
       <div class="v-stagger bg-iron border border-whisper rounded-xl p-5 mb-8">
         <div id="six-grid" class="grid grid-cols-8 gap-2 font-mono text-[10px] text-ash">
-          <span></span>${["M","T","W","T","F","S","S"].map(d=>`<span class="text-center">${d}</span>`).join("")}
-          ${["HYD","BIB","PRA","MED","REA","TRN"].map((h,r)=>`
+          <span></span>${["M","T","W","T","F","S","S"].map((d) => `<span class="text-center">${d}</span>`).join("")}
+          ${["HYD","BIB","PRA","MED","REA","TRN"].map((h, r) => `
             <span class="leading-6">${h}</span>
-            ${[1,1,1,1,1,1,0].map((_,c)=>{
-              const on = (r*7+c*3)%5 !== 0;
-              return `<span class="h-6 rounded ${on?"bg-ember/70":"bg-forged"} block dot" style="opacity:0"></span>`;}).join("")}`).join("")}
+            ${[0,1,2,3,4,5,6].map((col) => {
+              const on = ((r * 13 + col * 7 + c.comp) % 100) < c.comp;
+              return `<span class="h-6 rounded ${on ? "bg-ember/70" : "bg-forged"} block dot" style="opacity:0"></span>`;}).join("")}`).join("")}
         </div>
       </div>
-      <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-3">LOGGED SESSIONS — FOUNDATIONS OF IRON</p>
+      <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-3">LOGGED SESSIONS — ${c.prog.toUpperCase()}</p>
+      ${c.sessions.length ? `
       <div class="divide-y" style="border-color:var(--c-whisper)">
-        ${[["W3 · D2 · Push","TODAY · 52 MIN","4×8 @ 205 BENCH — PR"],
-           ["W3 · D1 · Pull","2 DAYS AGO · 49 MIN","ROWS 4×10 @ 155"],
-           ["W2 · D4 · Full","5 DAYS AGO · 61 MIN","SQUAT 5×5 @ 225"]].map(([t,m,d])=>`
-        <div class="v-stagger py-4 flex items-center justify-between">
+        ${c.sessions.map(([t, m, d]) => `
+        <div class="v-stagger py-4 flex items-center justify-between gap-4">
           <div><p class="text-sm">${t}</p><p class="font-mono text-xs text-ash">${m}</p></div>
-          <span class="font-mono text-xs">${d}</span>
+          <span class="font-mono text-xs text-right">${d}</span>
         </div>`).join("")}
-      </div>
+      </div>` : `
+      <div class="v-stagger bg-iron border border-whisper rounded-xl p-6 text-center">
+        <p class="text-sm text-ash">No sessions since <span class="font-mono">JUL 28</span> — membership paused.</p>
+      </div>`}
     </div>
     <aside class="space-y-4">
+      <div class="v-stagger bg-iron border ${c.st === "bad" ? "border-bad/40" : "border-whisper"} rounded-xl p-5">
+        <p class="font-mono text-xs tracking-widest ${c.st === "bad" ? "text-bad" : "text-ash"} mb-3">COACH READ</p>
+        <p class="text-sm leading-relaxed">${c.tip}</p>
+      </div>
       <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
         <p class="font-mono text-xs tracking-widest text-ash mb-4">SNAPSHOT</p>
         <div class="space-y-3 font-mono text-sm">
-          <div class="flex justify-between"><span class="text-ash text-xs">COMPLIANCE</span><span><span class="count" data-to="87">0</span>%</span></div>
-          <div class="flex justify-between"><span class="text-ash text-xs">STREAK</span><span><span class="count" data-to="23">0</span> DAYS</span></div>
-          <div class="flex justify-between"><span class="text-ash text-xs">WEEK VOLUME</span><span>12,480 LB</span></div>
-          <div class="flex justify-between"><span class="text-ash text-xs">WEIGHT TREND</span><span>−1.2 LB</span></div>
+          <div class="flex justify-between"><span class="text-ash text-xs">COMPLIANCE</span><span><span class="count" data-to="${c.comp}">0</span>%</span></div>
+          <div class="flex justify-between"><span class="text-ash text-xs">STREAK</span><span>${c.streak === "—" ? "—" : `<span class="count" data-to="${c.streak}">0</span> DAYS`}</span></div>
+          <div class="flex justify-between"><span class="text-ash text-xs">WEEK VOLUME</span><span>${c.vol}</span></div>
+          <div class="flex justify-between"><span class="text-ash text-xs">WEIGHT TREND</span><span>${c.wt}</span></div>
+          <div class="flex justify-between"><span class="text-ash text-xs">PROGRAM</span><span class="text-right text-xs leading-6">${c.prog}</span></div>
         </div>
       </div>
+      ${c.review ? `
       <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
-        <p class="font-mono text-xs tracking-widest text-ash mb-3">WEEKLY REVIEW · W2</p>
-        <p class="text-sm leading-relaxed mb-2">"Best week yet. Struggled with evening reading habit — done by 9 PM or it doesn't happen."</p>
-        <p class="font-mono text-[10px] text-ash">SUBMITTED SUN 8:14 PM</p>
-      </div>
+        <p class="font-mono text-xs tracking-widest text-ash mb-3">WEEKLY REVIEW · ${c.review.wk}</p>
+        <p class="text-sm leading-relaxed mb-2">"${c.review.quote}"</p>
+        <p class="font-mono text-[10px] text-ash">${c.review.when}</p>
+      </div>` : `
+      <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
+        <p class="font-mono text-xs tracking-widest text-ash mb-3">WEEKLY REVIEW</p>
+        <p class="text-sm leading-relaxed text-ash">${c.reviewNote}</p>
+      </div>`}
       <a href="#/builder" class="v-stagger press block text-center bg-ember text-furnace rounded-lg py-3 text-sm font-semibold">Adjust Program</a>
     </aside>
-  </div>`,
+  </div>`;
+},
 },
 
 builder: { title: "Coach — Program Builder", phase2: false, html: `
