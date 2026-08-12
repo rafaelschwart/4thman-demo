@@ -209,6 +209,37 @@ tailwind.config = {
   #more-sheet .ms-tiles a.ms-active .material-symbols-outlined { color: var(--c-ember); }
   #more-sheet .ms-foot { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--c-whisper); }
   @media (min-width: 1024px) { #more-sheet { display: none; } }
+  /* ---------- Command palette (21st.dev Raycast pattern, Furnace & Iron skin) ---------- */
+  #cmdk-trigger { display: none; }
+  @media (min-width: 1024px) {
+    #cmdk-trigger { display: flex; align-items: center; gap: 10px;
+      border: 1px solid var(--c-whisper); background: var(--c-forged); color: var(--c-ash);
+      border-radius: 10px; padding: 7px 12px; font-size: 13px; min-width: 250px;
+      transition: border-color .2s, color .2s; cursor: pointer; }
+    #cmdk-trigger:hover { border-color: rgb(var(--c-ember-rgb) / .45); color: var(--c-bone); }
+    #cmdk-trigger .ck-t-label { flex: 1; text-align: left; }
+  }
+  .ck-kbd { font-family: "Geist Mono", monospace; font-size: 10px; letter-spacing: .04em;
+    color: var(--c-ash); border: 1px solid var(--c-whisper); background: var(--c-forged);
+    border-radius: 6px; padding: 2px 6px; }
+  #cmdk { position: fixed; inset: 0; z-index: 70; }
+  #cmdk.hidden { display: none; }
+  #cmdk .ck-scrim { position: absolute; inset: 0; background: rgba(10, 10, 12, .6);
+    -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+  html.light #cmdk .ck-scrim { background: rgba(26, 26, 29, .35); }
+  #cmdk .ck-panel { position: relative; margin: 13vh auto 0; width: min(640px, calc(100vw - 32px));
+    background: var(--c-iron); border: 1px solid var(--c-whisper); border-radius: 14px;
+    box-shadow: 0 30px 90px -18px rgba(0, 0, 0, .65), 0 0 0 1px rgba(var(--c-ember-rgb) / .06); overflow: hidden; }
+  .ck-group { font-family: "Geist Mono", monospace; font-size: 10px; letter-spacing: .16em;
+    color: var(--c-ash); padding: 10px 16px 6px; }
+  .ck-item { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+    padding: 9px 16px; color: var(--c-bone); cursor: pointer; }
+  .ck-item .material-symbols-outlined { font-size: 18px; color: var(--c-ash); }
+  .ck-item .ck-desc { color: var(--c-ash); font-size: 12px; }
+  .ck-item[aria-selected="true"] { background: var(--c-forged); }
+  .ck-item[aria-selected="true"] .material-symbols-outlined { color: var(--c-ember); }
+  .ck-item .ck-chip { font-family: "Geist Mono", monospace; font-size: 9px; letter-spacing: .1em; }
+  .ck-empty { text-align: center; color: var(--c-ash); font-size: 13px; padding: 36px 16px; }
   #bottom-nav .nav-item.active { background: transparent; }
 
   @media (max-width: 1023px) {
@@ -420,6 +451,11 @@ tailwind.config = {
           <h1 id="view-title" class="text-sm font-medium"></h1>
           <span id="phase-tag" class="hidden font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-2 py-0.5">PHASE 2 PREVIEW</span>
         </div>
+        <button id="cmdk-trigger" aria-label="Search — jump anywhere" aria-haspopup="dialog">
+          <span class="material-symbols-outlined" style="font-size:16px" aria-hidden="true">search</span>
+          <span class="ck-t-label">Search or jump to&hellip;</span>
+          <span class="ck-kbd" aria-hidden="true">&#8984;K</span>
+        </button>
         <div class="flex items-center gap-5">
           <button id="theme-toggle" aria-label="Toggle light or dark theme" class="w-9 h-9 rounded-lg border border-whisper flex items-center justify-center text-ash hover:text-bone" title="Toggle light / dark">
             <span class="material-symbols-outlined theme-ic" style="font-size:18px">light_mode</span>
@@ -441,6 +477,25 @@ tailwind.config = {
     <a class="nav-item" href="#/progress"><span class="material-symbols-outlined" aria-hidden="true">monitoring</span>Progress</a>
     <button class="nav-item" id="bn-more" aria-label="More sections" aria-expanded="false"><span class="material-symbols-outlined" aria-hidden="true">apps</span>More</button>
   </nav>
+  <div id="cmdk" class="hidden" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="ck-scrim"></div>
+    <div class="ck-panel">
+      <div class="flex items-center gap-3 px-4 border-b border-whisper">
+        <span class="material-symbols-outlined text-ash" style="font-size:18px" aria-hidden="true">search</span>
+        <input id="ck-in" class="h-13 w-full bg-transparent border-0 text-sm text-bone placeholder:text-ash focus:outline-none focus:ring-0 py-4" placeholder="Search sections, clients, programs, actions&hellip;" autocomplete="off" spellcheck="false"/>
+        <span class="ck-kbd shrink-0">ESC</span>
+      </div>
+      <div id="ck-list" class="max-h-[56vh] overflow-y-auto py-2" role="listbox" aria-label="Results"></div>
+      <div class="flex items-center justify-between border-t border-whisper px-4 py-2.5">
+        <div class="flex items-center gap-3 font-mono text-[10px] tracking-widest text-ash">
+          <span><span class="ck-kbd">&#8593;</span> <span class="ck-kbd">&#8595;</span> NAVIGATE</span>
+          <span><span class="ck-kbd">&#8629;</span> OPEN</span>
+          <span><span class="ck-kbd">ESC</span> CLOSE</span>
+        </div>
+        <span class="font-mono text-[10px] tracking-widest text-ash">4TH MAN PLATFORM</span>
+      </div>
+    </div>
+  </div>
   <div id="more-sheet" class="hidden" role="dialog" aria-modal="true" aria-label="All sections">
     <div class="ms-scrim"></div>
     <div class="ms-panel">
@@ -492,7 +547,7 @@ tailwind.config = {
   </div>
 </div>
 
-<script src="exmedia.js?v=28"></script>
-<script src="views.js?v=28"></script>
-<script src="app.js?v=28"></script>
+<script src="exmedia.js?v=29"></script>
+<script src="views.js?v=29"></script>
+<script src="app.js?v=29"></script>
 </body></html>

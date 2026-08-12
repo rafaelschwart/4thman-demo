@@ -38,6 +38,105 @@
     const gv = $("#gate-photo video");
     if (gv) { gv.removeAttribute("autoplay"); gv.pause(); gv.removeAttribute("src"); gv.load(); }
   }
+  /* ---------- command palette (adapted from 21st.dev Raycast-style palette) ---------- */
+  (() => {
+    const root = $("#cmdk"), input = $("#ck-in"), list = $("#ck-list"), trigger = $("#cmdk-trigger");
+    if (!root || !input) return;
+    const SECTIONS = [
+      ["#/today", "bolt", "Today", "Session, Daily Six, streak", "PHASE 1"],
+      ["#/phases", "route", "Phased Approach", "What ships in four weeks, what comes after", ""],
+      ["#/walkthrough", "tour", "Walk-through", "Guided tour of the platform", ""],
+      ["#/overview", "calendar_month", "Overview", "Schedule, calendar, year planner", "PHASE 1"],
+      ["#/programs", "fitness_center", "Programs", "Five training blocks", "PHASE 1"],
+      ["#/progress", "monitoring", "Progress", "Records, volume, consistency", "PHASE 1"],
+      ["#/photos", "photo_library", "Progress Photos", "Private dated timeline", "PHASE 1"],
+      ["#/review", "rate_review", "Weekly Review", "Half fills itself", "PHASE 1"],
+      ["#/community", "diversity_3", "Community", "Feed, prayer wall, leaderboard", "PHASE 2"],
+      ["#/messages", "chat_bubble", "Messages", "Coach and brothers", "PHASE 2"],
+      ["#/nutrition", "restaurant", "Nutrition", "Meals, macros", "PHASE 2"],
+      ["#/recipes", "skillet", "Recipes", "The 4th Man kitchen", "PHASE 2"],
+      ["#/faith", "menu_book", "Faith & Mind", "Reading plan, audio", "PHASE 2"],
+      ["#/blood", "labs", "Blood Panel", "Upload results, chart trends", "PHASE 2"],
+      ["#/partners", "handshake", "Partners", "Book trusted practitioners", "PHASE 2"],
+      ["#/gear", "apparel", "Gear", "The 4th Man drop", "PHASE 2"],
+      ["#/coach", "grid_view", "Coach Dashboard", "Who needs attention", "ADMIN"],
+      ["#/builder", "design_services", "Program Builder", "Build and assign blocks", "ADMIN"],
+      ["#/billing", "credit_card", "Billing", "Stripe subscriptions", "ADMIN"],
+      ["#/account", "card_membership", "Subscription", "Plan and payment", "PHASE 1"],
+    ].map(([href, ic, t, d, tag]) => ({ g: "SECTIONS", href, ic, t, d, tag }));
+    const CLIENTX = typeof CLIENTS !== "undefined" ? Object.values(CLIENTS).map((c) => ({
+      g: "CLIENTS", href: "#/client/" + c.id, ic: "person", t: c.n,
+      d: c.plan + " · " + c.stl + " · " + c.comp + "% compliance", tag: c.st === "bad" ? "SLIPPING" : "" })) : [];
+    const PROGX = typeof PROGRAMS !== "undefined" ? Object.entries(PROGRAMS).map(([id, p]) => ({
+      g: "PROGRAMS", href: "#/program/" + id, ic: "fitness_center", t: p.name, d: p.weeks + " weeks", tag: "" })) : [];
+    const ACTIONS = [
+      { g: "ACTIONS", ic: "contrast", t: "Toggle light / dark", d: "Switch the theme", tag: "", run: () => { const b = $("#theme-toggle"); if (b) b.click(); } },
+      { g: "ACTIONS", ic: "play_arrow", t: "Start today's session", d: "Jump into the guided workout", tag: "", href: "#/workout/foundations/" + (typeof FMP !== "undefined" ? FMP.next("foundations") : 1) },
+      { g: "ACTIONS", ic: "logout", t: "Sign out", d: "Back to the gate", tag: "", run: () => { const b = $("#signout"); if (b) b.click(); } },
+    ];
+    const ALL = [...SECTIONS, ...CLIENTX, ...PROGX, ...ACTIONS];
+    let filtered = ALL, sel = 0;
+
+    const render = () => {
+      if (!filtered.length) {
+        list.innerHTML = '<p class="ck-empty">Nothing matches. Try a section, a client, or a program.</p>';
+        return;
+      }
+      let html = "", lastG = "";
+      filtered.forEach((it, i) => {
+        if (it.g !== lastG) { html += `<p class="ck-group">${it.g}</p>`; lastG = it.g; }
+        html += `<button class="ck-item" role="option" aria-selected="${i === sel}" data-i="${i}">
+          <span class="material-symbols-outlined" aria-hidden="true">${it.ic}</span>
+          <span class="flex-1 min-w-0"><span class="block text-sm truncate">${it.t}</span><span class="ck-desc block truncate">${it.d}</span></span>
+          ${it.tag ? `<span class="ck-chip ${it.tag === "PHASE 2" ? "text-ember" : it.tag === "SLIPPING" ? "text-bad" : "text-ash"}">${it.tag}</span>` : ""}
+          <span class="material-symbols-outlined text-ash" style="font-size:14px" aria-hidden="true">${it.run ? "keyboard_return" : "north_east"}</span>
+        </button>`;
+      });
+      list.innerHTML = html;
+      const selEl = list.querySelector('[aria-selected="true"]');
+      if (selEl) selEl.scrollIntoView({ block: "nearest" });
+      $$(".ck-item", list).forEach((el) => {
+        el.addEventListener("mouseenter", () => { sel = parseInt(el.dataset.i); paint(); });
+        el.addEventListener("click", () => pick(parseInt(el.dataset.i)));
+      });
+    };
+    const paint = () => $$(".ck-item", list).forEach((el) => el.setAttribute("aria-selected", parseInt(el.dataset.i) === sel ? "true" : "false"));
+    const filter = () => {
+      const q = input.value.trim().toLowerCase();
+      filtered = !q ? ALL : ALL.filter((it) => (it.t + " " + it.d + " " + it.g + " " + (it.tag || "")).toLowerCase().includes(q));
+      sel = 0; render();
+    };
+    const openCK = () => {
+      root.classList.remove("hidden");
+      input.value = ""; filter(); input.focus();
+      anime({ targets: ".ck-panel", opacity: [0, 1], translateY: [-10, 0], scale: [0.985, 1], duration: D(240), easing: "easeOutQuart" });
+      anime({ targets: ".ck-scrim", opacity: [0, 1], duration: D(180), easing: "linear" });
+    };
+    const closeCK = () => { root.classList.add("hidden"); };
+    const pick = (i) => {
+      const it = filtered[i]; if (!it) return;
+      closeCK();
+      if (it.run) it.run(); else if (it.href) location.hash = it.href;
+    };
+    if (trigger) trigger.addEventListener("click", openCK);
+    root.querySelector(".ck-scrim").addEventListener("click", closeCK);
+    input.addEventListener("input", filter);
+    document.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        if ($("#shell").classList.contains("hidden")) return;
+        root.classList.contains("hidden") ? openCK() : closeCK();
+        return;
+      }
+      if (root.classList.contains("hidden")) return;
+      if (e.key === "Escape") { e.preventDefault(); closeCK(); }
+      else if (e.key === "ArrowDown") { e.preventDefault(); sel = Math.min(sel + 1, filtered.length - 1); paint(); const el = list.querySelector('[aria-selected="true"]'); if (el) el.scrollIntoView({ block: "nearest" }); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); sel = Math.max(sel - 1, 0); paint(); const el = list.querySelector('[aria-selected="true"]'); if (el) el.scrollIntoView({ block: "nearest" }); }
+      else if (e.key === "Enter") { e.preventDefault(); pick(sel); }
+    });
+    window.addEventListener("hashchange", closeCK);
+  })();
+
   $("#enter-btn").addEventListener("click", enterApp);
   ["#em", "#pw"].forEach((sel) => { const f = $(sel); if (f) f.addEventListener("keydown", (e) => { if (e.key === "Enter") enterApp(); }); });
   const cb = $("#create-btn");
