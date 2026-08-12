@@ -123,7 +123,7 @@
       view.innerHTML = typeof v.html === "function" ? v.html(param) : v.html;
       titleEl.textContent = typeof v.title === "function" ? v.title(param) : v.title;
       phaseTag.classList.toggle("hidden", !v.phase2);
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       if (reduced) $$("video", view).forEach((vd) => { vd.removeAttribute("autoplay"); vd.pause(); });
       animateIn();
       wire(key, param);
@@ -856,31 +856,91 @@
     }
 
     if (key === "community") {
-      const wirePray = (scope) => $$(".pray-btn", scope || view).forEach((b) => b.addEventListener("click", () => {
-        if (b.dataset.prayed) return;
-        b.dataset.prayed = "1";
+      const wireAmen = (scope) => $$(".amen-btn", scope || view).forEach((b) => b.addEventListener("click", () => {
+        if (b.dataset.done) return;
+        b.dataset.done = "1";
         const c = $("span", b); c.textContent = parseInt(c.textContent) + 1;
-        b.firstChild.textContent = "Praying ";
         b.classList.add("border-ember/50", "text-ember");
-        anime({ targets: b, scale: [1, 1.05, 1], duration: D(260), easing: "easeOutQuad" });
+        anime({ targets: b, scale: [1, 1.08, 1], duration: D(260), easing: "easeOutQuad" });
       }));
-      wirePray();
-      const pwIn = $("#pw-in");
-      if (pwIn) pwIn.addEventListener("keydown", (ev) => {
-        if (ev.key !== "Enter" || !pwIn.value.trim()) return;
-        const card = document.createElement("div");
-        card.className = "bg-iron border border-ember/30 rounded-xl p-4 mb-3";
-        card.innerHTML = `<p class="text-sm leading-relaxed mb-3"></p>
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-xs text-ash">You</span>
-            <button class="pray-btn press flex items-center gap-2 border border-whisper rounded-lg px-3 py-1.5 text-xs hover:bg-forged">Pray for this <span class="font-mono text-ash">0</span></button>
+      const wireComments = (scope) => {
+        $$(".cmt-toggle", scope || view).forEach((b) => b.addEventListener("click", () => {
+          const block = b.closest(".cm-post").querySelector(".cmt-block");
+          const opening = block.classList.contains("hidden");
+          block.classList.toggle("hidden");
+          b.setAttribute("aria-expanded", opening ? "true" : "false");
+          b.classList.toggle("border-ember/50", opening);
+          if (opening) {
+            anime({ targets: block.querySelectorAll(".cmt"), opacity: [0, 1], translateY: [8, 0],
+              duration: D(280), delay: anime.stagger(D(60)), easing: "easeOutQuart" });
+            block.querySelector(".cmt-in").focus();
+          }
+        }));
+        $$(".cmt-in", scope || view).forEach((inp) => inp.addEventListener("keydown", (ev) => {
+          if (ev.key !== "Enter" || !inp.value.trim()) return;
+          const postEl = inp.closest(".cm-post");
+          const row = document.createElement("div");
+          row.className = "flex gap-2.5 cmt";
+          row.innerHTML = `<img src="assets/coach-profile.jpg" alt="Cayman" class="w-7 h-7 rounded-full object-cover border border-whisper shrink-0 mt-0.5"/>
+            <div class="bg-forged rounded-lg rounded-tl-sm px-3.5 py-2.5 text-[13px] leading-relaxed min-w-0"><span class="font-medium">Cayman</span> · </div>`;
+          row.lastElementChild.append(inp.value.trim());
+          postEl.querySelector(".cmt-list").appendChild(row);
+          const cc = postEl.querySelector(".cmt-count"); cc.textContent = parseInt(cc.textContent) + 1;
+          anime({ targets: row, opacity: [0, 1], translateY: [8, 0], duration: D(280), easing: "easeOutQuart" });
+          inp.value = "";
+        }));
+      };
+      wireAmen(); wireComments();
+      $$(".cm-tab", view).forEach((t) => t.addEventListener("click", () => {
+        $$(".cm-tab", view).forEach((x) => x.className = x.className.replace("border-ember/50 text-ember bg-forged", "border-whisper text-ash hover:bg-forged"));
+        t.className = t.className.replace("border-whisper text-ash hover:bg-forged", "border-ember/50 text-ember bg-forged");
+        let shown = 0;
+        $$(".cm-post", view).forEach((p) => {
+          const show = t.dataset.cat === "ALL" || p.dataset.cat === t.dataset.cat;
+          p.classList.toggle("hidden", !show);
+          if (show) shown++;
+        });
+        $(".cm-empty", view).classList.toggle("hidden", shown > 0);
+        anime({ targets: $$(".cm-post:not(.hidden)", view), opacity: [0, 1], translateY: [10, 0],
+          duration: D(300), delay: anime.stagger(D(50)), easing: "easeOutQuart" });
+      }));
+      const cmIn = $("#cm-in"), cmPost = $("#cm-post");
+      const publish = () => {
+        if (!cmIn.value.trim()) { anime({ targets: cmIn, translateX: [0, -6, 6, 0], duration: D(260), easing: "easeOutQuad" }); return; }
+        const activeTab = $$(".cm-tab", view).find((x) => x.className.includes("text-ember"));
+        const cat = activeTab && activeTab.dataset.cat !== "ALL" ? activeTab.dataset.cat : "WINS";
+        const art = document.createElement("article");
+        art.className = "cm-post bg-iron border border-whisper rounded-xl overflow-hidden mb-4";
+        art.dataset.cat = cat;
+        art.innerHTML = `
+          <div class="flex items-center gap-3 p-5 pb-3">
+            <img src="assets/coach-profile.jpg" alt="Cayman" class="w-9 h-9 rounded-full object-cover border border-whisper shrink-0"/>
+            <div class="min-w-0"><p class="text-sm font-medium">Cayman</p>
+            <p class="font-mono text-[10px] tracking-widest text-ash">${cat} · NOW</p></div>
+          </div>
+          <div class="px-5 pb-4"><p class="text-sm leading-relaxed cm-new-text"></p></div>
+          <div class="flex items-center gap-2 px-5 pb-4">
+            <button class="amen-btn press flex items-center gap-2 border border-whisper rounded-lg px-3 py-2 text-xs hover:bg-forged">Amen <span class="font-mono text-ash">0</span></button>
+            <button class="cmt-toggle press flex items-center gap-2 border border-whisper rounded-lg px-3 py-2 text-xs hover:bg-forged" aria-expanded="false">
+              <span class="material-symbols-outlined" style="font-size:15px" aria-hidden="true">chat_bubble</span>
+              <span class="font-mono text-ash cmt-count">0</span> Comments
+            </button>
+          </div>
+          <div class="cmt-block hidden border-t border-whisper px-5 py-4">
+            <div class="cmt-list space-y-3 mb-3"></div>
+            <div class="flex gap-2.5 items-center">
+              <img src="assets/coach-profile.jpg" alt="Cayman" class="w-7 h-7 rounded-full object-cover border border-whisper shrink-0"/>
+              <input class="cmt-in flex-1 bg-forged border border-whisper rounded-lg px-3.5 py-2 text-[13px] placeholder:text-ash focus:border-ember focus:ring-0 text-bone" placeholder="Add a comment — press Enter"/>
+            </div>
           </div>`;
-        card.querySelector("p").textContent = pwIn.value.trim();
-        pwIn.closest(".bg-iron").after(card);
-        wirePray(card);
-        anime({ targets: card, opacity: [0, 1], translateY: [10, 0], duration: D(320), easing: "easeOutQuart" });
-        pwIn.value = "";
-      });
+        art.querySelector(".cm-new-text").textContent = cmIn.value.trim();
+        $("#cm-feed", view).prepend(art);
+        wireAmen(art); wireComments(art);
+        anime({ targets: art, opacity: [0, 1], translateY: [12, 0], duration: D(340), easing: "easeOutQuart" });
+        cmIn.value = "";
+      };
+      cmPost.addEventListener("click", publish);
+      cmIn.addEventListener("keydown", (ev) => { if (ev.key === "Enter") publish(); });
     }
   }
 

@@ -280,6 +280,16 @@ tailwind.config = {
     /* 20: year planner reads as 2-up months, not a 12-deep stack */
     #view #yr-plan { grid-template-columns: repeat(2, 1fr) !important; }
   }
+
+  /* ---------- Touch: hover lifts off, taps answer instantly ---------- */
+  @media (hover: none) {
+    #view a[class*="bg-iron"]:hover { transform: none; box-shadow: none; }
+    #view a[class*="bg-iron"]:hover .ig-img { transform: none; }
+    #sidebar .nav-item:hover { transform: none; }
+    .wk-tab:hover, .cal-tab:hover, .r-filter:hover { transform: none; }
+    #view a[class*="bg-iron"]:active { background: var(--c-forged); transform: scale(.985); transition-duration: .08s; }
+    #view a[class*="bg-iron"]:active .ig-img { transform: none; }
+  }
 </style>
 </head>
 <body class="font-sans overflow-x-hidden">
@@ -449,7 +459,7 @@ tailwind.config = {
   </div>
 </div>
 
-<script src="exmedia.js?v=25"></script>
-<script src="views.js?v=25"></script>
-<script src="app.js?v=25"></script>
+<script src="exmedia.js?v=26"></script>
+<script src="views.js?v=26"></script>
+<script src="app.js?v=26"></script>
 </body></html>

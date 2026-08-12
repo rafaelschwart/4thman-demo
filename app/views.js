@@ -1335,65 +1335,122 @@ account: { title: "Subscription", phase2: false, html: `
   <p class="v-stagger font-mono text-[11px] text-ash mt-6">BILLED ON THE WEB VIA STRIPE · NO APP-STORE COMMISSION</p>`,
 },
 
-community: { title: "Community & Prayer Wall", phase2: true, html: `
+community: { title: "Community", phase2: true, html: () => {
+  const POSTS = [
+    { id:"p1", who:"Coach Cayman", av:"coach-profile.jpg", coach:true, pin:true, cat:"ANNOUNCEMENTS", when:"PINNED",
+      text:"Exhaust the body, tame the mind. True vitality is built through the alignment of your spiritual, mental and physical health. This space works like the gym floor: show up, spot each other, leave stronger.",
+      img:"assets/gen2-community-1.png", amens:78,
+      comments:[["client-whitfield.png","J. Whitfield","This is why I signed up. The 5 AM crew is proof."],
+                ["client-marcus.png","Marcus T.","Needed this today, Coach."]] },
+    { id:"p2", who:"Marcus T.", av:"client-marcus.png", cat:"WINS", when:"2H AGO",
+      text:"Hit 205 on bench after stalling for a month. The program works if you work.",
+      img:"", amens:9,
+      comments:[["coach-profile.jpg","Coach Cayman","Told you the stall was mental. Wrote it into your weekly review — next stop 225."],
+                ["client-boateng.png","K. Boateng","Strong. What did you change?"],
+                ["client-marcus.png","Marcus T.","@K. Boateng nothing — I just stopped skipping Fridays."]] },
+    { id:"p3", who:"S. Nguyen", av:"client-nguyen.png", cat:"QUESTIONS", when:"5H AGO",
+      text:"Anyone else fighting the 5 AM alarm since Week 2 moved sessions to mornings? What is actually working for you?",
+      img:"", amens:4,
+      comments:[["client-boateng.png","K. Boateng","Phone charges in the kitchen. No negotiation at the nightstand."],
+                ["coach-profile.jpg","Coach Cayman","Or take the evening variant — ask me in messages and I will switch your block."]] },
+    { id:"p4", who:"Robert", av:"", ini:"R", cat:"PRAYER", when:"YESTERDAY",
+      text:"My father starts chemo Monday. Prayers for strength — his and mine.",
+      img:"", amens:31, pray:true,
+      comments:[["coach-profile.jpg","Coach Cayman","Standing with you, brother. Dan 3:25 — there is a fourth man in the fire."],
+                ["client-alvarez.png","D. Alvarez","Praying every morning this week."]] },
+    { id:"p5", who:"J. Whitfield", av:"client-whitfield.png", cat:"WINS", when:"YESTERDAY",
+      text:"Thankful for community that sharpens me. As iron sharpens iron, so a friend sharpens a friend. — Prov 27:17",
+      img:"assets/gen2-community-3.png", amens:21,
+      comments:[["client-nguyen.png","S. Nguyen","That partner WOD almost ended me. Again Saturday?"]] },
+    { id:"p6", who:"Sam", av:"", ini:"S", cat:"PRAYER", when:"2 DAYS AGO",
+      text:"Forty days sober today. Keep me steady.",
+      img:"", amens:27, pray:true,
+      comments:[["client-whitfield.png","J. Whitfield","Forty days of iron. Proud of you."]] },
+  ];
+  const avatar = (av, ini, n) => av
+    ? `<img onerror="this.remove()" loading="lazy" decoding="async" src="assets/${av.replace("assets/","")}" alt="${n}" class="w-9 h-9 rounded-full object-cover border border-whisper shrink-0"/>`
+    : `<span class="w-9 h-9 rounded-full bg-forged border border-whisper flex items-center justify-center text-[11px] font-mono shrink-0">${ini}</span>`;
+  const post = (p) => `
+  <article class="v-stagger cm-post bg-iron border ${p.pin ? "border-ember/30" : "border-whisper"} rounded-xl overflow-hidden mb-4" data-cat="${p.cat}">
+    <div class="flex items-center gap-3 p-5 pb-3">
+      ${avatar(p.av, p.ini, p.who)}
+      <div class="min-w-0">
+        <p class="text-sm font-medium truncate">${p.who} ${p.coach ? '<span class="font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-1.5 py-0.5 ml-1">COACH</span>' : ""}</p>
+        <p class="font-mono text-[10px] tracking-widest text-ash">${p.cat} · ${p.when}</p>
+      </div>
+      ${p.pin ? '<span class="material-symbols-outlined text-ember ml-auto" style="font-size:16px" aria-hidden="true">keep</span>' : ""}
+    </div>
+    <div class="px-5 pb-4">
+      <p class="text-sm leading-relaxed ${p.img ? "mb-4" : ""}">${p.text}</p>
+      ${p.img ? `<div class="h-64 rounded-lg overflow-hidden"><img onerror="this.remove()" loading="lazy" decoding="async" src="${p.img}" alt="" class="ig-img"/></div>` : ""}
+    </div>
+    <div class="flex items-center gap-2 px-5 pb-4">
+      <button class="amen-btn press flex items-center gap-2 border border-whisper rounded-lg px-3 py-2 text-xs hover:bg-forged">${p.pray ? "Praying" : "Amen"} <span class="font-mono text-ash">${p.amens}</span></button>
+      <button class="cmt-toggle press flex items-center gap-2 border border-whisper rounded-lg px-3 py-2 text-xs hover:bg-forged" aria-expanded="false">
+        <span class="material-symbols-outlined" style="font-size:15px" aria-hidden="true">chat_bubble</span>
+        <span class="font-mono text-ash cmt-count">${p.comments.length}</span> Comments
+      </button>
+    </div>
+    <div class="cmt-block hidden border-t border-whisper bg-furnace/40 px-5 py-4">
+      <div class="cmt-list space-y-3 mb-3">
+        ${p.comments.map(([cav, cn, ct]) => `
+        <div class="flex gap-2.5 cmt">
+          <img onerror="this.remove()" loading="lazy" decoding="async" src="assets/${cav}" alt="${cn}" class="w-7 h-7 rounded-full object-cover border border-whisper shrink-0 mt-0.5"/>
+          <div class="bg-forged rounded-lg rounded-tl-sm px-3.5 py-2.5 text-[13px] leading-relaxed min-w-0"><span class="font-medium">${cn}</span> · ${ct}</div>
+        </div>`).join("")}
+      </div>
+      <div class="flex gap-2.5 items-center">
+        <img src="assets/coach-profile.jpg" alt="Cayman" class="w-7 h-7 rounded-full object-cover border border-whisper shrink-0"/>
+        <input class="cmt-in flex-1 bg-forged border border-whisper rounded-lg px-3.5 py-2 text-[13px] placeholder:text-ash focus:border-ember focus:ring-0 text-bone" placeholder="Add a comment — press Enter"/>
+      </div>
+    </div>
+  </article>`;
+  return `
   <div class="grid grid-cols-[1.5fr_1fr] gap-8">
     <section>
-      <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-8">Community</h2>
-      <article class="v-stagger bg-iron border border-ember/30 rounded-xl overflow-hidden mb-4">
-        <div class="flex items-center gap-3 p-5 pb-3">
-          <img onerror="this.remove()" loading="lazy" decoding="async" src="assets/coach-profile.jpg" alt="Coach Cayman" class="w-9 h-9 rounded-full object-cover border border-ember/40"/>
-          <p class="text-sm font-medium">Coach Cayman <span class="font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-1.5 py-0.5 ml-2">COACH</span></p>
-          <span class="font-mono text-[10px] text-ash ml-auto">PINNED</span>
-        </div>
-        <div class="px-5 pb-4">
-          <p class="text-sm leading-relaxed mb-4">Exhaust the body, tame the mind. True vitality is built through the alignment of your spiritual, mental, and physical health. Post one win below before Sunday.</p>
-          <div class="h-64 rounded-lg overflow-hidden"><img onerror="this.remove()" loading="lazy" decoding="async" src="assets/gen2-community-1.png" alt="Sunrise training" class="ig-img"/></div>
-        </div>
-        <p class="font-mono text-xs text-ash px-5 pb-4">78 AMEN · 12 REPLIES</p>
-      </article>
-      <article class="v-stagger bg-iron border border-whisper rounded-xl overflow-hidden mb-4">
-        <div class="flex items-center gap-3 p-5 pb-3">
-          <img onerror="this.remove()" loading="lazy" decoding="async" src="assets/coach-profile.jpg" alt="Coach Cayman" class="w-9 h-9 rounded-full object-cover border border-whisper"/>
-          <p class="text-sm font-medium">Coach Cayman <span class="font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-1.5 py-0.5 ml-2">COACH</span></p>
-        </div>
-        <div class="px-5 pb-4">
-          <p class="text-sm leading-relaxed mb-4">TEAM Testimonial — Nic Hemken, Founder of Elevate Sports Management. Results will never exceed your level of personal development. It's been an honor to watch you grow, brother.</p>
-          <div class="h-64 rounded-lg overflow-hidden"><img onerror="this.remove()" loading="lazy" decoding="async" src="assets/gen2-community-2.png" alt="Testimonial" class="ig-img"/></div>
-        </div>
-        <p class="font-mono text-xs text-ash px-5 pb-4">16 AMEN · 4 REPLIES</p>
-      </article>
-      ${[["MT","Marcus T.","Hit 205 on bench after stalling for a month. The program works if you work.", "9 AMEN · 3 REPLIES", ""],
-         ["JW","J. Whitfield","Thankful for community that sharpens me. As iron sharpens iron, so a friend sharpens a friend. — Prov 27:17","21 AMEN · 7 REPLIES","assets/gen2-community-3.png"]]
-        .map(([i,n,t,m,img])=>`
-      <article class="v-stagger bg-iron border border-whisper rounded-xl overflow-hidden mb-4">
-        <div class="flex items-center gap-3 p-5 pb-3">
-          <div class="w-9 h-9 rounded-full bg-forged border border-whisper flex items-center justify-center text-[11px] font-mono">${i}</div>
-          <p class="text-sm font-medium">${n}</p>
-        </div>
-        <div class="px-5 pb-4">
-          <p class="text-sm leading-relaxed ${img?"mb-4":""}">${t}</p>
-          ${img?`<div class="h-56 rounded-lg overflow-hidden"><img onerror="this.remove()" loading="lazy" decoding="async" src="${img}" alt="" class="ig-img"/></div>`:""}
-        </div>
-        <p class="font-mono text-xs text-ash px-5 pb-4">${m}</p>
-      </article>`).join("")}
-    </section>
-    <aside>
-      <h3 class="v-stagger text-lg font-semibold tracking-tight mb-6 mt-14">Prayer Wall</h3>
-      <div class="v-stagger bg-iron border border-whisper rounded-xl p-4 mb-4">
-        <input id="pw-in" placeholder="Share a request — press Enter" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2.5 text-sm placeholder:text-ash focus:border-ember focus:ring-0"/>
+      <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-1">Community</h2>
+      <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-6">THE 4TH MAN BROTHERHOOD · 28 MEMBERS</p>
+      <div class="v-stagger flex gap-2 mb-6 overflow-x-auto pb-1">
+        ${["ALL", "ANNOUNCEMENTS", "WINS", "PRAYER", "QUESTIONS"].map((c, i) => `
+        <button class="cm-tab press shrink-0 font-mono text-[10px] tracking-widest rounded-lg px-3.5 py-2 border ${i === 0 ? "border-ember/50 text-ember bg-forged" : "border-whisper text-ash hover:bg-forged"}" data-cat="${c}">${c}</button>`).join("")}
       </div>
-      ${[["Daniel","Interviewing Thursday for a job that would let me be home for dinner.","12"],
-         ["Robert","My father starts chemo Monday.","31"],
-         ["Sam","Forty days sober today. Keep me steady.","27"]].map(([n,t,c])=>`
-      <div class="v-stagger bg-iron border border-whisper rounded-xl p-4 mb-3">
-        <p class="text-sm leading-relaxed mb-3">${t}</p>
-        <div class="flex items-center justify-between">
-          <span class="font-mono text-xs text-ash">${n}</span>
-          <button class="pray-btn press flex items-center gap-2 border border-whisper rounded-lg px-3 py-1.5 text-xs hover:bg-forged">Pray for this <span class="font-mono text-ash">${c}</span></button>
+      <div class="v-stagger bg-iron border border-whisper rounded-xl p-4 mb-6 flex gap-3 items-center">
+        <img src="assets/coach-profile.jpg" alt="Cayman" class="w-9 h-9 rounded-full object-cover border border-whisper shrink-0"/>
+        <input id="cm-in" class="flex-1 bg-forged border border-whisper rounded-lg px-4 py-2.5 text-sm placeholder:text-ash focus:border-ember focus:ring-0 text-bone" placeholder="Share with the brotherhood…"/>
+        <button id="cm-post" class="press bg-ember rounded-lg px-4 py-2.5 text-xs font-semibold shrink-0" style="color:var(--c-furnace)">POST</button>
+      </div>
+      <div id="cm-feed">${POSTS.map(post).join("")}</div>
+      <p class="v-stagger cm-empty hidden text-sm text-ash text-center py-10">Nothing in this category yet — be the first.</p>
+    </section>
+    <aside class="space-y-4">
+      <div class="v-stagger bg-iron border border-whisper rounded-xl p-5 mt-14">
+        <p class="font-mono text-xs tracking-widest text-ash mb-3">ABOUT</p>
+        <p class="text-sm leading-relaxed mb-4">Iron sharpens iron. Post your wins, carry each other's burdens, ask anything. Coach reads everything.</p>
+        <div class="flex justify-between font-mono text-sm"><span class="text-ash text-xs">MEMBERS</span><span><span class="count" data-to="28">0</span></span></div>
+        <div class="flex justify-between font-mono text-sm mt-2"><span class="text-ash text-xs">POSTS THIS WEEK</span><span><span class="count" data-to="14">0</span></span></div>
+      </div>
+      <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
+        <p class="font-mono text-xs tracking-widest text-ash mb-4">LEADERBOARD · AUG</p>
+        ${[["client-whitfield.png","J. Whitfield","41-DAY STREAK","1"],
+           ["client-marcus.png","Marcus T.","BENCH PR + 23 DAYS","2"],
+           ["client-boateng.png","K. Boateng","12 DAYS · 8 POSTS","3"]].map(([av, n, m, r]) => `
+        <div class="flex items-center gap-3 py-2">
+          <span class="font-mono text-xs text-ember w-4">${r}</span>
+          <img onerror="this.remove()" loading="lazy" decoding="async" src="assets/${av}" alt="${n}" class="w-8 h-8 rounded-full object-cover border border-whisper"/>
+          <div class="min-w-0"><p class="text-sm truncate">${n}</p><p class="font-mono text-[10px] tracking-widest text-ash">${m}</p></div>
+        </div>`).join("")}
+      </div>
+      <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
+        <p class="font-mono text-xs tracking-widest text-ash mb-3">ACTIVE NOW</p>
+        <div class="flex -space-x-2">
+          ${["coach-profile.jpg","client-marcus.png","client-boateng.png","client-whitfield.png"].map((a) => `
+          <img onerror="this.remove()" src="assets/${a}" alt="" class="w-8 h-8 rounded-full object-cover border-2" style="border-color:var(--c-iron)"/>`).join("")}
+          <span class="w-8 h-8 rounded-full bg-forged border-2 flex items-center justify-center font-mono text-[10px]" style="border-color:var(--c-iron)">+5</span>
         </div>
-      </div>`).join("")}
+      </div>
     </aside>
-  </div>`,
+  </div>`;
+},
 },
 
 messages: { title: "Messages", phase2: true, html: `
