@@ -451,6 +451,23 @@ overview: { title: "Overview", phase2: false, html: () => {
       </a>`).join("")}
     </div>
 
+    <div class="flex items-baseline justify-between mb-4">
+      <h3 class="v-stagger text-xl font-semibold tracking-tight">Calendar</h3>
+      <div class="v-stagger flex gap-2" id="cal-tabs">
+        ${["AUG","SEP","OCT","NOV","DEC"].map((m,i)=>`<button class="cal-tab press font-mono text-[11px] tracking-widest px-3.5 py-1.5 rounded-full border ${i===0?"border-ember text-ember":"border-whisper text-ash"}" data-m="${m}">${m}</button>`).join("")}
+      </div>
+    </div>
+    <div class="v-stagger grid grid-cols-7 gap-1.5 mb-1.5 px-0.5">
+      ${["MON","TUE","WED","THU","FRI","SAT","SUN"].map((d)=>`<p class="font-mono text-[10px] tracking-widest text-ash text-center">${d}</p>`).join("")}
+    </div>
+    <div class="v-stagger grid grid-cols-7 gap-1.5 mb-3" id="cal-grid"></div>
+    <p class="v-stagger font-mono text-[10px] tracking-widest text-ash mb-12 flex items-center gap-4 flex-wrap">
+      <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-ember inline-block"></span>COMPLETED</span>
+      <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full border border-ember inline-block"></span>UP NEXT</span>
+      <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-forged inline-block"></span>SCHEDULED</span>
+      <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full border inline-block" style="border-color:var(--c-whisper)"></span>REST</span>
+    </p>
+
     <h3 class="v-stagger text-xl font-semibold tracking-tight mb-4">Current program</h3>
     <a href="#/program/${pid}" class="v-stagger block bg-iron border border-ember/40 rounded-xl overflow-hidden hover:bg-forged mb-12">
       <div class="grid grid-cols-[220px_1fr] rgrid items-stretch">
@@ -523,9 +540,16 @@ overview: { title: "Overview", phase2: false, html: () => {
 
 walkthrough: { title: "Walk-through", phase2: false, html: () => `
   <div class="max-w-3xl mx-auto" id="wt-root">
-    <div class="v-stagger text-center mb-8">
-      <p class="font-mono text-xs tracking-[0.25em] text-ash mb-2">4TH MAN PLATFORM · GUIDED TOUR</p>
-      <h2 class="text-3xl font-semibold tracking-tight">Cayman, this is your method —<br/>built into a platform.</h2>
+    <div class="v-stagger relative rounded-xl overflow-hidden border border-whisper mb-8 h-80">
+      <video src="assets/hero-tour.mp4" poster="assets/hero-tour.png" autoplay loop muted playsinline
+        class="absolute inset-0 w-full h-full object-cover"
+        onerror="this.outerHTML='<img src=&quot;assets/hero-tour.png&quot; class=&quot;absolute inset-0 w-full h-full object-cover kenburns&quot; alt=&quot;&quot;/>'"></video>
+      <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(12,12,14,.25) 0%,rgba(12,12,14,.45) 55%,rgba(12,12,14,.94) 100%)"></div>
+      <div class="absolute left-8 right-8 bottom-7">
+        <p class="font-mono text-[11px] tracking-[0.3em] text-[#c99b4a] mb-3">4TH MAN PLATFORM · GUIDED TOUR</p>
+        <h2 class="text-4xl font-semibold tracking-tight leading-[1.1] text-[#f4f2ee]">Cayman, this is your method —<br/>built into a platform.</h2>
+        <p class="text-sm text-[#c9c6c0] mt-3">Twelve steps. Everything a client sees, everything you control. About four minutes.</p>
+      </div>
     </div>
     <div class="v-stagger flex items-center gap-4 mb-8">
       <div class="flex-1 h-1 rounded bg-forged"><div id="wt-bar" class="h-1 rounded bg-ember" style="width:0%"></div></div>

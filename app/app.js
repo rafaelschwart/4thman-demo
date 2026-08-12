@@ -175,6 +175,65 @@
   /* ---------- per-view interactions ---------- */
   function wire(key, param) {
     if (key === "overview") {
+      /* ---- month calendar ---- */
+      const CAL = [
+        { m: "AUG", y: 2026, mi: 7 }, { m: "SEP", y: 2026, mi: 8 }, { m: "OCT", y: 2026, mi: 9 },
+        { m: "NOV", y: 2026, mi: 10 }, { m: "DEC", y: 2026, mi: 11 },
+      ];
+      const SHORT = (t) => t.replace("Strength & conditioning: ", "").replace("High-intensity cardio", "HIIT")
+        .replace("Long walk + audio devotional", "Walk").replace(" and Mobility", "").slice(0, 14);
+      const renderCal = (mKey) => {
+        const mo = CAL.find((x) => x.m === mKey);
+        const pid2 = mKey === "AUG" ? "foundations" : FMY.load()[mKey];
+        const p2 = pid2 ? PROGRAMS[pid2] : null;
+        const daysIn = new Date(mo.y, mo.mi + 1, 0).getDate();
+        const startDow = (new Date(mo.y, mo.mi, 1).getDay() + 6) % 7; // Mon = 0
+        const cells = [];
+        for (let b = 0; b < startDow; b++) cells.push('<div></div>');
+        for (let dt = 1; dt <= daysIn; dt++) {
+          const dow = (startDow + dt - 1) % 7;
+          const sess = p2 && dow < p2.days.length ? p2.days[dow] : null;
+          const isToday = mKey === "AUG" && dt === 12;
+          let state = "rest", link = "", label = sess ? SHORT(sess.t) : (dow === 6 ? "Sabbath" : "Rest");
+          if (!p2) { state = "unplanned"; label = ""; }
+          else if (sess) {
+            if (mKey === "AUG") {
+              const wkDay = dt - 9; // Aug 10 = week-3 day 1
+              if (dt < 10) state = "done";
+              else if (wkDay >= 1 && wkDay <= p2.days.length) {
+                if (FMP.done("foundations").includes(wkDay)) state = "done";
+                else if (wkDay === FMP.next("foundations")) state = "next";
+                else state = "sched";
+                link = "#/session/foundations/" + wkDay;
+              } else state = "sched";
+            } else state = "sched";
+          }
+          const base = "relative rounded-lg p-1.5 text-left overflow-hidden min-h-[58px] border ";
+          const cls = state === "done" ? base + "bg-iron border-ember/40"
+            : state === "next" ? base + "bg-iron border-ember"
+            : state === "sched" ? base + "bg-iron border-whisper"
+            : state === "unplanned" ? base + "border-whisper opacity-40"
+            : base + "border-whisper opacity-50";
+          const inner = `
+            <p class="font-mono text-[10px] ${isToday ? "text-ember font-bold" : "text-ash"} text-right">${dt}${isToday ? " ·" : ""}</p>
+            ${label ? `<p class="text-[10px] leading-tight mt-0.5 ${state === "rest" ? "text-ash" : ""}">${label}</p>` : ""}
+            ${state === "done" ? '<span class="absolute bottom-1.5 left-1.5 w-2 h-2 rounded-full bg-ember"></span>' : ""}
+            ${state === "next" ? '<span class="absolute bottom-1 left-1.5 font-mono text-[8px] tracking-widest text-ember">NEXT</span>' : ""}`;
+          cells.push(link
+            ? `<a href="${link}" class="${cls} hover:bg-forged block">${inner}</a>`
+            : `<div class="${cls}">${inner}</div>`);
+        }
+        $("#cal-grid").innerHTML = cells.join("") + (p2 ? "" :
+          `<div class="col-span-7 -mt-1 border border-dashed rounded-lg p-4 text-center text-sm text-ash" style="border-color:var(--c-whisper)">No block planned for ${mKey} yet — assign one in the year planner below.</div>`);
+        anime({ targets: "#cal-grid > *", opacity: [0, 1], duration: D(240), delay: anime.stagger(D(6)), easing: "easeOutQuad" });
+      };
+      $$(".cal-tab", view).forEach((t) => t.addEventListener("click", () => {
+        $$(".cal-tab", view).forEach((x) => x.className = x.className.replace("border-ember text-ember", "border-whisper text-ash"));
+        t.className = t.className.replace("border-whisper text-ash", "border-ember text-ember");
+        renderCal(t.dataset.m);
+      }));
+      renderCal("AUG");
+
       let activeMonth = null;
       const openPicker = (m) => {
         activeMonth = m;
