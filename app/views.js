@@ -464,7 +464,152 @@ const CLIENTS = {
 
 const VIEWS = {
 
-overview: { title: "Overview", phase2: false, html: () => {
+phases: { title: "Phased Approach", phase2: false, html: `
+  <div class="max-w-4xl mx-auto">
+  <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-1">Phased Approach</h2>
+  <p class="v-stagger text-ash text-sm mb-10">How the platform gets built: what ships in four weeks, what comes after — and exactly what this demo previews versus what goes live. Two phases, one deliberate order.</p>
+
+  <div class="grid grid-cols-2 gap-5 mb-12">
+    <section class="v-stagger bg-iron border-2 border-ember/60 rounded-xl p-6 relative">
+      <span class="absolute top-4 right-4 font-mono text-[10px] tracking-widest text-ember">QUOTED · IN PROPOSAL</span>
+      <p class="font-mono text-[10px] tracking-widest text-ash mb-2">PHASE 1</p>
+      <p class="text-lg font-semibold mb-2">The Platform</p>
+      <p class="text-sm text-ash leading-relaxed mb-4">The part clients pay for every month, so it gets built first and starts charging first. A working webapp in four weeks, on desktop and phone.</p>
+      <p class="font-mono text-xs tracking-widest">8 MODULES · 4 WEEKS</p>
+    </section>
+    <section class="v-stagger bg-iron border border-whisper rounded-xl p-6 relative">
+      <span class="absolute top-4 right-4 font-mono text-[10px] tracking-widest text-ash">QUOTED AT CLOSE OF PHASE 1</span>
+      <p class="font-mono text-[10px] tracking-widest text-ash mb-2">PHASE 2</p>
+      <p class="text-lg font-semibold mb-2">The Ecosystem</p>
+      <p class="text-sm text-ash leading-relaxed mb-4">Community, messaging, nutrition, faith content, blood panel, partners, store. Priced once the platform is live and there is real usage data instead of assumptions. Can be taken in pieces.</p>
+      <p class="font-mono text-xs tracking-widest">ROADMAP · NO PRICE YET</p>
+    </section>
+  </div>
+
+  <h3 class="v-stagger text-xl font-semibold tracking-tight mb-1">Phase 1 — the eight modules</h3>
+  <p class="v-stagger text-sm text-ash mb-5">The baseline closes at the end of week 2 with payments already running. Weeks 3 and 4 build the coaching core and end at go-live.</p>
+  <p class="v-stagger font-mono text-[10px] tracking-widest text-ember mb-3">WEEKS 1–2 · THE BASELINE THAT CHARGES</p>
+  <div class="grid grid-cols-4 gap-4 mb-6">
+    ${[["01","Unified database & access","One signup, one login, phone and desktop. Everything else hangs off this data model."],
+       ["02","Client dashboard","Answers \"what do I do today?\" — plus the admin panel for the coach."],
+       ["03","Six habit tracker","Hydration, Bible, prayer, meditation, reading, training. Training checks itself."],
+       ["04","Stripe subscriptions","Essential $97 · Elite $147. Renew, upgrade, pause. Charging from week 2."]].map(([n,t,d])=>`
+    <div class="v-stagger bg-iron border border-whisper rounded-xl p-4">
+      <p class="font-mono text-ember text-sm mb-2">${n}</p>
+      <p class="text-sm font-medium mb-1.5">${t}</p>
+      <p class="text-xs text-ash leading-relaxed">${d}</p>
+    </div>`).join("")}
+  </div>
+  <p class="v-stagger font-mono text-[10px] tracking-widest text-ember mb-3">WEEKS 3–4 · THE COACHING CORE</p>
+  <div class="grid grid-cols-4 gap-4 mb-12">
+    ${[["05","Exercise library","Licensed video per exercise ($10–50/mo, billed to 4th Man). Nothing gets filmed."],
+       ["06","Workout programming","Coach builds and assigns; client logs sets, reps and weight with a rest timer."],
+       ["07","Progress tracking","Personal records, volume, consistency — and the weekly review that half fills itself."],
+       ["08","Private progress photos","A dated timeline, encrypted, visible only to the client and the coach."]].map(([n,t,d])=>`
+    <div class="v-stagger bg-iron border border-whisper rounded-xl p-4">
+      <p class="font-mono text-ember text-sm mb-2">${n}</p>
+      <p class="text-sm font-medium mb-1.5">${t}</p>
+      <p class="text-xs text-ash leading-relaxed">${d}</p>
+    </div>`).join("")}
+  </div>
+
+  <h3 class="v-stagger text-xl font-semibold tracking-tight mb-5">Four weeks, week by week</h3>
+  <div class="space-y-3 mb-6">
+    ${[["WEEK 1","Database, authentication, unified profile, permissions","Working login, your coach account, a real client list","Brand identity + a verified Stripe account — blocks every screen"],
+       ["WEEK 2","Client dashboard, six habit tracker, Stripe live","Habits tracking with streaks, a live test payment","Exercise library decision · final plans and prices"],
+       ["WEEK 3","Exercise library, program assignment, set and rep logging","A real program assigned to your test client","One real test client for a full run-through"],
+       ["WEEK 4","Progress tracking, private photos, testing, go-live","The live platform, plus your usage training","Your availability for go-live and the training session"]].map(([w,b,s,n])=>`
+    <div class="v-stagger bg-iron border border-whisper rounded-xl p-5 grid grid-cols-[92px_1fr] gap-4">
+      <span class="font-mono text-xs tracking-widest text-ember pt-0.5">${w}</span>
+      <div>
+        <p class="text-sm mb-1">${b}</p>
+        <p class="text-xs text-ash mb-1.5">You see: ${s}</p>
+        <p class="font-mono text-[10px] tracking-widest text-ash">WE NEED: ${n.toUpperCase()}</p>
+      </div>
+    </div>`).join("")}
+  </div>
+  <p class="v-stagger text-xs text-ash leading-relaxed mb-12">Throughout: a working demo every week on the real platform, never in slides. Decisions in writing. Two rounds of design adjustments per module inside scope — anything outside scope gets noted, quoted and decided, never slipped in.</p>
+
+  <h3 class="v-stagger text-xl font-semibold tracking-tight mb-5">The investment</h3>
+  <div class="grid grid-cols-3 gap-4 mb-4">
+    <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
+      <p class="font-mono text-[10px] tracking-widest text-ash mb-2">DEVELOPMENT · ONE TIME</p>
+      <p class="font-mono text-2xl mb-2">$3,000</p>
+      <p class="text-xs text-ash leading-relaxed">Phase 1 complete. 50% to start ($1,500) · 50% on delivery.</p>
+    </div>
+    <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
+      <p class="font-mono text-[10px] tracking-widest text-ash mb-2">PLATFORM · MONTHLY</p>
+      <p class="font-mono text-2xl mb-2">$300<span class="text-sm text-ash">/MO</span></p>
+      <p class="text-xs text-ash leading-relaxed">From go-live, not before. Hosting, maintenance, support, minor updates.</p>
+    </div>
+    <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
+      <p class="font-mono text-[10px] tracking-widest text-ash mb-2">THIRD PARTY · DIRECT</p>
+      <p class="font-mono text-2xl mb-2">$10–50<span class="text-sm text-ash">/MO</span></p>
+      <p class="text-xs text-ash leading-relaxed">Exercise library license + Stripe per-transaction fees, billed to 4th Man.</p>
+    </div>
+  </div>
+  <p class="v-stagger font-mono text-[10px] tracking-widest text-ash mb-12">PROPOSAL V03 · 30 JUL 2026 · VALID TO 14 AUG 2026 · NEW FEATURES OUTSIDE PHASE 1 ARE QUOTED SEPARATELY AND APPROVED BEFORE ANY WORK HAPPENS</p>
+
+  <h3 class="v-stagger text-xl font-semibold tracking-tight mb-1">Phase 2 — quoted with real data, not assumptions</h3>
+  <p class="v-stagger text-sm text-ash mb-5">Everything below is live in this demo as a preview, marked <span class="font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-1.5 py-0.5">PHASE 2 PREVIEW</span> in the header. It is priced at the close of Phase 1 and can be taken in pieces.</p>
+  <div class="grid grid-cols-2 gap-5 mb-6">
+    <div class="v-stagger bg-iron border border-whisper rounded-xl p-6">
+      <p class="font-mono text-[10px] tracking-widest text-ember mb-3">COMMUNITY · BUILT FIRST</p>
+      <ul class="text-sm text-ash space-y-2">
+        <li>Private feed, prayer wall, challenges, leaderboard</li>
+        <li>Direct messaging between members and coaches</li>
+        <li>Nutrition: meal plans, macros and recipes</li>
+        <li>Devotional, meditation and reading content</li>
+      </ul>
+    </div>
+    <div class="v-stagger bg-iron border border-whisper rounded-xl p-6">
+      <p class="font-mono text-[10px] tracking-widest text-ember mb-3">ECOSYSTEM · BUILT LAST</p>
+      <ul class="text-sm text-ash space-y-2">
+        <li>Blood panel (Path A: you upload your own results)</li>
+        <li>Partner network, booked through embedded Cal.com</li>
+        <li>Apparel store via Shopify Buy SDK</li>
+        <li>Accounts for additional coaches and staff</li>
+      </ul>
+    </div>
+  </div>
+  <div class="v-stagger bg-iron border border-whisper rounded-xl p-5 mb-12">
+    <p class="font-mono text-[10px] tracking-widest text-ash mb-2">HONEST NOTE ON COMMUNITY</p>
+    <p class="text-sm text-ash leading-relaxed">Even the large platforms in this category run their community in a Facebook group rather than in the app, because a quiet feed reads worse than no feed. Worth deciding with real usage data once the platform is live.</p>
+  </div>
+
+  <h3 class="v-stagger text-xl font-semibold tracking-tight mb-1">This demo vs. what ships</h3>
+  <p class="v-stagger text-sm text-ash mb-5">This demo exists to show the product vision. Where the demo goes beyond the quoted scope, here is the honest line — so week 3 never has to relitigate week 1.</p>
+  <div class="space-y-3 mb-12">
+    ${[["Exercise photos & videos","AI-generated placeholders in this demo. Phase 1 ships a licensed professional library ($10–50/mo). Nothing gets filmed."],
+       ["Programs & sessions","Sample plans written for this demo. Your real plans, names and habit copy come from you in weeks 1–3."],
+       ["Payments","Simulated here. Real Stripe subscriptions in 4th Man's own account are live in week 2."],
+       ["Year planner (Overview)","In Phase 1 the coach assigns programs. Client self-planning like this demo's year view is a Phase 2 candidate."],
+       ["Community, Messages, Nutrition, Faith, Partners, Gear","Fully interactive previews — none are in the Phase 1 quote. Each is priced at the close of Phase 1."],
+       ["Blood panel","Path A only, ever, in v1: you or your client upload your own lab PDF and the platform charts trends. Direct Quest or LabCorp integration is not ours to grant, so we will not sell it to you. Named results stored with identity are PHI and carry full HIPAA obligations — the barrier is legal, not technical."],
+       ["Native iOS / Android apps","Not in Phase 1 — this is a webapp for phone and desktop browsers, built on a backend the future apps reuse. Store review timelines are never committed as ours: Apple and Google control them."],
+       ["Sample clients & numbers","Every client, metric and conversation in this demo is fictional sample data."]].map(([t,d])=>`
+    <div class="v-stagger bg-iron border border-whisper rounded-xl p-5 grid grid-cols-[200px_1fr] gap-4 rgrid">
+      <p class="text-sm font-medium">${t}</p>
+      <p class="text-xs text-ash leading-relaxed">${d}</p>
+    </div>`).join("")}
+  </div>
+
+  <h3 class="v-stagger text-xl font-semibold tracking-tight mb-5">How we start</h3>
+  <div class="grid grid-cols-3 gap-4 mb-8">
+    ${[["01","Confirm the proposal","One reply. The quote holds to 14 Aug 2026."],
+       ["02","50% + week-1 inputs","$1,500 to start, brand identity, and a verified Stripe account — the two inputs that block every screen."],
+       ["03","Week 1 begins","The first working demo arrives 7 days later, on the real platform."]].map(([n,t,d])=>`
+    <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
+      <p class="font-mono text-ember text-sm mb-2">${n}</p>
+      <p class="text-sm font-medium mb-1.5">${t}</p>
+      <p class="text-xs text-ash leading-relaxed">${d}</p>
+    </div>`).join("")}
+  </div>
+  <p class="v-stagger text-sm text-ash">The method stays yours. 4th Man's data, and its clients' data, belong to 4th Man Enterprises.</p>
+  </div>`,
+},
+
+overview: { title: "Overview", phase2: false, p1: "MODULES 02 · 06", html: () => {
   const pid = "foundations", p = PROGRAMS[pid];
   const nd = FMP.next(pid), doneArr = FMP.done(pid);
   const total = p.weeks * p.days.length, cur = Math.min(total, (p.done || 0) + doneArr.length);
@@ -631,7 +776,7 @@ walkthrough: { title: "Walk-through", phase2: false, html: () => `
   </div>`,
 },
 
-today: { title: "Today", phase2: false, html: () => {
+today: { title: "Today", phase2: false, p1: "MODULES 02 · 03", html: () => {
   const pid = "foundations", p = PROGRAMS[pid];
   const nd = FMP.next(pid), d = p.days[nd - 1];
   const doneCount = FMP.done(pid).length;
@@ -694,7 +839,7 @@ today: { title: "Today", phase2: false, html: () => {
   </div>`; },
 },
 
-programs: { title: "Programs", phase2: false, html: () => {
+programs: { title: "Programs", phase2: false, p1: "MODULES 05 · 06", html: () => {
   const card = (id, p) => `
     <a href="#/program/${id}" class="v-stagger block bg-iron border border-whisper rounded-xl overflow-hidden hover:bg-forged">
       <div class="h-40 overflow-hidden"><img src="${p.cover}" alt="${p.name}" class="ig-img"/></div>
@@ -769,6 +914,7 @@ programs: { title: "Programs", phase2: false, html: () => {
 program: {
   title: (id) => (PROGRAMS[id] || PROGRAMS.foundations).name,
   phase2: false,
+  p1: "MODULES 05 · 06",
   html: (id) => {
     const p = PROGRAMS[id] || PROGRAMS.foundations; const wk = p.week || 1;
     const w = weekOf(p, wk);
@@ -838,6 +984,7 @@ program: {
 session: {
   title: (param) => { const [id] = (param || "foundations/1").split("/"); return (PROGRAMS[id] || PROGRAMS.foundations).name + " — Session"; },
   phase2: false,
+  p1: "MODULES 05 · 06",
   html: (param) => {
     const [id, dn] = (param || "foundations/1").split("/");
     const p = PROGRAMS[id] || PROGRAMS.foundations;
@@ -937,6 +1084,7 @@ session: {
 logbook: {
   title: (param) => { const [id] = (param || "foundations/1").split("/"); return (PROGRAMS[id] || PROGRAMS.foundations).name + " — Logbook"; },
   phase2: false,
+  p1: "MODULE 06",
   html: (param) => {
     const [id, dn] = (param || "foundations/1").split("/");
     const p = PROGRAMS[id] || PROGRAMS.foundations;
@@ -1005,6 +1153,7 @@ workout: {
     return p.days[di].t + " — Week " + (p.week || 1) + ", Day " + (di + 1);
   },
   phase2: false,
+  p1: "MODULE 06",
   html: (param) => {
     const [id, dn] = (param || "foundations/" + FMP.next("foundations")).split("/");
     const p = PROGRAMS[id] || PROGRAMS.foundations;
@@ -1087,7 +1236,7 @@ workout: {
   </div>`; },
 },
 
-progress: { title: "Progress", phase2: false, html: `
+progress: { title: "Progress", phase2: false, p1: "MODULE 07", html: `
   <div class="max-w-4xl mx-auto">
     <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-2">Progress</h2>
     <p class="v-stagger text-ash text-sm mb-8">Eight weeks of work on one screen — the story that used to live buried in chat history.</p>
@@ -1179,7 +1328,7 @@ progress: { title: "Progress", phase2: false, html: `
   </div>`,
 },
 
-photos: { title: "Progress Photos", phase2: false, html: `
+photos: { title: "Progress Photos", phase2: false, p1: "MODULE 08", html: `
   <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-2">Progress Photos</h2>
   <p class="v-stagger flex items-center gap-2 text-ash text-sm mb-10">${ICON("lock","text-ember")} Private — visible only to you and your coach. Encrypted at rest.</p>
   <div class="grid grid-cols-4 gap-5">
@@ -1200,7 +1349,7 @@ photos: { title: "Progress Photos", phase2: false, html: `
   <button id="add-photo" class="v-stagger press mt-8 border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged">Add photo</button>`,
 },
 
-review: { title: "Weekly Review — Week 3", phase2: false, html: `
+review: { title: "Weekly Review — Week 3", phase2: false, p1: "MODULE 07", html: `
   <div class="max-w-4xl mx-auto">
     <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-2">Weekly Review</h2>
     <p class="v-stagger text-ash text-sm max-w-2xl leading-relaxed mb-7">Every Sunday the platform writes the measurable half of your week for you — sessions, habits, body. You add the part no system can measure. Coach Cayman reads it before Monday's call.</p>
@@ -1304,7 +1453,7 @@ review: { title: "Weekly Review — Week 3", phase2: false, html: `
   </div>`,
 },
 
-account: { title: "Subscription", phase2: false, html: `
+account: { title: "Subscription", phase2: false, p1: "MODULE 04", html: `
   <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-1">Subscription</h2>
   <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-8">CAYMAN · CAYMANDEMO@ARQENTIA.COM</p>
   <div class="grid grid-cols-2 gap-5 max-w-3xl mb-8">
@@ -1899,7 +2048,7 @@ gear: { title: "4th Man Gear", phase2: true, html: `
   <p class="v-stagger font-mono text-[11px] text-ash mt-8">CHECKOUT POWERED BY SHOPIFY · EMBEDDED</p>`,
 },
 
-coach: { title: "Coach — Dashboard", phase2: false, html: `
+coach: { title: "Coach — Dashboard", phase2: false, p1: "ADMIN PANEL", html: `
   <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-1">Who needs attention</h2>
   <p class="v-stagger text-ash text-sm mb-8">Sorted slipping-first. You learn a client slipped here, not when they cancel.</p>
   <div class="grid grid-cols-4 gap-4 mb-10">
@@ -1954,7 +2103,7 @@ coach: { title: "Coach — Dashboard", phase2: false, html: `
   ${ci===5?"</div>":""}`).join("")}`,
 },
 
-client: { title: (id) => "Coach — " + ((CLIENTS[id] || CLIENTS.marcus).n), phase2: false, html: (id) => {
+client: { title: (id) => "Coach — " + ((CLIENTS[id] || CLIENTS.marcus).n), phase2: false, p1: "ADMIN PANEL", html: (id) => {
   const c = CLIENTS[id] || CLIENTS.marcus;
   const stColor = c.st === "ok" ? "ok" : c.st === "bad" ? "bad" : "ash";
   return `
@@ -2042,7 +2191,7 @@ client: { title: (id) => "Coach — " + ((CLIENTS[id] || CLIENTS.marcus).n), pha
 },
 },
 
-builder: { title: "Coach — Program Builder", phase2: false, html: `
+builder: { title: "Coach — Program Builder", phase2: false, p1: "MODULE 06 · ADMIN", html: `
   <div class="v-stagger flex items-start justify-between mb-8">
     <div><h2 class="text-2xl font-semibold tracking-tight">Program Builder</h2>
       <p class="text-ash text-sm mt-1">Foundations of Iron · <span class="font-mono">8 WEEKS · 4 DAYS/WK</span></p></div>
@@ -2115,7 +2264,7 @@ builder: { title: "Coach — Program Builder", phase2: false, html: `
   </div>`,
 },
 
-billing: { title: "Coach — Billing", phase2: false, html: `
+billing: { title: "Coach — Billing", phase2: false, p1: "MODULE 04 · ADMIN", html: `
   <h2 class="v-stagger text-2xl font-semibold tracking-tight mb-1">Billing</h2>
   <p class="v-stagger text-ash text-sm mb-8">Subscriptions renew, upgrade and pause without a reminder.</p>
   <div class="grid grid-cols-4 gap-4 mb-10">

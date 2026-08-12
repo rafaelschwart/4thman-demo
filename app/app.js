@@ -126,7 +126,11 @@
     const mount = () => {
       view.innerHTML = typeof v.html === "function" ? v.html(param) : v.html;
       titleEl.textContent = typeof v.title === "function" ? v.title(param) : v.title;
-      phaseTag.classList.toggle("hidden", !v.phase2);
+      const chip = v.phase2 ? "PHASE 2 PREVIEW" : v.p1 ? "PHASE 1 · " + v.p1 : "";
+      phaseTag.classList.toggle("hidden", !chip);
+      phaseTag.textContent = chip;
+      phaseTag.className = "font-mono text-[10px] tracking-widest rounded px-2 py-0.5 border " +
+        (chip ? "" : "hidden ") + (v.phase2 ? "text-ember border-ember/40" : "text-ok border-ok/40");
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       if (reduced) $$("video", view).forEach((vd) => { vd.removeAttribute("autoplay"); vd.pause(); });
       animateIn();
