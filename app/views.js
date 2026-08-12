@@ -524,11 +524,13 @@ session: {
     const di = Math.min(Math.max(parseInt(dn || "1") - 1, 0), p.days.length - 1);
     const d = p.days[di]; const wk = p.week || 1;
     const S = sessOf(id, di);
-    const ex = (e) => `
+    const ex = (e) => {
+      const med = exMedia(e.n, e.k);
+      return `
       <div class="ex-row border-b" style="border-color:var(--c-whisper)">
         <div class="flex items-center gap-4 py-3 px-1 cursor-pointer">
           <div class="relative w-20 rounded-lg overflow-hidden bg-forged flex items-center justify-center shrink-0" style="height:52px">
-            <img onerror="this.remove()" loading="lazy" decoding="async" src="${EXIMG[e.k]}" alt="" class="ig-img"/>
+            <img onerror="this.remove()" loading="lazy" decoding="async" src="${med.img}" alt="${e.n}" class="ig-img"/>
             <span class="absolute inset-0 flex items-center justify-center" style="background:rgba(12,12,14,.25)">${ICON("play_arrow","text-white")}</span>
           </div>
           <div class="flex-1"><p class="text-sm leading-snug">${e.n}</p><p class="font-mono text-sm font-semibold mt-0.5">${e.v}</p></div>
@@ -536,14 +538,15 @@ session: {
         </div>
         <div class="ex-tip hidden pb-4 pl-24 pr-6">
           <div class="player rounded-lg h-36 border border-whisper mb-3">
-            ${EXVID[e.k]
-              ? `<video src="${EXVID[e.k]}" poster="${EXIMG[e.k]}" loop muted playsinline preload="none" aria-label="${e.n} form video" class="ig-img"></video>`
-              : `<img onerror="this.remove()" loading="lazy" decoding="async" src="${EXIMG[e.k]}" alt="${e.n} form video" class="kenburns"/><div class="play-badge"><span>${ICON("play_arrow")}</span></div>`}
-            <span class="dur-chip">${EXVID[e.k] ? "0:08 · FORM VIDEO" : "0:15 · FORM VIDEO"}</span>
+            ${med.vid
+              ? `<video src="${med.vid}" poster="${med.img}" loop muted playsinline preload="none" aria-label="${e.n} form video" class="ig-img"></video>`
+              : `<img onerror="this.remove()" loading="lazy" decoding="async" src="${med.img}" alt="${e.n} form video" class="kenburns"/><div class="play-badge"><span>${ICON("play_arrow")}</span></div>`}
+            <span class="dur-chip">0:05 · FORM VIDEO</span>
           </div>
           <p class="text-xs text-ash leading-relaxed">${CUES[e.k]}</p>
         </div>
       </div>`;
+    };
     const rest = (t) => t && t !== "—" ? `<p class="py-3 text-center font-mono text-xs tracking-widest text-ash border-b" style="border-color:var(--c-whisper)">REST • ${t}</p>` : "";
     const eyebrow = (l) => `<p class="font-mono text-xs tracking-widest font-semibold border-b pb-2 mb-1" style="border-color:var(--c-whisper)">${l}</p>`;
     const setGroup = (g) => {
