@@ -1088,26 +1088,106 @@ photos: { title: "Progress Photos", phase2: false, html: `
 },
 
 review: { title: "Weekly Review — Week 3", phase2: false, html: `
-  <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-1">Weekly Review</h2>
-  <p class="v-stagger font-mono text-xs text-ash mb-8">WEEK 3 · 3 OF 5 FIELDS PRE-FILLED FROM YOUR LOGS</p>
-  <div class="max-w-2xl space-y-4">
-    ${[["Training","4 of 4 sessions completed · 12,480 lb total volume"],
-       ["Daily Six","38 of 42 habit checks · longest streak 23 days"],
-       ["Body","Weight logged 3× · trend −1.2 lb"]].map(([t,v])=>`
-    <section class="v-stagger bg-iron border border-whisper rounded-xl p-5 flex items-start justify-between">
-      <div><p class="text-sm font-medium mb-1">${t}</p><p class="font-mono text-sm text-ash">${v}</p></div>
-      <span class="flex items-center gap-2 font-mono text-[10px] tracking-widest text-ember">${ICON("check_circle")}PRE-FILLED</span>
-    </section>`).join("")}
-    <section class="v-stagger bg-iron border border-whisper rounded-xl p-5">
-      <label class="block text-sm font-medium mb-2" for="wins">Wins this week</label>
-      <textarea id="wins" rows="3" class="w-full bg-forged border border-whisper rounded-lg px-4 py-3 text-sm focus:border-ember focus:ring-0" placeholder="What moved forward?"></textarea>
-    </section>
-    <section class="v-stagger bg-iron border border-whisper rounded-xl p-5">
-      <label class="block text-sm font-medium mb-2" for="struggle">Where I struggled</label>
-      <textarea id="struggle" rows="3" class="w-full bg-forged border border-whisper rounded-lg px-4 py-3 text-sm focus:border-ember focus:ring-0" placeholder="Name it plainly."></textarea>
-    </section>
-    <button class="v-stagger press w-full bg-ember text-furnace rounded-lg py-3.5 text-sm font-semibold">Submit Review</button>
-    <p class="v-stagger text-ash text-xs text-center">Your coach reads every review before Monday's call.</p>
+  <div class="max-w-4xl mx-auto">
+    <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-2">Weekly Review</h2>
+    <p class="v-stagger text-ash text-sm max-w-2xl leading-relaxed mb-7">Every Sunday the platform writes the measurable half of your week for you — sessions, habits, body. You add the part no system can measure. Coach Cayman reads it before Monday's call.</p>
+
+    <div class="v-stagger grid grid-cols-3 gap-3 mb-10 rgrid">
+      ${[["database","1. The logs fill the facts","Training, habits and body data land here automatically."],
+         ["edit_note","2. You add the story","Two honest sentences: what moved, what fought back."],
+         ["forum","3. Your coach reads it","Reviewed before Monday's call — it shapes next week's plan."]]
+        .map(([ic,t,d])=>`
+      <div class="flex items-start gap-3 bg-iron border border-whisper rounded-xl p-4">
+        <span class="w-8 h-8 rounded-lg bg-forged flex items-center justify-center shrink-0">${ICON(ic,"text-ember")}</span>
+        <div><p class="text-sm font-semibold mb-0.5">${t}</p><p class="text-xs text-ash leading-relaxed">${d}</p></div>
+      </div>`).join("")}
+    </div>
+
+    <div class="grid grid-cols-[1.15fr_1fr] gap-8 rgrid">
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <p class="v-stagger font-mono text-xs tracking-widest text-ash">FILLED FROM YOUR LOGS</p>
+          <span class="v-stagger font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-2 py-0.5">3 OF 5 · AUTOMATIC</span>
+        </div>
+
+        <section class="v-stagger bg-iron border border-whisper rounded-xl p-5 mb-4">
+          <div class="flex items-baseline justify-between mb-4">
+            <p class="text-sm font-semibold">Training</p>
+            <p class="font-mono text-sm"><span class="count" data-to="4">0</span>/4 SESSIONS</p>
+          </div>
+          <div class="grid grid-cols-6 gap-1.5 mb-4">
+            ${[["MON","Push",1],["TUE","Pull",1],["WED","HIIT",1],["THU","Legs",1],["FRI","Mobility",0],["SAT","LISS",0]]
+              .map(([d,t,done])=>`
+            <div class="text-center">
+              <div class="dot h-9 rounded-lg ${done?"bg-ember":"bg-forged"} flex items-center justify-center" style="opacity:0">
+                ${done?`<span class="material-symbols-outlined" aria-hidden="true" style="font-size:15px;color:var(--c-furnace)">check</span>`:""}
+              </div>
+              <p class="font-mono text-[9px] text-ash mt-1">${d}</p>
+            </div>`).join("")}
+          </div>
+          <div class="flex justify-between font-mono text-[11px] text-ash mb-1.5"><span>VOLUME VS LAST WEEK</span><span class="text-ok">12,480 LB ▲ +8%</span></div>
+          <div class="flex items-end gap-1 h-10">
+            ${[62,71,68,80,76,84,100].map(v=>`<div class="vol-bar flex-1 rounded-t bg-ember/70" style="height:0" data-h="${v}"></div>`).join("")}
+          </div>
+        </section>
+
+        <section class="v-stagger bg-iron border border-whisper rounded-xl p-5 mb-4">
+          <div class="flex items-baseline justify-between mb-4">
+            <p class="text-sm font-semibold">The Daily Six</p>
+            <p class="font-mono text-sm"><span class="count" data-to="38">0</span>/42 CHECKS</p>
+          </div>
+          ${[["water_drop","Hydration",7],["auto_stories","Bible",7],["volunteer_activism","Prayer",6],["self_improvement","Meditation",5],["import_contacts","Reading",6],["exercise","Training",7]]
+            .map(([ic,n,c])=>`
+          <div class="flex items-center gap-3 py-1.5">
+            ${ICON(ic,"text-ash")}
+            <span class="text-xs w-24 shrink-0">${n}</span>
+            <div class="flex-1 h-1.5 rounded bg-forged"><div class="bar-fill h-1.5 rounded" data-w="${Math.round(c/7*100)}%"></div></div>
+            <span class="font-mono text-[11px] text-ash w-8 text-right">${c}/7</span>
+          </div>`).join("")}
+          <p class="font-mono text-[11px] text-ash mt-3">LONGEST STREAK · <span class="text-ember">23 DAYS</span></p>
+        </section>
+
+        <section class="v-stagger bg-iron border border-whisper rounded-xl p-5">
+          <div class="flex items-baseline justify-between mb-3">
+            <p class="text-sm font-semibold">Body</p>
+            <p class="font-mono text-sm text-ok">▼ 1.2 LB THIS WEEK</p>
+          </div>
+          <svg viewBox="0 0 320 56" class="w-full" style="height:56px" role="img" aria-label="Weight trend, three logs this week, down 1.2 pounds">
+            <line x1="0" y1="44" x2="320" y2="44" stroke="var(--c-whisper)" stroke-width="1"/>
+            <polyline points="20,16 160,26 300,38" fill="none" stroke="var(--c-ember)" stroke-width="2"/>
+            ${[[20,16,"188.4","MON"],[160,26,"187.8","WED"],[300,38,"187.2","SAT"]].map(([x,y,v,d])=>`
+              <circle cx="${x}" cy="${y}" r="3.5" fill="var(--c-ember)"/>
+              <text x="${x}" y="${y-8}" text-anchor="middle" font-family="Geist Mono" font-size="10" fill="var(--c-bone)">${v}</text>
+              <text x="${x}" y="54" text-anchor="middle" font-family="Geist Mono" font-size="8" fill="var(--c-ash)">${d}</text>`).join("")}
+          </svg>
+          <p class="text-xs text-ash mt-2">Logged 3× — steady, no crash. Exactly the pace the block calls for.</p>
+        </section>
+      </div>
+
+      <div>
+        <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-4">YOU WRITE THE REST · 2 OF 5</p>
+        <section class="v-stagger bg-iron border border-whisper rounded-xl p-5 mb-4">
+          <label class="block text-sm font-semibold mb-1" for="wins">Wins this week</label>
+          <p class="text-xs text-ash mb-3">What moved forward — in the gym or out of it.</p>
+          <textarea id="wins" rows="3" class="w-full bg-forged border border-whisper rounded-lg px-4 py-3 text-sm focus:border-ember focus:ring-0" placeholder="Benched 205 clean. Read with the kids every night."></textarea>
+        </section>
+        <section class="v-stagger bg-iron border border-whisper rounded-xl p-5 mb-4">
+          <label class="block text-sm font-semibold mb-1" for="struggle">Where I struggled</label>
+          <p class="text-xs text-ash mb-3">Name it plainly. This is what the call is for.</p>
+          <textarea id="struggle" rows="3" class="w-full bg-forged border border-whisper rounded-lg px-4 py-3 text-sm focus:border-ember focus:ring-0" placeholder="Meditation slipped twice — evenings got away from me."></textarea>
+        </section>
+        <button class="v-stagger press w-full bg-ember rounded-lg py-3.5 text-sm font-semibold mb-6" style="color:var(--c-furnace)">Send to Coach Cayman</button>
+
+        <div class="v-stagger bg-iron border border-ember/30 rounded-xl p-5">
+          <div class="flex items-center gap-3 mb-3">
+            <img src="assets/coach-profile.jpg" alt="Coach Cayman" class="w-10 h-10 rounded-full object-cover border border-ember/40"/>
+            <div><p class="text-sm font-semibold">Coach Cayman</p><p class="font-mono text-[10px] tracking-widest text-ash">REPLIED TO LAST WEEK'S REVIEW</p></div>
+          </div>
+          <p class="text-sm leading-relaxed italic">"Four for four and the streak held through a travel week — that's the man we're building. This week: guard the evening reading. Everything else is working."</p>
+          <p class="font-mono text-[10px] tracking-widest text-ash mt-3">REVIEW STREAK · <span class="text-ember">4 WEEKS IN A ROW</span></p>
+        </div>
+      </div>
+    </div>
   </div>`,
 },
 
