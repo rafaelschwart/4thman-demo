@@ -541,10 +541,10 @@ overview: { title: "Overview", phase2: false, html: () => {
 walkthrough: { title: "Walk-through", phase2: false, html: () => `
   <div class="max-w-3xl mx-auto" id="wt-root">
     <div class="v-stagger relative rounded-xl overflow-hidden border border-whisper mb-8 h-80">
-      <video src="assets/hero-tour.mp4" poster="assets/hero-tour.png" autoplay loop muted playsinline
+      <video src="assets/hero-tour.mp4?r=2" poster="assets/hero-tour.png?r=2" autoplay loop muted playsinline
         class="absolute inset-0 w-full h-full object-cover"
         onerror="this.outerHTML='<img src=&quot;assets/hero-tour.png&quot; class=&quot;absolute inset-0 w-full h-full object-cover kenburns&quot; alt=&quot;&quot;/>'"></video>
-      <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(12,12,14,.25) 0%,rgba(12,12,14,.45) 55%,rgba(12,12,14,.94) 100%)"></div>
+      <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(12,12,14,.10) 0%,rgba(12,12,14,.22) 55%,rgba(12,12,14,.86) 100%)"></div>
       <div class="absolute left-8 right-8 bottom-7">
         <p class="font-mono text-[11px] tracking-[0.3em] text-[#c99b4a] mb-3">4TH MAN PLATFORM · GUIDED TOUR</p>
         <h2 class="text-4xl font-semibold tracking-tight leading-[1.1] text-[#f4f2ee]">Cayman, this is your method —<br/>built into a platform.</h2>
