@@ -155,7 +155,7 @@
   const WT_STEPS = [
     { eyebrow: "WELCOME", title: "Twelve years of coaching, one login",
       body: "Everything you already do over WhatsApp — the plans, the check-ins, the habit reminders, the payment chasing — lives in one system that carries your name, your pillars, and your standard. This tour walks you through it exactly the way a client will experience it.",
-      cta: "Start at the sign-in", href: "#/today", media: { img: "assets/post-C9U3l8gOpmm.jpg" }, tryIt: "Spiritual strength. Mental fortitude. Physical fitness. Your words, on the front door." },
+      cta: "Start at the sign-in", href: "#/today", media: { img: "assets/coach-transform.png" }, tryIt: "Twelve years of your own transformation \u2014 restyled into the platform\u2019s look. Every visual swaps for your real footage in production." },
     { eyebrow: "THE DAILY SIX", title: "Your differentiator becomes measurable",
       body: "Hydration, Bible, Prayer, Meditation, Reading, Training — the six habits you teach, counted instead of remembered. A client opens the app on a Tuesday morning and knows exactly what to do; Training checks itself when the session ends, and you see everyone's streaks without asking for screenshots.",
       cta: "Open Today", href: "#/today", media: { img: "assets/gen-bench.png", vid: "assets/gen2-bench.mp4" }, tryIt: "Try it: tap a habit tile — the streak reacts instantly." },
