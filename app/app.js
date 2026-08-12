@@ -90,8 +90,26 @@
 
   /* ---------- entrance choreography ---------- */
   function animateIn() {
-    anime({ targets: $$(".v-stagger", view), opacity: [0, 1], translateY: [16, 0],
+    const els = $$(".v-stagger", view);
+    const fold = window.innerHeight + 80;
+    const above = els.filter((el) => el.getBoundingClientRect().top < fold);
+    const below = els.filter((el) => el.getBoundingClientRect().top >= fold);
+    anime({ targets: above, opacity: [0, 1], translateY: [16, 0],
       duration: D(480), delay: anime.stagger(D(42)), easing: "easeOutQuart" });
+    if (below.length) {
+      if (reduced) { below.forEach((el) => (el.style.opacity = 1)); }
+      else {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) {
+              anime({ targets: en.target, opacity: [0, 1], translateY: [18, 0], duration: 520, easing: "easeOutQuart" });
+              io.unobserve(en.target);
+            }
+          });
+        }, { rootMargin: "0px 0px -8% 0px" });
+        below.forEach((el) => io.observe(el));
+      }
+    }
 
     $$(".count", view).forEach((el) => {
       const to = parseFloat(el.dataset.to || "0");

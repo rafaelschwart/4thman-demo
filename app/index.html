@@ -30,12 +30,14 @@ tailwind.config = {
     --c-bone:#f4f2ee; --c-ash:#8e8e93;
     --c-ember:#c99b4a; --c-ember-rgb:201 155 74;
     --c-whisper:rgba(244,242,238,0.08); --c-glass:rgba(12,12,14,.82);
+    --shadow-card: 0 1px 2px rgba(0,0,0,.35), 0 14px 36px -16px rgba(201,155,74,.14);
   }
   html.light {
-    --c-furnace:#f3f1ec; --c-iron:#fbfaf7; --c-forged:#e7e3da;
-    --c-bone:#1a1a1d; --c-ash:#70706c;
+    --c-furnace:#e9e6df; --c-iron:#f7f5f0; --c-forged:#dcd7cb;
+    --c-bone:#1a1a1d; --c-ash:#63635d;
     --c-ember:#875f24; --c-ember-rgb:135 95 36;
-    --c-whisper:rgba(26,26,29,0.12); --c-glass:rgba(243,241,236,.85);
+    --c-whisper:rgba(26,26,29,0.16); --c-glass:rgba(233,230,223,.88);
+    --shadow-card: 0 1px 2px rgba(26,26,29,.05), 0 12px 32px -14px rgba(26,26,29,.22);
   }
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300; font-size: 20px; }
   html { scrollbar-color: var(--c-forged) var(--c-furnace); }
@@ -91,6 +93,53 @@ tailwind.config = {
     padding: 3px 8px; border-radius: 6px; }
   .press:active { transform: translateY(1px); }
   td, th { font-variant-numeric: tabular-nums; }
+
+  /* ---------- Premium layer: texture, depth, and micro-motion ---------- */
+  ::selection { background: rgba(var(--c-ember-rgb) / .28); color: var(--c-bone); }
+  html { scroll-behavior: smooth; }
+
+  /* filmic grain — fixed pseudo-element, imperceptible but kills flat digital surfaces */
+  body::after {
+    content: ""; position: fixed; inset: -50%; z-index: 9998; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: .022; mix-blend-mode: overlay;
+  }
+  html.light body::after { opacity: .05; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    #view a, #view button, .nav-item {
+      transition: transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s cubic-bezier(.22,1,.36,1),
+                  border-color .22s ease, background-color .22s ease, color .18s ease;
+    }
+    .ig-img { transition: transform .6s cubic-bezier(.22,1,.36,1); }
+    /* cards lift, their imagery breathes */
+    #view a[class*="bg-iron"]:hover { transform: translateY(-2px); box-shadow: var(--shadow-card); }
+    #view a[class*="bg-iron"]:hover .ig-img { transform: scale(1.045); }
+    #view a[class*="bg-iron"]:active { transform: translateY(0); }
+    /* sidebar items nudge, icon warms */
+    #sidebar .nav-item:hover { transform: translateX(2px); }
+    #sidebar .nav-item:hover .material-symbols-outlined { color: var(--c-ember); }
+    /* primary ember actions get a light sweep */
+    .press.bg-ember { position: relative; overflow: hidden; }
+    .press.bg-ember::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 42%, rgba(255,255,255,.32) 50%, transparent 58%);
+      transform: translateX(-120%); transition: transform .7s cubic-bezier(.22,1,.36,1);
+    }
+    .press.bg-ember:hover::before { transform: translateX(120%); }
+    /* media chrome responds */
+    .player:hover .play-badge > span { transform: scale(1.08); background: rgba(12,12,14,.78); }
+    .play-badge > span { transition: transform .3s cubic-bezier(.22,1,.36,1), background .3s ease; }
+    /* week/calendar tabs settle in */
+    .wk-tab, .cal-tab, .r-filter { transition: transform .25s cubic-bezier(.22,1,.36,1), border-color .2s, color .2s; }
+    .wk-tab:hover, .cal-tab:hover, .r-filter:hover { transform: translateY(-1px); }
+    /* habit tiles get tactile depth */
+    .habit-tile { transition: transform .25s cubic-bezier(.22,1,.36,1), border-color .2s, box-shadow .25s; }
+    .habit-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-card); }
+  }
+  /* resting depth so cards sit on the ground in both themes */
+  #view .bg-iron { box-shadow: 0 1px 0 rgba(0,0,0,.04); }
+  html.light #view .bg-iron { box-shadow: 0 1px 2px rgba(26,26,29,.06); }
 
   #gate-photo { background-size: cover; background-position: center 20%; }
   #gate-photo::after { content:""; position:absolute; inset:0;
@@ -238,7 +287,7 @@ tailwind.config = {
   </nav>
 </div>
 
-<script src="exmedia.js?v=15"></script>
-<script src="views.js?v=15"></script>
-<script src="app.js?v=15"></script>
+<script src="exmedia.js?v=16"></script>
+<script src="views.js?v=16"></script>
+<script src="app.js?v=16"></script>
 </body></html>
