@@ -279,7 +279,8 @@ const sessOf = (pid, di) => SESSIONS[(PROGRAMS[pid] || PROGRAMS.foundations).typ
 const weekOf = (p, wk) => p.weekly[Math.min(Math.max(wk, 1), p.weeks) - 1];
 
 const dayCard = (pid, d, i) => `
-  <a href="#/session/${pid}/${i + 1}" class="v-stagger tl-card relative block bg-iron border border-whisper rounded-xl overflow-hidden hover:bg-forged">
+  <a href="#/session/${pid}/${i + 1}" class="v-stagger tl-card relative block bg-iron border ${FMP.done(pid).includes(i + 1) ? "border-ember/50" : "border-whisper"} rounded-xl overflow-hidden hover:bg-forged">
+    ${FMP.done(pid).includes(i + 1) ? '<span class="absolute top-3 right-3 z-10 w-6 h-6 rounded-full bg-ember flex items-center justify-center" style="color:var(--c-furnace)"><span class="material-symbols-outlined" style="font-size:15px">check</span></span>' : ""}
     <div class="grid grid-cols-[136px_1fr] items-center">
       <div class="h-28 overflow-hidden"><img onerror="this.remove()" loading="lazy" decoding="async" src="${d.img}" alt="" class="ig-img"/></div>
       <div class="p-4">
@@ -337,21 +338,73 @@ const RECIPES = {
 };
 const rBadge = (b) => `<span class="w-6 h-6 rounded-full bg-forged flex items-center justify-center font-mono text-[8px] tracking-wide text-ash" title="${({DF:"Dairy free",EF:"Egg free",GF:"Gluten free",NS:"No added sugar",NF:"Nut free",VE:"Vegetarian",V:"Vegan"})[b]||b}">${b}</span>`;
 
+
+/* ---- Session progress store: which days of each program are completed ---- */
+const FMP = {
+  key: "fm-progress",
+  load() { try { return JSON.parse(localStorage.getItem(this.key)) || {}; } catch (e) { return {}; } },
+  done(pid) { return this.load()[pid] || []; },
+  mark(pid, d) {
+    const s = this.load();
+    s[pid] = [...new Set([...(s[pid] || []), d])].sort((a, b) => a - b);
+    try { localStorage.setItem(this.key, JSON.stringify(s)); } catch (e) {}
+  },
+  next(pid) {
+    const p = PROGRAMS[pid] || PROGRAMS.foundations;
+    const dn = this.done(pid);
+    for (let i = 1; i <= p.days.length; i++) if (!dn.includes(i)) return i;
+    return 1;
+  },
+};
+
+/* Flatten a session into an ordered, traceable exercise sequence */
+const flatWorkout = (pid, di) => {
+  const S = sessOf(pid, di);
+  const steps = [];
+  S.warm.items.forEach((e) => steps.push({ label: "WARM-UP", e, rest: null }));
+  S.sets.forEach((g) => {
+    for (let r = 1; r <= g.rounds; r++) {
+      g.items.forEach((e, ix) => steps.push({
+        label: g.rounds > 1 ? g.label + " - ROUND " + r + "/" + g.rounds : g.label,
+        e,
+        rest: ix === g.items.length - 1 && r < g.rounds && g.rest !== "—" ? g.rest : null,
+      }));
+    }
+  });
+  S.cool.items.forEach((e) => steps.push({ label: "COOL-DOWN", e, rest: null }));
+  return steps;
+};
+
 const VIEWS = {
 
-today: { title: "Today", phase2: false, html: `
+today: { title: "Today", phase2: false, html: () => {
+  const pid = "foundations", p = PROGRAMS[pid];
+  const nd = FMP.next(pid), d = p.days[nd - 1];
+  const doneCount = FMP.done(pid).length;
+  const med = { img: d.img, vid: (HEROVID && HEROVID[d.img]) || "" };
+  return `
   <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-1">TUESDAY · <span class="count" data-to="5">0</span>:42 AM</p>
   <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-8">Today</h2>
   <div class="grid grid-cols-[1.3fr_1fr] gap-8">
     <section class="v-stagger bg-iron border border-whisper rounded-xl p-7">
-      <p class="font-mono text-xs tracking-widest text-ash mb-3">NEXT SESSION</p>
-      <h3 class="text-xl font-semibold tracking-tight mb-1">Foundations of Iron</h3>
-      <p class="text-ash text-sm mb-6">Week 3 · Day 1 · Push · <span class="font-mono">5 EXERCISES · ~52 MIN</span></p>
-      <a href="#/session/foundations/1" class="player block rounded-xl h-40 border border-whisper mb-6">
-        <video src="assets/gen-bench.mp4" poster="assets/gen-bench.png" autoplay loop muted playsinline class="ig-img"></video>
-        <span class="dur-chip">DAY 1 · PUSH · 5 EXERCISES</span>
+      <div class="flex items-center justify-between mb-3">
+        <p class="font-mono text-xs tracking-widest text-ash">NEXT SESSION</p>
+        <p class="font-mono text-[11px] text-ash">${doneCount}/${p.days.length} THIS WEEK</p>
+      </div>
+      <h3 class="text-xl font-semibold tracking-tight mb-1">${p.name}</h3>
+      <p class="text-ash text-sm mb-6">Week ${p.week} · Day ${nd} · ${d.t} · <span class="font-mono">${d.min} MIN</span></p>
+      <a href="#/session/${pid}/${nd}" class="player block rounded-xl h-40 border border-whisper mb-6">
+        ${med.vid ? `<video src="${med.vid}" poster="${med.img}" autoplay loop muted playsinline class="ig-img"></video>`
+                  : `<img src="${med.img}" alt="${d.t}" class="kenburns ig-img"/>`}
+        <span class="dur-chip">DAY ${nd} · ${d.min} MIN</span>
       </a>
-      <a href="#/workout" class="press inline-block bg-ember text-furnace rounded-lg px-8 py-3.5 text-sm font-semibold">Start Session</a>
+      <div class="flex items-center gap-3">
+        <a href="#/workout/${pid}/${nd}" class="press inline-block bg-ember text-furnace rounded-lg px-8 py-3.5 text-sm font-semibold">Start Session</a>
+        <a href="#/session/${pid}/${nd}" class="press inline-block border border-whisper rounded-lg px-5 py-3.5 text-sm hover:bg-forged">View plan</a>
+      </div>
+      <div class="flex gap-1.5 mt-6">
+        ${p.days.map((_, i) => `<span class="h-1 flex-1 rounded ${FMP.done(pid).includes(i + 1) ? "bg-ember" : "bg-forged"}" title="Day ${i + 1}"></span>`).join("")}
+      </div>
     </section>
     <section class="v-stagger">
       <div class="flex items-baseline justify-between mb-4">
@@ -375,10 +428,10 @@ today: { title: "Today", phase2: false, html: `
     ${ring(87,"CONSISTENCY","87","%")}
     ${ring(64,"WEEK VOLUME","12,480","LB")}
     ${ring(75,"SESSIONS","34","TOTAL")}
-  </div>`,
+  </div>`; },
 },
 
-programs: { title: "Programs", phase2: false, html: (() => {
+programs: { title: "Programs", phase2: false, html: () => {
   const card = (id, p) => `
     <a href="#/program/${id}" class="v-stagger block bg-iron border border-whisper rounded-xl overflow-hidden hover:bg-forged">
       <div class="h-40 overflow-hidden"><img src="${p.cover}" alt="${p.name}" class="ig-img"/></div>
@@ -405,19 +458,22 @@ programs: { title: "Programs", phase2: false, html: (() => {
 
     <section class="mb-12">
       <h3 class="v-stagger text-xl font-semibold tracking-tight mb-5">In Progress</h3>
+      ${(() => { const fp = PROGRAMS.foundations, nx = FMP.next("foundations"), nd = fp.days[nx - 1];
+        const total = fp.weeks * fp.days.length, cur = Math.min(total, (fp.done || 0) + FMP.done("foundations").length);
+        return `
       <a href="#/program/foundations" class="v-stagger block bg-iron border border-ember/40 rounded-xl overflow-hidden hover:bg-forged max-w-xl">
         <div class="grid grid-cols-[110px_1fr] items-center">
-          <div class="h-24 overflow-hidden"><img src="assets/gen-bench.png" alt="Foundations of Iron" class="ig-img"/></div>
+          <div class="h-24 overflow-hidden"><img src="${nd.img}" alt="${fp.name}" class="ig-img"/></div>
           <div class="px-5 py-3.5">
-            <p class="text-[15px] font-semibold">Foundations of Iron</p>
-            <p class="text-xs text-ash mt-0.5 mb-2">Next: <span class="text-bone">Strength &amp; conditioning: Push</span> · 40 min</p>
+            <p class="text-[15px] font-semibold">${fp.name}</p>
+            <p class="text-xs text-ash mt-0.5 mb-2">Next: <span class="text-bone">Day ${nx} · ${nd.t}</span> · ${nd.min} min</p>
             <div class="flex items-center gap-3">
-              <span class="font-mono text-[11px]">9/24</span>
-              <div class="flex-1 h-1 rounded bg-forged"><div class="bar-fill h-1 rounded" data-w="37%"></div></div>
+              <span class="font-mono text-[11px]">${cur}/${total}</span>
+              <div class="flex-1 h-1 rounded bg-forged"><div class="bar-fill h-1 rounded" data-w="${Math.round(cur / total * 100)}%"></div></div>
             </div>
           </div>
         </div>
-      </a>
+      </a>`; })()}
     </section>
 
     <section class="mb-12">
@@ -444,7 +500,7 @@ programs: { title: "Programs", phase2: false, html: (() => {
     ${section("Conditioning & Hybrid", "Strength. Cardio. Speed. Endurance.", ["protocol", "furnace"], 2)}
     ${section("Recovery", "Maintenance for the long haul.", ["temple"], 2)}
   </div>`;
-})(),
+},
 },
 
 program: {
@@ -454,7 +510,8 @@ program: {
     const p = PROGRAMS[id] || PROGRAMS.foundations; const wk = p.week || 1;
     const w = weekOf(p, wk);
     const total = p.weeks * p.days.length;
-    const done = p.done || 0;
+    const done = Math.min(total, (p.done || 0) + FMP.done(id).length);
+    const nx = FMP.next(id); const nd = p.days[nx - 1];
     return `
   <div class="max-w-2xl mx-auto">
     <div class="v-stagger flex items-center gap-3 mb-6">
@@ -479,13 +536,13 @@ program: {
     </div>
 
     <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-3">UP NEXT</p>
-    <a href="#/session/${id}/1" class="v-stagger block bg-iron border border-whisper rounded-xl overflow-hidden mb-8 hover:bg-forged">
+    <a href="#/session/${id}/${nx}" class="v-stagger block bg-iron border border-whisper rounded-xl overflow-hidden mb-8 hover:bg-forged">
       <div class="grid grid-cols-[112px_1fr] items-center">
-        <div class="h-24 overflow-hidden"><img src="${p.days[0].img}" alt="" class="ig-img"/></div>
+        <div class="h-24 overflow-hidden"><img src="${nd.img}" alt="" class="ig-img"/></div>
         <div class="px-5 py-4">
-          <p class="font-mono text-[11px] text-ash mb-1">WEEK ${wk} · DAY 1</p>
-          <p class="text-[15px] font-semibold mb-1">${p.days[0].t}</p>
-          <p class="font-mono text-xs text-ash">${p.days[0].min} MIN | ${p.days[0].eq}</p>
+          <p class="font-mono text-[11px] text-ash mb-1">WEEK ${wk} · DAY ${nx}</p>
+          <p class="text-[15px] font-semibold mb-1">${nd.t}</p>
+          <p class="font-mono text-xs text-ash">${nd.min} MIN | ${nd.eq}</p>
         </div>
       </div>
     </a>
@@ -610,7 +667,7 @@ session: {
     ${S.cool.items.map(ex).join("")}
   </div>
   <div class="fixed bottom-6 left-64 right-0 flex justify-center pointer-events-none z-40">
-    <a href="#/workout" class="press pointer-events-auto bg-ember rounded-full px-10 py-4 text-sm font-bold tracking-widest shadow-xl" style="color:var(--c-furnace)">START SELF-GUIDED WORKOUT</a>
+    <a href="#/workout/${id}/${di + 1}" class="press pointer-events-auto bg-ember rounded-full px-10 py-4 text-sm font-bold tracking-widest shadow-xl" style="color:var(--c-furnace)">START SELF-GUIDED WORKOUT</a>
   </div>`; },
 },
 
@@ -652,44 +709,75 @@ logbook: {
   </div>`; },
 },
 
-workout: { title: "Workout — Foundations of Iron · Day 2", phase2: false, html: `
-  <div class="v-stagger grid grid-cols-[1fr_380px] gap-8 items-center mb-8">
-    <div><h2 class="text-3xl font-semibold tracking-tight mb-1">Barbell Bench Press</h2>
-      <p class="text-ash text-sm mb-4">Chest · Barbell · <span class="font-mono">EXERCISE 1 OF 5</span></p>
-      <p class="text-ash text-xs leading-relaxed max-w-md">Feet planted, shoulder blades pinned, bar path over mid-chest. Coach's cue this week: pause a beat at the bottom, drive through the floor.</p></div>
-    <div class="player rounded-xl h-52 border border-whisper">
-      <video src="assets/gen-bench.mp4" poster="assets/gen-bench.png" autoplay loop muted playsinline class="ig-img"></video>
-      <span class="dur-chip">0:08 · FORM DEMO</span>
+workout: {
+  title: (param) => {
+    const [id, dn] = (param || "foundations/1").split("/");
+    const p = PROGRAMS[id] || PROGRAMS.foundations;
+    const di = Math.min(Math.max(parseInt(dn || FMP.next(id)) - 1, 0), p.days.length - 1);
+    return p.days[di].t + " — Week " + (p.week || 1) + ", Day " + (di + 1);
+  },
+  phase2: false,
+  html: (param) => {
+    const [id, dn] = (param || "foundations/" + FMP.next("foundations")).split("/");
+    const p = PROGRAMS[id] || PROGRAMS.foundations;
+    const di = Math.min(Math.max(parseInt(dn || FMP.next(id)) - 1, 0), p.days.length - 1);
+    const d = p.days[di];
+    const steps = flatWorkout(id, di);
+    return `
+  <div class="max-w-2xl mx-auto" id="wo-root" data-pid="${id}" data-day="${di + 1}">
+    <div class="v-stagger flex items-center gap-3 mb-5">
+      <a href="#/session/${id}/${di + 1}" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("arrow_back")}</a>
+      <div class="mx-auto text-center flex-1">
+        <p class="font-mono text-xs tracking-[0.2em] text-ash">GUIDED WORKOUT</p>
+        <p class="text-xs text-ash mt-0.5">${p.name} · Week ${p.week || 1}, Day ${di + 1} · ${d.t}</p>
+      </div>
+      <span class="w-9"></span>
     </div>
-  </div>
-  <div class="v-stagger grid grid-cols-[56px_1fr_1fr_1fr_56px] gap-3 font-mono text-[11px] tracking-widest text-ash px-1 mb-2">
-    <span>SET</span><span>PREVIOUS</span><span>LB</span><span>REPS</span><span></span>
-  </div>
-  <div id="sets" class="space-y-2 mb-8">
-    ${[["1","195 × 8","205","8",true],["2","195 × 8","205","8",true],["3","195 × 7","205","",false],["4","195 × 6","","",false]]
-      .map(([n,prev,w,r,done])=>`
-    <div class="v-stagger set-row grid grid-cols-[56px_1fr_1fr_1fr_56px] gap-3 items-center bg-iron border border-whisper rounded-xl px-1 py-2 ${done?"":"pending"}">
-      <span class="font-mono text-sm text-center">${n}</span>
-      <span class="font-mono text-sm text-ash">${prev}</span>
-      <input value="${w}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
-      <input value="${r}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
-      <button class="set-check w-9 h-9 mx-auto rounded-lg flex items-center justify-center ${done?"bg-ember text-furnace":"border border-whisper text-ash"}">${ICON("check")}</button>
-    </div>`).join("")}
-  </div>
-  <div class="v-stagger flex items-center gap-4">
-    <button id="log-set" class="press bg-ember text-furnace rounded-lg px-8 py-3.5 text-sm font-semibold">Log Set</button>
-    <button id="rest-btn" class="press border border-whisper rounded-lg px-6 py-3.5 text-sm hover:bg-forged">Rest Timer</button>
-    <span class="text-ash text-xs">Finishing the last set completes the Training habit.</span>
-  </div>
-  <div id="rest-sheet" class="hidden fixed bottom-0 left-64 right-0 bg-iron border-t border-whisper p-8 z-50" style="transform:translateY(100%)">
-    <div class="max-w-[1200px] mx-auto flex items-center justify-between">
-      <div><p class="font-mono text-xs tracking-widest text-ash mb-1">REST</p>
-        <p class="font-mono text-5xl" id="rest-time">1:30</p></div>
-      <div class="flex gap-3">
-        <button id="rest-skip" class="press border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged">Skip</button>
+
+    <div class="v-stagger flex items-center gap-4 mb-6">
+      <div class="flex-1 h-1 rounded bg-forged"><div id="wo-bar" class="h-1 rounded bg-ember" style="width:0%"></div></div>
+      <span class="font-mono text-xs text-ash" id="wo-count">EXERCISE 1 OF ${steps.length}</span>
+    </div>
+
+    <div id="wo-live">
+      <p class="v-stagger font-mono text-xs tracking-widest text-ember mb-3" id="wo-block"></p>
+      <div class="v-stagger player rounded-xl h-64 border border-whisper mb-5" id="wo-player"></div>
+      <div class="v-stagger flex items-baseline justify-between mb-1.5">
+        <h2 class="text-2xl font-semibold tracking-tight" id="wo-name"></h2>
+        <span class="font-mono text-lg" id="wo-val"></span>
+      </div>
+      <p class="v-stagger text-sm text-ash leading-relaxed mb-6" id="wo-cue"></p>
+
+      <div id="wo-sets" class="mb-6 hidden">
+        <div class="grid grid-cols-[48px_1fr_1fr_48px] gap-3 font-mono text-[11px] tracking-widest text-ash px-1 mb-2">
+          <span>SET</span><span>LB</span><span>REPS</span><span></span>
+        </div>
+        <div id="wo-set-rows" class="space-y-2"></div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="wo-prev" class="press border border-whisper rounded-lg px-5 py-3.5 text-sm hover:bg-forged">Previous</button>
+        <button id="wo-next" class="press flex-1 bg-ember text-furnace rounded-lg px-8 py-3.5 text-sm font-semibold">Complete exercise</button>
+      </div>
+      <p class="text-xs text-ash mt-4">Finishing the last exercise completes the session and checks the Training habit.</p>
+    </div>
+
+    <div id="wo-done" class="hidden text-center py-14">
+      <span class="material-symbols-outlined text-ember" style="font-size:56px">task_alt</span>
+      <h2 class="text-3xl font-semibold tracking-tight mt-4 mb-2">Session complete</h2>
+      <p class="text-ash text-sm mb-2">${d.t} · Week ${p.week || 1}, Day ${di + 1} logged.</p>
+      <p class="font-mono text-sm text-ember mb-8">TRAINING HABIT ✓ · STREAK +1</p>
+      <div class="flex items-center justify-center gap-3" id="wo-done-nav"></div>
+    </div>
+
+    <div id="wo-rest" class="hidden fixed bottom-0 left-64 right-0 bg-iron border-t border-whisper p-8 z-50">
+      <div class="max-w-2xl mx-auto flex items-center justify-between">
+        <div><p class="font-mono text-xs tracking-widest text-ash mb-1">REST</p>
+          <p class="font-mono text-5xl" id="wo-rest-time">1:00</p></div>
+        <button id="wo-rest-skip" class="press border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged">Skip rest</button>
       </div>
     </div>
-  </div>`,
+  </div>`; },
 },
 
 progress: { title: "Progress", phase2: false, html: `

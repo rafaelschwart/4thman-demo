@@ -196,21 +196,95 @@
     }
 
     if (key === "workout") {
-      const logNext = () => {
-        const row = $(".set-row.pending", view);
-        if (!row) return;
-        row.classList.remove("pending");
-        const btn = $(".set-check", row);
-        btn.className = "set-check w-9 h-9 mx-auto rounded-lg flex items-center justify-center bg-ember text-furnace";
-        anime({ targets: row, backgroundColor: ["rgba(201,155,74,0.18)", "rgba(201,155,74,0)"], duration: D(700), easing: "easeOutQuad",
-          complete: () => { row.style.backgroundColor = ""; } });
-        openRest();
-        if (!$(".set-row.pending", view)) completeTraining();
+      const root = $("#wo-root");
+      if (!root) return;
+      const pid = root.dataset.pid, day = parseInt(root.dataset.day);
+      const steps = flatWorkout(pid, day - 1);
+      let i = 0, restT = null;
+      const parseRest = (t) => { const [m, sec] = t.split(":").map(Number); return m * 60 + sec; };
+      const closeRestW = () => {
+        clearInterval(restT);
+        const sh = $("#wo-rest");
+        if (!sh || sh.classList.contains("hidden")) return;
+        anime({ targets: sh, translateY: ["0%", "100%"], duration: D(260), easing: "easeInQuad",
+          complete: () => sh.classList.add("hidden") });
       };
-      $("#log-set").addEventListener("click", logNext);
-      $$(".set-check", view).forEach((b) => b.addEventListener("click", logNext));
-      $("#rest-btn").addEventListener("click", openRest);
-      $("#rest-skip").addEventListener("click", closeRest);
+      const openRestW = (t) => {
+        const sh = $("#wo-rest");
+        sh.classList.remove("hidden");
+        anime({ targets: sh, translateY: ["100%", "0%"], duration: D(380), easing: "easeOutQuart" });
+        let sec = parseRest(t);
+        $("#wo-rest-time").textContent = t;
+        clearInterval(restT);
+        restT = setInterval(() => {
+          sec--;
+          $("#wo-rest-time").textContent = Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
+          if (sec <= 0) closeRestW();
+        }, 1000);
+      };
+      const renderStep = () => {
+        const st = steps[i];
+        $("#wo-count").textContent = "EXERCISE " + (i + 1) + " OF " + steps.length;
+        anime({ targets: "#wo-bar", width: (i / steps.length * 100) + "%", duration: D(300), easing: "easeOutQuart" });
+        $("#wo-block").textContent = st.label;
+        const med = exMedia(st.e.n, st.e.k);
+        $("#wo-player").innerHTML = med.vid
+          ? `<video src="${med.vid}" poster="${med.img}" autoplay loop muted playsinline class="ig-img"></video><span class="dur-chip">FORM VIDEO · 0:05</span>`
+          : `<img src="${med.img}" alt="${st.e.n}" class="kenburns ig-img"/><span class="dur-chip">FORM DEMO</span>`;
+        if (reduced) { const v = $("#wo-player video"); if (v) { v.removeAttribute("autoplay"); v.pause(); } }
+        $("#wo-name").textContent = st.e.n;
+        $("#wo-val").textContent = st.e.v;
+        $("#wo-cue").textContent = CUES[st.e.k];
+        const repBased = /reps$/.test(st.e.v);
+        $("#wo-sets").classList.toggle("hidden", !repBased);
+        if (repBased) {
+          const reps = st.e.v.split(" ")[0].replace("MAX", "12");
+          $("#wo-set-rows").innerHTML = [1, 2, 3].map((n) => `
+            <div class="grid grid-cols-[48px_1fr_1fr_48px] gap-3 items-center bg-iron border border-whisper rounded-xl px-1 py-2">
+              <span class="font-mono text-sm text-center">${n}</span>
+              <input value="185" aria-label="Weight set ${n}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
+              <input value="${reps}" aria-label="Reps set ${n}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
+              <button class="wo-check w-9 h-9 mx-auto rounded-lg border border-whisper text-ash flex items-center justify-center"><span class="material-symbols-outlined">check</span></button>
+            </div>`).join("");
+          $$(".wo-check", view).forEach((b) => b.addEventListener("click", () => {
+            b.className = "wo-check w-9 h-9 mx-auto rounded-lg bg-ember flex items-center justify-center";
+            b.style.color = "var(--c-furnace)";
+            anime({ targets: b, scale: [1, 1.12, 1], duration: D(240), easing: "easeOutQuad" });
+          }));
+        }
+        $("#wo-prev").style.visibility = i === 0 ? "hidden" : "visible";
+        $("#wo-next").textContent = i === steps.length - 1 ? "Finish session" : "Complete exercise";
+        anime({ targets: ["#wo-block", "#wo-player", "#wo-name", "#wo-cue"], opacity: [0, 1], translateY: [10, 0],
+          duration: D(300), delay: anime.stagger(D(40)), easing: "easeOutQuart" });
+      };
+      const finish = () => {
+        FMP.mark(pid, day);
+        closeRestW();
+        $("#wo-live").classList.add("hidden");
+        anime({ targets: "#wo-bar", width: "100%", duration: D(300), easing: "easeOutQuart" });
+        $("#wo-count").textContent = "COMPLETE";
+        const p = PROGRAMS[pid], nx = FMP.next(pid);
+        const allDone = FMP.done(pid).length >= p.days.length;
+        $("#wo-done-nav").innerHTML =
+          `<a href="#/program/${pid}" class="press border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged">Back to program</a>` +
+          (allDone
+            ? `<a href="#/today" class="press bg-ember rounded-lg px-6 py-3 text-sm font-semibold" style="color:var(--c-furnace)">Week complete — back to Today</a>`
+            : `<a href="#/session/${pid}/${nx}" class="press bg-ember rounded-lg px-6 py-3 text-sm font-semibold" style="color:var(--c-furnace)">Next: Day ${nx} · ${p.days[nx - 1].t}</a>`);
+        const dn = $("#wo-done");
+        dn.classList.remove("hidden");
+        anime({ targets: dn, opacity: [0, 1], translateY: [16, 0], duration: D(450), easing: "easeOutQuart" });
+        pulseStreak(true);
+      };
+      $("#wo-rest-skip").addEventListener("click", closeRestW);
+      $("#wo-next").addEventListener("click", () => {
+        const st = steps[i];
+        if (i === steps.length - 1) { finish(); return; }
+        i++;
+        renderStep();
+        if (st.rest) openRestW(st.rest);
+      });
+      $("#wo-prev").addEventListener("click", () => { if (i > 0) { i--; renderStep(); closeRestW(); } });
+      renderStep();
     }
 
     if (key === "recipes") {
