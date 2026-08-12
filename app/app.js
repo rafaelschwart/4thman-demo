@@ -126,8 +126,10 @@
       anime({ targets: el, strokeDashoffset: [C, C * (1 - pct / 100)], duration: D(900), delay: D(250), easing: "easeOutQuart" });
     });
 
-    $$(".vol-bar", view).forEach((el, i) =>
-      anime({ targets: el, height: [0, el.dataset.h + "%"], duration: D(700), delay: D(300 + i * 60), easing: "easeOutQuart" }));
+    $$(".vol-bar", view).forEach((el, i) => {
+      if (reduced) { el.style.transform = "scaleY(1)"; return; }
+      anime({ targets: el, scaleY: [0, 1], duration: 700, delay: 300 + i * 60, easing: "easeOutQuart" });
+    });
 
     $$(".dot", view).length &&
       anime({ targets: $$(".dot", view), opacity: [0, 1], scale: [0.6, 1],

@@ -1031,37 +1031,93 @@ workout: {
 },
 
 progress: { title: "Progress", phase2: false, html: `
-  <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-8">Progress</h2>
-  <div class="grid grid-cols-3 gap-4 mb-10">
-    <div class="v-stagger bg-iron border border-whisper rounded-xl p-5"><p class="font-mono text-xs tracking-widest text-ash mb-2">CONSISTENCY</p><p class="font-mono text-3xl"><span class="count" data-to="87">0</span>%</p></div>
-    <div class="v-stagger bg-iron border border-whisper rounded-xl p-5"><p class="font-mono text-xs tracking-widest text-ash mb-2">SESSIONS</p><p class="font-mono text-3xl"><span class="count" data-to="34">0</span></p></div>
-    <div class="v-stagger bg-iron border border-whisper rounded-xl p-5"><p class="font-mono text-xs tracking-widest text-ash mb-2">STREAK</p><p class="font-mono text-3xl"><span class="count" data-to="23">0</span> <span class="text-sm text-ash">DAYS</span></p></div>
-  </div>
-  <section class="v-stagger bg-iron border border-whisper rounded-xl p-6 mb-10">
-    <p class="font-mono text-xs tracking-widest text-ash mb-5">WEEKLY VOLUME · LB</p>
-    <div class="flex items-end gap-3 h-40" id="vol-chart">
-      ${[8200,9400,8800,10600,11200,10400,12480].map((v,i)=>`
-        <div class="flex-1 flex flex-col items-center gap-2">
-          <div class="vol-bar w-full rounded-t bg-ember/80" style="height:0" data-h="${Math.round(v/12480*100)}"></div>
-          <span class="font-mono text-[10px] text-ash">W${i+1}</span>
-        </div>`).join("")}
+  <div class="max-w-4xl mx-auto">
+    <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-2">Progress</h2>
+    <p class="v-stagger text-ash text-sm mb-8">Eight weeks of work on one screen — the story that used to live buried in chat history.</p>
+
+    <div class="grid grid-cols-4 gap-4 mb-8 rgrid">
+      ${ring(87,"CONSISTENCY","87","%")}
+      ${ring(76,"SESSIONS","34","OF 45")}
+      ${ring(96,"STREAK","23","DAYS")}
+      ${ring(64,"WEEK VOLUME","12,480","LB")}
     </div>
-  </section>
-  <div class="grid grid-cols-2 gap-8">
-    <section class="v-stagger">
-      <p class="font-mono text-xs tracking-widest text-ash mb-3">PERSONAL RECORDS</p>
-      <div class="divide-y" style="border-color:var(--c-whisper)">
-        ${[["Squat","245 LB","AUG 4"],["Bench Press","205 LB","JUL 28"],["Deadlift","315 LB","JUL 19"]]
-          .map(([n,w,d])=>`<div class="flex items-center justify-between py-3.5">
-            <span class="text-sm">${n}</span>
-            <span class="font-mono text-sm">${w} <span class="text-ember">▲</span> <span class="text-ash text-xs ml-2">${d}</span></span></div>`).join("")}
+
+    <section class="v-stagger bg-iron border border-whisper rounded-xl p-6 mb-8">
+      <div class="flex items-baseline justify-between mb-6">
+        <p class="font-mono text-xs tracking-widest text-ash">WEEKLY VOLUME · LB</p>
+        <p class="font-mono text-xs text-ok">▲ +52% SINCE WEEK 1</p>
+      </div>
+      <div class="flex items-end gap-3" style="height:170px">
+        ${[[8200,"W1"],[9400,"W2"],[8800,"W3"],[10600,"W4"],[11200,"W5"],[10400,"W6"],[12480,"W7"]].map(([v,w],i)=>`
+          <div class="flex-1 flex flex-col items-center justify-end gap-1.5 h-full">
+            <span class="font-mono text-[10px] text-ash">${(v/1000).toFixed(1)}k</span>
+            <div class="vol-bar w-full rounded-t ${i===6?"bg-ember":"bg-ember/45"}" style="height:${Math.round(v/12480*100)}%;transform:scaleY(0);transform-origin:bottom"></div>
+            <span class="font-mono text-[10px] ${i===6?"text-ember":"text-ash"}">${w}</span>
+          </div>`).join("")}
       </div>
     </section>
-    <section class="v-stagger bg-iron border border-whisper rounded-xl p-6">
-      <p class="font-mono text-xs tracking-widest text-ash mb-2">WEEKLY REVIEW</p>
-      <p class="text-sm mb-1">3 of 5 fields pre-filled from your logs.</p>
-      <p class="text-ash text-xs mb-5">Your coach reads every review before Monday's call.</p>
-      <a href="#/review" class="press inline-block border border-whisper rounded-lg px-5 py-2.5 text-sm hover:bg-forged">Complete review</a>
+
+    <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-4">PERSONAL RECORDS</p>
+    <div class="grid grid-cols-3 gap-4 mb-8 rgrid">
+      ${[["Squat","245","+20 LB","AUG 4","assets/gen2-legs.png","185,42 235,34 285,22 320,12"],
+         ["Bench Press","205","+15 LB","JUL 28","assets/gen-bench.png","185,44 235,38 285,26 320,16"],
+         ["Deadlift","315","+25 LB","JUL 19","assets/ex-deadlift.png","185,40 235,30 285,24 320,10"]].map(([n,w,d,dt,img,pts])=>`
+      <div class="v-stagger bg-iron border border-whisper rounded-xl overflow-hidden">
+        <div class="h-24 overflow-hidden relative">
+          <img src="${img}" alt="${n}" class="ig-img" loading="lazy"/>
+          <span class="absolute top-2.5 right-2.5 font-mono text-[9px] tracking-widest text-bone rounded px-2 py-1" style="background:rgba(12,12,14,.72)">PR · ${dt}</span>
+        </div>
+        <div class="p-4">
+          <div class="flex items-baseline justify-between mb-1">
+            <p class="text-sm font-semibold">${n}</p>
+            <p class="font-mono text-lg">${w}<span class="text-ash text-xs"> LB</span></p>
+          </div>
+          <div class="flex items-center justify-between">
+            <svg viewBox="180 0 145 48" class="h-8" style="width:60%"><polyline points="${pts}" fill="none" stroke="var(--c-ember)" stroke-width="2"/><circle cx="320" cy="${pts.split(" ").pop().split(",")[1]}" r="3" fill="var(--c-ember)"/></svg>
+            <span class="font-mono text-[11px] text-ok">▲ ${d}</span>
+          </div>
+        </div>
+      </div>`).join("")}
+    </div>
+
+    <div class="grid grid-cols-[1.2fr_1fr] gap-6 mb-8 rgrid">
+      <section class="v-stagger bg-iron border border-whisper rounded-xl p-6">
+        <div class="flex items-baseline justify-between mb-4">
+          <p class="font-mono text-xs tracking-widest text-ash">BODY WEIGHT · 8 WEEKS</p>
+          <p class="font-mono text-xs text-ok">▼ 6.8 LB TOTAL</p>
+        </div>
+        <svg viewBox="0 0 440 120" class="w-full" style="height:120px" role="img" aria-label="Body weight trend across eight weeks, down 6.8 pounds">
+          ${[0,40,80].map(y=>`<line x1="0" y1="${y+10}" x2="440" y2="${y+10}" stroke="var(--c-whisper)" stroke-width="1"/>`).join("")}
+          <polyline points="20,18 80,26 140,30 200,44 260,52 320,68 380,80 420,88" fill="none" stroke="var(--c-ember)" stroke-width="2"/>
+          ${[[20,18,"194.0"],[200,44,"190.6"],[420,88,"187.2"]].map(([x,y,v])=>`
+            <circle cx="${x}" cy="${y}" r="3.5" fill="var(--c-ember)"/>
+            <text x="${x}" y="${y-9}" text-anchor="middle" font-family="Geist Mono" font-size="10" fill="var(--c-bone)">${v}</text>`).join("")}
+          ${["W1","W3","W5","W7"].map((w,i)=>`<text x="${20+i*133}" y="116" text-anchor="middle" font-family="Geist Mono" font-size="9" fill="var(--c-ash)">${w}</text>`).join("")}
+        </svg>
+      </section>
+      <section class="v-stagger bg-iron border border-whisper rounded-xl p-6">
+        <div class="flex items-center justify-between mb-4">
+          <p class="font-mono text-xs tracking-widest text-ash">PHOTO TIMELINE</p>
+          <a href="#/photos" class="text-xs text-ember hover:underline">Open</a>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          ${[["assets/gen2-progress-1.png","WK 1"],["assets/gen2-progress-2.png","WK 9"],["assets/gen2-progress-4.png","WK 18"]].map(([img,w])=>`
+          <a href="#/photos" class="block relative rounded-lg overflow-hidden" style="aspect-ratio:3/4">
+            <img src="${img}" alt="Progress photo ${w}" class="ig-img" loading="lazy"/>
+            <span class="absolute left-1.5 bottom-1.5 font-mono text-[8px] tracking-widest text-bone rounded px-1.5 py-0.5" style="background:rgba(12,12,14,.72)">${w}</span>
+          </a>`).join("")}
+        </div>
+        <p class="text-xs text-ash mt-3 flex items-center gap-1.5">${ICON("lock","text-ember")} Private — only you and your coach.</p>
+      </section>
+    </div>
+
+    <section class="v-stagger bg-iron border border-ember/30 rounded-xl p-6 flex items-center gap-5 rgrid">
+      <img src="assets/coach-profile.jpg" alt="Coach Cayman" class="w-12 h-12 rounded-full object-cover border border-ember/40 shrink-0"/>
+      <div class="flex-1">
+        <p class="font-mono text-xs tracking-widest text-ash mb-1">WEEKLY REVIEW · 3 OF 5 PRE-FILLED</p>
+        <p class="text-sm leading-relaxed">This chart becomes a conversation on Sunday — Coach Cayman reads every review before Monday's call.</p>
+      </div>
+      <a href="#/review" class="press bg-ember rounded-lg px-6 py-3 text-sm font-semibold shrink-0" style="color:var(--c-furnace)">Complete review</a>
     </section>
   </div>`,
 },
@@ -1127,7 +1183,7 @@ review: { title: "Weekly Review — Week 3", phase2: false, html: `
           </div>
           <div class="flex justify-between font-mono text-[11px] text-ash mb-1.5"><span>VOLUME VS LAST WEEK</span><span class="text-ok">12,480 LB ▲ +8%</span></div>
           <div class="flex items-end gap-1 h-10">
-            ${[62,71,68,80,76,84,100].map(v=>`<div class="vol-bar flex-1 rounded-t bg-ember/70" style="height:0" data-h="${v}"></div>`).join("")}
+            ${[62,71,68,80,76,84,100].map(v=>`<div class="vol-bar flex-1 rounded-t bg-ember/70" style="height:${v}%;transform:scaleY(0);transform-origin:bottom"></div>`).join("")}
           </div>
         </section>
 
