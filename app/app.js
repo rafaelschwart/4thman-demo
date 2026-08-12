@@ -8,7 +8,7 @@
   const gate = $("#gate"), shell = $("#shell"), view = $("#view");
   const titleEl = $("#view-title"), phaseTag = $("#phase-tag");
   const forge = $("#forge-line"), marker = $("#nav-marker");
-  let streak = 23, habitsDone = 3, restTimer = null;
+  let streak = 23, habitsDone = 3;
 
   /* ---------- dark / light theme ---------- */
   const applyTheme = (light) => {
@@ -35,6 +35,23 @@
     .add({ targets: "#g4", opacity: [0, 1], translateX: [24, 0], duration: D(600) }, "-=450");
 
   $("#enter-btn").addEventListener("click", enterApp);
+  ["#em", "#pw"].forEach((sel) => { const f = $(sel); if (f) f.addEventListener("keydown", (e) => { if (e.key === "Enter") enterApp(); }); });
+  const cb = $("#create-btn");
+  if (cb) cb.addEventListener("click", (e) => flash(e.currentTarget, "INVITE-ONLY — ASK YOUR COACH"));
+  const bnMore = $("#bn-more"), moreSheet = $("#more-sheet");
+  if (bnMore && moreSheet) {
+    const closeMore = () => { moreSheet.classList.add("hidden"); bnMore.setAttribute("aria-expanded", "false"); };
+    bnMore.addEventListener("click", () => {
+      const opening = moreSheet.classList.contains("hidden");
+      moreSheet.classList.toggle("hidden");
+      bnMore.setAttribute("aria-expanded", opening ? "true" : "false");
+      if (opening) anime({ targets: moreSheet, opacity: [0, 1], translateY: [12, 0], duration: D(260), easing: "easeOutQuart" });
+    });
+    moreSheet.addEventListener("click", (e) => { if (e.target.closest("a")) closeMore(); });
+    const msOut = moreSheet.querySelector(".more-signout");
+    if (msOut) msOut.addEventListener("click", () => { closeMore(); const so = $("#signout"); if (so) so.click(); });
+    window.addEventListener("hashchange", closeMore);
+  }
   function enterApp() {
     anime({
       targets: gate, opacity: [1, 0], translateY: [0, -28], duration: D(450),
@@ -60,8 +77,9 @@
   });
 
   function render() {
-    const { key, param } = routeOf();
-    const v = VIEWS[key] || VIEWS.today;
+    let { key, param } = routeOf();
+    if (!VIEWS[key]) { key = "today"; param = ""; }
+    const v = VIEWS[key];
 
     // forge line pulse — the ember heat crossing the top on every navigation
     anime.remove(forge);
@@ -146,7 +164,7 @@
     if (key === "program" || key === "session" || key === "logbook") key = "programs";
     if (key === "recipe") key = "recipes";
     $$(".nav-item").forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#/" + key));
-    const active = $(".nav-item.active");
+    const active = $("#sidebar .nav-item.active");
     if (!active) { marker.style.height = "0"; return; }
     const nav = $("#nav");
     const top = active.getBoundingClientRect().top - nav.getBoundingClientRect().top + nav.scrollTop;
@@ -226,7 +244,7 @@
                 else if (wkDay === FMP.next("foundations")) state = "next";
                 else state = "sched";
                 link = "#/session/foundations/" + wkDay;
-              } else state = "sched";
+              } else { state = "sched"; link = "#/session/foundations/" + ((((dt - 10) % p2.days.length) + p2.days.length) % p2.days.length + 1); }
             } else state = "sched";
           }
           const base = "relative rounded-lg p-1.5 text-left overflow-hidden min-h-[58px] border ";
@@ -270,6 +288,8 @@
         const wks = 4 + Object.values(plan).reduce((a, id) => a + (PROGRAMS[id] ? PROGRAMS[id].weeks : 0), 0);
         $("#yr-summary").textContent = (n + 1) + " BLOCKS PLANNED · " + wks + " WEEKS";
       };
+      const yc = $("#yr-close");
+      if (yc) yc.addEventListener("click", () => { $("#yr-picker").classList.add("hidden"); activeMonth = null; });
       $$(".yr-slot", view).forEach((b) => b.addEventListener("click", () => openPicker(b.dataset.m)));
       $$(".yr-pick", view).forEach((b) => b.addEventListener("click", () => {
         if (!activeMonth) return;
@@ -380,6 +400,8 @@
     }
 
     if (key === "today") {
+      habitsDone = $$(".habit-tile.done", view).length;
+      const el0 = $("#habit-done"); if (el0) el0.textContent = habitsDone;
       const ring0 = $("#habit-ring");
       if (ring0) anime({ targets: ring0, strokeDashoffset: [94.2, 94.2 * (1 - habitsDone / 6)], duration: D(900), delay: D(300), easing: "easeOutQuart" });
       $$(".habit-tile", view).forEach((t) => t.addEventListener("click", () => {
@@ -397,7 +419,8 @@
     if (key === "workout") {
       const root = $("#wo-root");
       if (!root) return;
-      const pid = root.dataset.pid, day = parseInt(root.dataset.day);
+      const pid = PROGRAMS[root.dataset.pid] ? root.dataset.pid : "foundations";
+      const day = Math.min(Math.max(parseInt(root.dataset.day) || 1, 1), PROGRAMS[pid].days.length);
       const steps = flatWorkout(pid, day - 1);
       let i = 0, restT = null;
       const parseRest = (t) => { const [m, sec] = t.split(":").map(Number); return m * 60 + sec; };
@@ -453,8 +476,8 @@
           $("#wo-set-rows").innerHTML = [1, 2, 3].map((n) => `
             <div class="grid grid-cols-[48px_1fr_1fr_48px] gap-3 items-center bg-iron border border-whisper rounded-xl px-1 py-2">
               <span class="font-mono text-sm text-center">${n}</span>
-              <input value="185" aria-label="Weight set ${n}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
-              <input value="${reps}" aria-label="Reps set ${n}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
+              <input value="185" inputmode="numeric" aria-label="Weight set ${n}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
+              <input value="${reps}" inputmode="numeric" aria-label="Reps set ${n}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
               <button class="wo-check w-9 h-9 mx-auto rounded-lg border border-whisper text-ash flex items-center justify-center"><span class="material-symbols-outlined">check</span></button>
             </div>`).join("");
           $$(".wo-check", view).forEach((b) => b.addEventListener("click", () => {
@@ -470,14 +493,18 @@
         $("#wo-upnext").innerHTML = up.length ? up.map((u, k) => {
           const um = exMedia(u.e.n, u.e.k);
           return `
-          <div class="wo-up flex items-center gap-3.5 bg-iron border border-whisper rounded-xl px-3 py-2.5 ${k === 0 ? "" : "opacity-60"}">
+          <button class="wo-up w-full text-left flex items-center gap-3.5 bg-iron border border-whisper rounded-xl px-3 py-2.5 ${k === 0 ? "" : "opacity-60"}" data-jump="${k}">
             <div class="w-14 rounded-lg overflow-hidden bg-forged shrink-0" style="height:38px"><img src="${um.img}" alt="" class="ig-img" loading="lazy"/></div>
             <p class="flex-1 text-sm truncate">${u.e.n}</p>
             <span class="font-mono text-xs text-ash shrink-0">${u.e.v}</span>
-          </div>`;
+          </button>`;
         }).join("") : '<p class="text-sm text-ash">Last one — finish strong.</p>';
         anime({ targets: $$(".wo-up", view), opacity: (el, k) => [0, k === 0 ? 1 : 0.6], translateX: [14, 0],
           duration: D(360), delay: anime.stagger(D(60)), easing: "easeOutQuart" });
+        $$(".wo-up", view).forEach((el) => el.addEventListener("click", () => {
+          i = Math.min(i + 1 + parseInt(el.dataset.jump), steps.length - 1);
+          renderStep();
+        }));
         anime({ targets: ["#wo-block", "#wo-player", "#wo-name", "#wo-cue"], opacity: [0, 1], translateY: [10, 0],
           duration: D(300), delay: anime.stagger(D(40)), easing: "easeOutQuart" });
       };
@@ -575,6 +602,8 @@
       const bump = (d) => {
         const v = Math.max(1, parseInt(sv.textContent) + d);
         sv.textContent = v;
+        const lbl = $("#sv-label");
+        if (lbl) lbl.textContent = "BASED ON " + v + " SERVING" + (v > 1 ? "S" : "");
         anime({ targets: sv, scale: [1, 1.15, 1], duration: D(220), easing: "easeOutQuad" });
       };
       $("#sv-minus").addEventListener("click", () => bump(-1));
@@ -585,6 +614,123 @@
         b.classList.toggle("bg-forged");
         b.classList.toggle("text-ember");
         anime({ targets: b, scale: [1, 0.98, 1], duration: D(220), easing: "easeOutQuad" });
+      });
+    }
+
+    if (key === "review") {
+      const b = $("#send-review");
+      if (b) b.addEventListener("click", (e) => flash(e.currentTarget, "SENT — COACH CAYMAN READS IT MONDAY"));
+    }
+
+    if (key === "photos") {
+      const b = $("#add-photo");
+      if (b) b.addEventListener("click", (e) => flash(e.currentTarget, "CAMERA OPENS ON THE PHONE"));
+    }
+
+    if (key === "account") {
+      const u = $("#upgrade-elite"); if (u) u.addEventListener("click", (e) => flash(e.currentTarget, "UPGRADED — ELITE ACTIVE SEP 1"));
+      const p = $("#sub-pause"); if (p) p.addEventListener("click", (e) => flash(e.currentTarget, "PAUSED"));
+      const pay = $("#sub-payment"); if (pay) pay.addEventListener("click", (e) => flash(e.currentTarget, "STRIPE PORTAL…"));
+    }
+
+    if (key === "billing") {
+      const b = $("#open-stripe");
+      if (b) b.addEventListener("click", (e) => flash(e.currentTarget, "OPENING STRIPE…"));
+    }
+
+    if (key === "logbook") {
+      $$(".lb-group", view).forEach((g) => g.addEventListener("click", () => {
+        const rows = g.nextElementSibling, chev = g.querySelector(".lb-chev");
+        const opening = rows.classList.contains("hidden");
+        rows.classList.toggle("hidden");
+        g.setAttribute("aria-expanded", opening ? "true" : "false");
+        if (chev) anime({ targets: chev, rotate: opening ? 0 : 180, duration: D(240), easing: "easeOutQuart" });
+        if (opening) anime({ targets: rows, opacity: [0, 1], translateY: [-6, 0], duration: D(240), easing: "easeOutQuart" });
+      }));
+    }
+
+    if (key === "builder") {
+      const save = $("#bld-save"); if (save) save.addEventListener("click", (e) => flash(e.currentTarget, "DRAFT SAVED"));
+      const asg = $("#bld-assign"); if (asg) asg.addEventListener("click", (e) => flash(e.currentTarget, "ASSIGNED TO MARCUS T."));
+      const addx = $("#bld-add-ex"); if (addx) addx.addEventListener("click", (e) => flash(e.currentTarget, "PICK FROM THE LIBRARY"));
+      const search = $("#bld-search");
+      if (search) search.addEventListener("input", () => {
+        const q = search.value.toLowerCase();
+        $$(".bld-ex", view).forEach((r) => r.classList.toggle("hidden", !!q && !r.dataset.name.includes(q)));
+      });
+      $$(".bld-filter", view).forEach((b) => b.addEventListener("click", () => {
+        $$(".bld-filter", view).forEach((x) => x.className = x.className.replace("text-ember border border-ember/40", "text-ash"));
+        b.className = b.className.replace("text-ash", "text-ember border border-ember/40");
+      }));
+      const day2 = $("#bld-day2");
+      const wireDel = (scope) => $$(".bld-del", scope || view).forEach((d) => d.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const row = d.closest(".bld-row");
+        anime({ targets: row, opacity: 0, height: 0, marginBottom: 0, duration: D(240), easing: "easeInQuad", complete: () => row.remove() });
+      }));
+      wireDel();
+      $$(".bld-ex", view).forEach((r) => r.addEventListener("click", () => {
+        if (!day2) return;
+        const row = document.createElement("div");
+        row.className = "bld-row flex items-center gap-4 bg-forged rounded-lg px-4 py-3 mb-2";
+        row.innerHTML = `<span class="material-symbols-outlined text-ash" aria-hidden="true">drag_indicator</span>
+          <span class="flex-1 text-sm"></span>
+          <span class="font-mono text-sm">3 × 10</span><span class="font-mono text-xs text-ash">75s</span>
+          <button class="bld-del press" aria-label="Remove"><span class="material-symbols-outlined text-ash" aria-hidden="true">close</span></button>`;
+        row.querySelector(".flex-1").textContent = r.dataset.ex;
+        day2.appendChild(row);
+        wireDel(row);
+        anime({ targets: row, opacity: [0, 1], translateY: [8, 0], scale: [0.97, 1], duration: D(300), easing: "easeOutQuart" });
+        anime({ targets: r, scale: [1, 0.97, 1], duration: D(220), easing: "easeOutQuad" });
+      }));
+      const wk4 = $("#bld-wk4");
+      if (wk4) wk4.addEventListener("click", () => {
+        const body = $("#bld-wk4-body"), chev = $(".bld-wk4-chev");
+        const opening = body.classList.contains("hidden");
+        body.classList.toggle("hidden");
+        wk4.setAttribute("aria-expanded", opening ? "true" : "false");
+        if (chev) anime({ targets: chev, rotate: opening ? 180 : 0, duration: D(240), easing: "easeOutQuart" });
+      });
+    }
+
+    if (key === "nutrition") {
+      const b = $("#log-meal");
+      if (b) b.addEventListener("click", (e) => {
+        flash(e.currentTarget, "LOGGED");
+        const sub = $("#dinner-sub");
+        if (sub) { sub.textContent = "Sirloin, sweet potato, greens — 580 CAL · 45P · 60C · 18F"; sub.classList.remove("text-ash"); }
+      });
+    }
+
+    if (key === "faith") {
+      const c = $("#faith-continue");
+      if (c) c.addEventListener("click", (e) => flash(e.currentTarget, "DAY 9 · DANIEL 3 — OPENING"));
+      $$(".mind-row", view).forEach((r) => r.addEventListener("click", () => {
+        const ic = r.querySelector(".mr-ic"), t = r.querySelector(".mr-t");
+        const playing = ic.textContent === "pause_circle";
+        $$(".mind-row .mr-ic", view).forEach((x) => (x.textContent = "play_circle"));
+        $$(".mind-row .mr-t", view).forEach((x) => x.classList.remove("text-ember"));
+        if (!playing) { ic.textContent = "pause_circle"; t.classList.add("text-ember"); }
+        anime({ targets: ic, scale: [1, 1.2, 1], duration: D(260), easing: "easeOutQuad" });
+      }));
+    }
+
+    if (key === "blood") {
+      $$(".bp-range", view).forEach((b) => b.addEventListener("click", () => {
+        $$(".bp-range", view).forEach((x) => x.className = x.className.replace(" bg-forged text-ember", " text-ash"));
+        b.className = b.className.replace(" text-ash", " bg-forged text-ember");
+      }));
+      $$(".bp-view", view).forEach((b) => b.addEventListener("click", (e) => flash(e.currentTarget, "OPENING…")));
+      const up = $("#bp-upload");
+      if (up) up.addEventListener("click", (e) => flash(e.currentTarget, "PANEL_JUN26.PDF ATTACHED"));
+    }
+
+    if (key === "gear") {
+      const sd = $("#shop-drop");
+      if (sd) sd.addEventListener("click", (e) => {
+        flash(e.currentTarget, "ADDED — HOODIE · L");
+        const grid = $(".grid.grid-cols-3.gap-5", view);
+        if (grid) grid.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
       });
     }
 
@@ -603,6 +749,40 @@
       };
       $("#msg-send").addEventListener("click", send);
       $("#msg-in").addEventListener("keydown", (e) => { if (e.key === "Enter") send(); });
+      const att = $("#msg-attach");
+      if (att) att.addEventListener("click", () => {
+        const t = $("#thread");
+        const w = document.createElement("div");
+        w.className = "max-w-md ml-auto";
+        w.innerHTML = `<div class="border border-whisper bg-furnace rounded-xl px-4 py-3">
+            <p class="font-mono text-[10px] tracking-widest text-ash mb-1">ATTACHMENT</p>
+            <p class="font-mono text-sm">form-check.mp4 <span class="text-ember">✓</span></p></div>
+          <p class="font-mono text-[10px] text-ash mt-1 text-right">NOW</p>`;
+        t.appendChild(w);
+        anime({ targets: w, opacity: [0, 1], translateY: [12, 0], duration: D(320), easing: "easeOutQuart" });
+        t.scrollTop = t.scrollHeight;
+      });
+      const ms = $("#msg-search");
+      if (ms) ms.addEventListener("input", () => {
+        const q = ms.value.toLowerCase();
+        $$(".conv-row", view).forEach((r) => r.classList.toggle("hidden", !!q && !r.dataset.name.includes(q)));
+      });
+      const THREADS = {
+        coach: null, // original markup restored below
+        bros: `
+        <div class="max-w-md msg"><div class="bg-forged rounded-xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed">J. Whitfield: 5 AM crew tomorrow? Rack is booked for 5:15.</div><p class="font-mono text-[10px] text-ash mt-1">YESTERDAY 9:12 PM</p></div>
+        <div class="max-w-md msg"><div class="bg-forged rounded-xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed">K. Boateng: In. Bringing the chalk.</div><p class="font-mono text-[10px] text-ash mt-1">YESTERDAY 9:20 PM</p></div>
+        <div class="max-w-md ml-auto msg"><div class="bg-ember/15 border border-ember/25 rounded-xl rounded-tr-sm px-4 py-3 text-sm leading-relaxed">Count me in. Prov 27:17.</div><p class="font-mono text-[10px] text-ash mt-1 text-right">YESTERDAY 9:31 PM</p></div>`,
+      };
+      const coachHTML = $("#thread").innerHTML;
+      $$(".conv-row", view).forEach((r) => r.addEventListener("click", () => {
+        $$(".conv-row", view).forEach((x) => x.classList.remove("bg-forged"));
+        r.classList.add("bg-forged");
+        const dot = $("#conv-dot"); if (dot && r.dataset.thread === "coach") dot.remove();
+        $("#thread-name").textContent = r.dataset.thread === "bros" ? "Brothers" : "Coach Cayman";
+        $("#thread").innerHTML = r.dataset.thread === "bros" ? THREADS.bros : coachHTML;
+        anime({ targets: $$("#thread .msg", view), opacity: [0, 1], translateY: [10, 0], duration: D(300), delay: anime.stagger(D(70)), easing: "easeOutQuart" });
+      }));
     }
 
     if (key === "partners") {
@@ -611,7 +791,31 @@
         b.className = "slot press rounded-lg py-2 font-mono text-xs bg-ember text-furnace font-semibold";
         anime({ targets: b, scale: [1, 1.06, 1], duration: D(260), easing: "easeOutQuad" });
       }));
-      $("#confirm-booking").addEventListener("click", (e) => flash(e.currentTarget, "Booked — Thu 2:30 PM"));
+      $$(".book-btn", view).forEach((b) => b.addEventListener("click", () => {
+        const who = $("#bk-who");
+        if (who) who.textContent = b.dataset.n + " · " + b.dataset.s;
+        $$(".book-btn", view).forEach((x) => x.closest(".v-stagger").classList.replace("border-ember/50", "border-whisper"));
+        const card = b.closest(".v-stagger");
+        if (card) { card.classList.remove("border-whisper"); card.classList.add("border-ember/50"); }
+        const aside = who && who.closest("aside");
+        if (aside) aside.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
+      }));
+      $$(".day", view).forEach((dBtn) => dBtn.addEventListener("click", () => {
+        $$(".day", view).forEach((x) => {
+          x.classList.remove("border", "border-ember/40");
+          x.querySelector(".day-d").className = "font-mono text-[10px] text-ash mb-1 day-d";
+          x.querySelector(".day-n").className = "font-mono text-sm day-n";
+        });
+        dBtn.classList.add("border", "border-ember/40");
+        dBtn.querySelector(".day-d").className = "font-mono text-[10px] text-ember mb-1 day-d";
+        dBtn.querySelector(".day-n").className = "font-mono text-sm text-ember day-n";
+      }));
+      $("#confirm-booking").addEventListener("click", (e) => {
+        const slot = $$(".slot", view).find((x) => x.className.includes("bg-ember"));
+        const dayB = $$(".day", view).find((x) => x.className.includes("border-ember/40"));
+        const dTxt = dayB ? dayB.querySelector(".day-d").textContent : "THU";
+        flash(e.currentTarget, "Booked — " + dTxt + " " + (slot ? slot.textContent.trim() : "2:30") + " PM");
+      });
     }
 
     if (key === "gear") {
@@ -623,39 +827,34 @@
     }
 
     if (key === "community") {
-      $$(".pray-btn", view).forEach((b) => b.addEventListener("click", () => {
+      const wirePray = (scope) => $$(".pray-btn", scope || view).forEach((b) => b.addEventListener("click", () => {
+        if (b.dataset.prayed) return;
+        b.dataset.prayed = "1";
         const c = $("span", b); c.textContent = parseInt(c.textContent) + 1;
+        b.firstChild.textContent = "Praying ";
         b.classList.add("border-ember/50", "text-ember");
         anime({ targets: b, scale: [1, 1.05, 1], duration: D(260), easing: "easeOutQuad" });
       }));
+      wirePray();
+      const pwIn = $("#pw-in");
+      if (pwIn) pwIn.addEventListener("keydown", (ev) => {
+        if (ev.key !== "Enter" || !pwIn.value.trim()) return;
+        const card = document.createElement("div");
+        card.className = "bg-iron border border-ember/30 rounded-xl p-4 mb-3";
+        card.innerHTML = `<p class="text-sm leading-relaxed mb-3"></p>
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs text-ash">You</span>
+            <button class="pray-btn press flex items-center gap-2 border border-whisper rounded-lg px-3 py-1.5 text-xs hover:bg-forged">Pray for this <span class="font-mono text-ash">0</span></button>
+          </div>`;
+        card.querySelector("p").textContent = pwIn.value.trim();
+        pwIn.closest(".bg-iron").after(card);
+        wirePray(card);
+        anime({ targets: card, opacity: [0, 1], translateY: [10, 0], duration: D(320), easing: "easeOutQuart" });
+        pwIn.value = "";
+      });
     }
   }
 
-  /* ---------- workout helpers ---------- */
-  function openRest() {
-    const s = $("#rest-sheet"); if (!s) return;
-    s.classList.remove("hidden");
-    anime({ targets: s, translateY: ["100%", "0%"], duration: D(420), easing: "easeOutQuart" });
-    let t = 90;
-    clearInterval(restTimer);
-    const el = $("#rest-time");
-    el.textContent = "1:30";
-    restTimer = setInterval(() => {
-      t -= 1;
-      el.textContent = Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0");
-      if (t <= 0) closeRest();
-    }, 1000);
-  }
-  function closeRest() {
-    const s = $("#rest-sheet"); if (!s) return;
-    clearInterval(restTimer);
-    anime({ targets: s, translateY: ["0%", "100%"], duration: D(300), easing: "easeInQuad",
-      complete: () => s.classList.add("hidden") });
-  }
-  function completeTraining() {
-    pulseStreak(true);
-    flash($("#log-set"), "Session complete — Training habit checked");
-  }
 
   /* ---------- shared micro-feedback ---------- */
   function pulseStreak(increment) {
@@ -666,10 +865,10 @@
   function flash(btn, text) {
     if (!btn || btn.dataset.busy) return;
     btn.dataset.busy = "1";
-    const old = btn.textContent;
+    const old = btn.innerHTML;
     btn.textContent = text;
     anime({ targets: btn, scale: [1, 0.97, 1], duration: D(240), easing: "easeOutQuad" });
-    setTimeout(() => { btn.textContent = old; delete btn.dataset.busy; }, 1600);
+    setTimeout(() => { btn.innerHTML = old; delete btn.dataset.busy; }, 1600);
   }
 
   /* ---------- sign out ---------- */

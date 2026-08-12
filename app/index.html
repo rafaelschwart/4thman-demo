@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>4TH MAN — Platform</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
@@ -173,6 +173,82 @@ tailwind.config = {
     #rest-sheet, #wo-rest { left: 0 !important; }
     #week-tabs { justify-content: flex-start !important; }
   }
+
+  /* ---------- Mobile production layer (agent-audit fixes) ---------- */
+  #more-sheet { position: fixed; left: 0; right: 0; z-index: 59; bottom: calc(58px + env(safe-area-inset-bottom));
+    background: var(--c-glass); backdrop-filter: blur(14px); border-top: 1px solid var(--c-whisper); padding: 14px 12px; }
+  #more-sheet .ms-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  #more-sheet a, #more-sheet button { display: flex; flex-direction: column; align-items: center; gap: 3px;
+    color: var(--c-ash); font-family: "Geist Mono", monospace; font-size: 10px; letter-spacing: .05em;
+    padding: 9px 4px; border-radius: 10px; min-height: 52px; }
+  #more-sheet a:active, #more-sheet button:active { background: var(--c-forged); }
+  #bottom-nav a.active { background: transparent; }
+
+  @media (max-width: 1023px) {
+    /* 1: sign-in gate — scrollable, fits, branded */
+    #gate { grid-template-columns: 1fr; overflow-y: auto; align-items: start;
+      padding: 24px 16px calc(24px + env(safe-area-inset-bottom)); display: block; }
+    #gate > div:last-child { border-left: 0 !important; min-height: 0; padding: 8px 0; }
+    #gate #g4 { width: 100%; max-width: 400px; margin: 0 auto; padding: 22px; }
+    #gate #g4 img[src*="coach-transform"] { max-height: 130px; object-fit: cover; }
+    #gate .gate-form-logo { display: block !important; }
+    #gate .text-5xl { font-size: 2rem; }
+    /* 2: keep intentional small-cell grids */
+    #view #habit-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    #view #slots { grid-template-columns: repeat(3, 1fr) !important; }
+    #view .grid-cols-3.gap-2 { grid-template-columns: repeat(3, 1fr) !important; }
+    #view .grid-cols-4.gap-5 { grid-template-columns: repeat(2, 1fr) !important; }
+    #view .grid-cols-4.gap-4 { grid-template-columns: repeat(2, 1fr) !important; }
+    #view .grid-cols-4.gap-3 { grid-template-columns: repeat(2, 1fr) !important; }
+    /* 3: coach + billing tables scroll horizontally */
+    #view .table-scroll { overflow-x: auto; margin: 0 -16px; padding: 0 16px; -webkit-overflow-scrolling: touch; }
+    #view .table-scroll > * { min-width: 560px; }
+    /* 4: week strip becomes a snap scroller; calendar stays 7-up */
+    #view .rgrid-week { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory;
+      gap: 10px; margin-left: -16px; margin-right: -16px; padding: 0 16px 6px; }
+    #view .rgrid-week > * { flex: 0 0 128px; scroll-snap-align: start; }
+    /* 5: client Daily-Six heatmap keeps its 8-col structure */
+    #view #six-grid { grid-template-columns: 26px repeat(7, 1fr) !important; gap: 4px !important; }
+    /* 6/7: fixed sheets clear the bottom nav */
+    #rest-sheet, #wo-rest { left: 0 !important; bottom: calc(58px + env(safe-area-inset-bottom)) !important; padding: 14px 16px !important; }
+    #wo-rest .max-w-2xl { flex-wrap: wrap; gap: 14px !important; }
+    #wo-rest #wo-rest-skip { width: 100%; order: 3; }
+    .fixed.bottom-6.left-64 { left: 0 !important; right: 0; bottom: calc(70px + env(safe-area-inset-bottom)) !important; padding: 0 16px; }
+    .fixed.bottom-6.left-64 > a { width: 100%; text-align: center; padding-left: 0; padding-right: 0; }
+    #view { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+    /* 8: messages layout */
+    #view .grid-cols-\[300px_1fr\] { height: auto !important; }
+    #view .grid-cols-\[300px_1fr\] > section { height: 68dvh; }
+    /* 9: gear hero collapses */
+    #view .grid-cols-\[1fr_240px\] { grid-template-columns: 1fr !important; }
+    /* 10/11: flex rows wrap instead of squeezing */
+    #view .rgrid.flex { flex-direction: column; align-items: flex-start !important; gap: 16px !important; }
+    #view .rgrid.flex > a, #view .rgrid.flex > button { width: 100%; text-align: center; }
+    #view .flex.justify-between.mb-8, #view .flex.items-baseline.justify-between,
+    #view .flex.items-center.justify-between.border.border-whisper,
+    #view section.flex.items-center.justify-between { flex-wrap: wrap; gap: 12px; }
+    /* 12: prevent iOS focus zoom */
+    #view input, #view textarea, #view select, #gate input { font-size: 16px !important; }
+    /* 13: touch targets */
+    #view button, #view a[href] { touch-action: manipulation; }
+    #view .wt-dot { position: relative; }
+    #view .wt-dot::after { content: ""; position: absolute; inset: -16px; }
+    #view #wt-dots { gap: 16px !important; }
+    #view .cal-tab, #view .r-filter, #view .slot, #view .pray-btn, #view .day, #view .bld-filter { min-height: 44px; }
+    #view .size { min-width: 42px; min-height: 42px; }
+    #view .wo-check, #view #sv-minus, #view #sv-plus { min-width: 44px; min-height: 44px; }
+    /* 14: charts scale by aspect ratio, labels stay legible */
+    #view svg[viewBox="0 0 720 160"], #view svg[viewBox="0 0 440 120"] { height: auto !important; }
+    /* 17: program timeline — hide the rail, cards go full width */
+    #view #timeline { grid-template-columns: 1fr !important; }
+    #view #timeline > div.relative:first-child { display: none; }
+    #view .grid-cols-\[136px_1fr\] { grid-template-columns: 104px 1fr !important; }
+    #view .grid-cols-\[112px_1fr\], #view .grid-cols-\[110px_1fr\] { grid-template-columns: 92px 1fr !important; }
+    /* 18: type scale */
+    #view .text-4xl { font-size: 1.75rem; line-height: 1.15; }
+    #view .text-2xl { font-size: 1.35rem; }
+    #view .absolute.left-8.right-8 { left: 20px; right: 20px; }
+  }
 </style>
 </head>
 <body class="font-sans overflow-x-hidden">
@@ -196,6 +272,7 @@ tailwind.config = {
       <span class="material-symbols-outlined theme-ic">light_mode</span>
     </button>
     <div id="g4" class="v-stagger w-96 bg-iron border border-whisper rounded-xl p-8">
+      <img src="assets/logo.png" alt="CaymanLikeTheIsland" class="brand-logo w-36 mb-3 gate-form-logo" style="display:none"/>
       <p class="font-mono text-[10px] tracking-[0.25em] text-ash mb-2">4TH MAN ENTERPRISES</p>
       <h2 class="text-lg font-semibold mb-6">Sign in</h2>
       <label class="block text-xs text-ash mb-1.5" for="em">Email</label>
@@ -203,7 +280,7 @@ tailwind.config = {
       <label class="block text-xs text-ash mb-1.5" for="pw">Password</label>
       <input id="pw" type="password" value="••••••••••" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2.5 text-sm mb-6 focus:border-ember focus:ring-0 text-bone"/>
       <button id="enter-btn" class="press w-full bg-ember rounded-lg py-3 text-sm font-semibold mb-3" style="color:var(--c-furnace)">Sign in</button>
-      <button class="press w-full border border-whisper rounded-lg py-3 text-sm text-ash hover:text-bone">Create account</button>
+      <button id="create-btn" class="press w-full border border-whisper rounded-lg py-3 text-sm text-ash hover:text-bone">Create account</button>
       <div class="mt-6 pt-6 border-t border-whisper">
         <div class="rounded-lg overflow-hidden border border-whisper mb-2.5">
           <img src="assets/coach-transform.png" alt="Coach Cayman, before and after twelve years of the method" class="w-full block"/>
@@ -274,26 +351,42 @@ tailwind.config = {
           <button id="theme-toggle" aria-label="Toggle light or dark theme" class="w-9 h-9 rounded-lg border border-whisper flex items-center justify-center text-ash hover:text-bone" title="Toggle light / dark">
             <span class="material-symbols-outlined theme-ic" style="font-size:18px">light_mode</span>
           </button>
-          <div class="flex items-center gap-2" title="Current streak">
+          <a href="#/progress" class="flex items-center gap-2" title="Current streak — see Progress">
             <span class="material-symbols-outlined text-ember" style="font-size:16px">local_fire_department</span>
             <span class="font-mono text-sm" id="streak-count">23</span>
-          </div>
-          <div class="w-8 h-8 rounded-full bg-forged border border-whisper flex items-center justify-center text-[11px] font-mono">MT</div>
+          </a>
+          <a href="#/account" title="Marcus T. — Subscription" class="w-8 h-8 rounded-full bg-forged border border-whisper flex items-center justify-center text-[11px] font-mono hover:text-bone">MT</a>
         </div>
       </header>
       <main id="view" class="px-10 py-8 max-w-[1100px] mx-auto"></main>
     </div>
   </div>
   <nav id="bottom-nav" aria-label="Primary">
-    <a class="nav-item" href="#/today"><span class="material-symbols-outlined">bolt</span>Today</a>
-    <a class="nav-item" href="#/programs"><span class="material-symbols-outlined">fitness_center</span>Programs</a>
-    <a class="nav-item" href="#/recipes"><span class="material-symbols-outlined">skillet</span>Meals</a>
-    <a class="nav-item" href="#/progress"><span class="material-symbols-outlined">monitoring</span>Progress</a>
-    <a class="nav-item" href="#/coach"><span class="material-symbols-outlined">grid_view</span>Coach</a>
+    <a class="nav-item" href="#/walkthrough"><span class="material-symbols-outlined" aria-hidden="true">tour</span>Tour</a>
+    <a class="nav-item" href="#/today"><span class="material-symbols-outlined" aria-hidden="true">bolt</span>Today</a>
+    <a class="nav-item" href="#/programs"><span class="material-symbols-outlined" aria-hidden="true">fitness_center</span>Programs</a>
+    <a class="nav-item" href="#/progress"><span class="material-symbols-outlined" aria-hidden="true">monitoring</span>Progress</a>
+    <button class="nav-item" id="bn-more" aria-label="More sections" aria-expanded="false"><span class="material-symbols-outlined" aria-hidden="true">apps</span>More</button>
   </nav>
+  <div id="more-sheet" class="hidden" role="dialog" aria-label="All sections">
+    <div class="ms-grid">
+      <a href="#/overview"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>Overview</a>
+      <a href="#/recipes"><span class="material-symbols-outlined" aria-hidden="true">skillet</span>Meals</a>
+      <a href="#/nutrition"><span class="material-symbols-outlined" aria-hidden="true">restaurant</span>Nutrition</a>
+      <a href="#/community"><span class="material-symbols-outlined" aria-hidden="true">diversity_3</span>Community</a>
+      <a href="#/messages"><span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span>Messages</a>
+      <a href="#/faith"><span class="material-symbols-outlined" aria-hidden="true">menu_book</span>Faith</a>
+      <a href="#/blood"><span class="material-symbols-outlined" aria-hidden="true">labs</span>Blood</a>
+      <a href="#/partners"><span class="material-symbols-outlined" aria-hidden="true">handshake</span>Partners</a>
+      <a href="#/gear"><span class="material-symbols-outlined" aria-hidden="true">apparel</span>Gear</a>
+      <a href="#/coach"><span class="material-symbols-outlined" aria-hidden="true">grid_view</span>Coach</a>
+      <a href="#/account"><span class="material-symbols-outlined" aria-hidden="true">card_membership</span>Plan</a>
+      <button class="more-signout"><span class="material-symbols-outlined" aria-hidden="true">logout</span>Sign out</button>
+    </div>
+  </div>
 </div>
 
-<script src="exmedia.js?v=21"></script>
-<script src="views.js?v=21"></script>
-<script src="app.js?v=21"></script>
+<script src="exmedia.js?v=22"></script>
+<script src="views.js?v=22"></script>
+<script src="app.js?v=22"></script>
 </body></html>

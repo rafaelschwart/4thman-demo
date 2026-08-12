@@ -515,7 +515,7 @@ overview: { title: "Overview", phase2: false, html: () => {
       }).join("")}
     </div>
     <div id="yr-picker" class="hidden mb-10 bg-iron border border-whisper rounded-xl p-4">
-      <p class="font-mono text-xs tracking-widest text-ash mb-3">CHOOSE A PROGRAM FOR <span id="yr-picker-month" class="text-ember"></span></p>
+      <div class="flex items-center justify-between mb-3"><p class="font-mono text-xs tracking-widest text-ash">CHOOSE A PROGRAM FOR <span id="yr-picker-month" class="text-ember"></span></p><button id="yr-close" class="press text-ash hover:text-bone" aria-label="Close picker">${ICON("close")}</button></div>
       <div class="flex flex-wrap gap-2.5">
         ${Object.entries(PROGRAMS).map(([id2, pp]) => `
         <button class="yr-pick press flex items-center gap-2.5 border border-whisper rounded-lg pl-1.5 pr-4 py-1.5 hover:bg-forged" data-pick="${id2}">
@@ -724,7 +724,7 @@ program: {
     <div class="v-stagger flex items-center gap-3 mb-6">
       <a href="#/programs" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone" aria-label="Back">${ICON("arrow_back")}</a>
       <p class="font-mono text-xs tracking-[0.2em] text-ash mx-auto text-center flex-1">${p.name.toUpperCase()}</p>
-      <button class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone" aria-label="More options">${ICON("more_vert")}</button>
+      <a href="#/overview" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone" aria-label="Plan this program in Overview">${ICON("calendar_month")}</a>
     </div>
 
     <div class="v-stagger relative rounded-xl overflow-hidden border border-whisper mb-6 h-64">
@@ -804,7 +804,7 @@ session: {
           <div class="player rounded-lg h-36 border border-whisper mb-3">
             ${med.vid
               ? `<video src="${med.vid}" poster="${med.img}" loop muted playsinline preload="none" aria-label="${e.n} form video" class="ig-img"></video>`
-              : `<img onerror="this.remove()" loading="lazy" decoding="async" src="${med.img}" alt="${e.n} form video" class="kenburns"/><div class="play-badge"><span>${ICON("play_arrow")}</span></div>`}
+              : `<img onerror="this.remove()" loading="lazy" decoding="async" src="${med.img}" alt="${e.n} form demo" class="kenburns"/>`}
             <span class="dur-chip">0:05 · FORM VIDEO</span>
           </div>
           <p class="text-xs text-ash leading-relaxed">${CUES[e.k]}</p>
@@ -842,13 +842,13 @@ session: {
     <p class="font-mono text-xs tracking-[0.2em] text-ash mx-auto pr-9 text-center flex-1">SELF-GUIDED</p>
   </div>
   <div class="max-w-2xl pb-24">
-    <div class="v-stagger player rounded-xl h-64 border border-whisper mb-6">
+    <a href="#/workout/${id}/${di + 1}" class="v-stagger player block rounded-xl h-64 border border-whisper mb-6" aria-label="Start this session">
       ${HEROVID[d.img]
         ? `<video src="${HEROVID[d.img]}" poster="${d.img}" autoplay loop muted playsinline class="ig-img"></video>`
         : `<img onerror="this.remove()" loading="lazy" decoding="async" src="${d.img}" alt="${d.t}" class="kenburns"/><div class="play-badge"><span>${ICON("play_arrow")}</span></div>`}
       <span class="absolute left-3 bottom-3 flex items-center gap-1.5 font-mono text-[10px] tracking-widest text-bone rounded px-2 py-1" style="background:rgba(12,12,14,.72)">${ICON("directions_run")}SELF-GUIDED</span>
       <span class="dur-chip">${d.min}:00 · SESSION PREVIEW</span>
-    </div>
+    </a>
     <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-1">${d.t}</h2>
     <p class="v-stagger text-ash text-sm mb-5">${p.name}: Week ${wk}, Day ${di + 1}</p>
     <p class="v-stagger text-sm leading-relaxed mb-8">${S.intro}</p>
@@ -899,14 +899,15 @@ logbook: {
           detail = '<p class="font-mono text-sm">' + (rec.val || st.e.v) + ' <span class="text-ash">— completed</span></p>';
         }
       }
-      return `
-      <div class="flex items-center justify-between bg-iron border ${logged ? "border-ember/40" : "border-whisper"} rounded-xl px-5 py-4 mb-3">
+      const inner = `
         <div class="min-w-0">
           <p class="font-mono text-xs tracking-widest font-semibold mb-1">${st.e.n.toUpperCase()}</p>
           ${detail}
         </div>
-        ${logged ? `<span class="w-6 h-6 shrink-0 rounded-full bg-ember flex items-center justify-center" style="color:var(--c-furnace)">${ICON("check")}</span>` : ICON("chevron_right", "text-ash shrink-0")}
-      </div>`;
+        ${logged ? `<span class="w-6 h-6 shrink-0 rounded-full bg-ember flex items-center justify-center" style="color:var(--c-furnace)">${ICON("check")}</span>` : ICON("chevron_right", "text-ash shrink-0")}`;
+      return logged
+        ? `<div class="flex items-center justify-between bg-iron border border-ember/40 rounded-xl px-5 py-4 mb-3">${inner}</div>`
+        : `<a href="#/workout/${id}/${di + 1}" class="flex items-center justify-between bg-iron border border-whisper rounded-xl px-5 py-4 mb-3 hover:bg-forged" aria-label="Log ${st.e.n} in the guided workout">${inner}</a>`;
     };
     // group consecutive steps by block label, preserving workout order
     const groups = [];
@@ -934,8 +935,8 @@ logbook: {
     </div>
     ${groups.map((g) => `
     <div class="v-stagger mb-8">
-      <div class="flex items-center justify-between mb-3"><p class="text-lg font-semibold">${cap(g.label)}</p>${ICON("expand_less", "text-ash")}</div>
-      ${g.rows.join("")}
+      <button class="lb-group w-full flex items-center justify-between mb-3" aria-expanded="true"><p class="text-lg font-semibold">${cap(g.label)}</p>${ICON("expand_less", "text-ash lb-chev")}</button>
+      <div class="lb-rows">${g.rows.join("")}</div>
     </div>`).join("")}
   </div>`; },
 },
@@ -955,7 +956,7 @@ workout: {
     const d = p.days[di];
     const steps = flatWorkout(id, di);
     return `
-  <div class="max-w-2xl mx-auto" id="wo-root" data-pid="${id}" data-day="${di + 1}">
+  <div class="max-w-2xl mx-auto" id="wo-root" data-pid="${PROGRAMS[id] ? id : 'foundations'}" data-day="${di + 1}">
     <div class="v-stagger flex items-center gap-3 mb-5">
       <a href="#/session/${id}/${di + 1}" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone" aria-label="Back">${ICON("arrow_back")}</a>
       <div class="mx-auto text-center flex-1">
@@ -1140,7 +1141,7 @@ photos: { title: "Progress Photos", phase2: false, html: `
     <p class="font-mono text-xs tracking-widest text-ash mb-2">COACH'S NOTE · WEEK 18</p>
     <p class="text-sm leading-relaxed">Same lighting, same stance, eighteen weeks apart. The scale said −9 lb; the photos say more. Keep the Sunday photo habit.</p>
   </div>
-  <button class="v-stagger press mt-8 border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged">Add photo</button>`,
+  <button id="add-photo" class="v-stagger press mt-8 border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged">Add photo</button>`,
 },
 
 review: { title: "Weekly Review — Week 3", phase2: false, html: `
@@ -1232,7 +1233,7 @@ review: { title: "Weekly Review — Week 3", phase2: false, html: `
           <p class="text-xs text-ash mb-3">Name it plainly. This is what the call is for.</p>
           <textarea id="struggle" rows="3" class="w-full bg-forged border border-whisper rounded-lg px-4 py-3 text-sm focus:border-ember focus:ring-0" placeholder="Meditation slipped twice — evenings got away from me."></textarea>
         </section>
-        <button class="v-stagger press w-full bg-ember rounded-lg py-3.5 text-sm font-semibold mb-6" style="color:var(--c-furnace)">Send to Coach Cayman</button>
+        <button id="send-review" class="v-stagger press w-full bg-ember rounded-lg py-3.5 text-sm font-semibold mb-6" style="color:var(--c-furnace)">Send to Coach Cayman</button>
 
         <div class="v-stagger bg-iron border border-ember/30 rounded-xl p-5">
           <div class="flex items-center gap-3 mb-3">
@@ -1264,14 +1265,14 @@ account: { title: "Subscription", phase2: false, html: `
       <ul class="text-sm text-ash space-y-2">
         <li>Everything in Essential</li><li>Monthly 1:1 video call</li>
         <li>Priority coach messaging</li><li>Partner network sessions included <span class="font-mono text-[10px] text-ember">PHASE 2</span></li></ul>
-      <button class="press mt-5 w-full bg-ember text-furnace rounded-lg py-3 text-sm font-semibold">Upgrade to Elite</button>
+      <button id="upgrade-elite" class="press mt-5 w-full bg-ember text-furnace rounded-lg py-3 text-sm font-semibold">Upgrade to Elite</button>
     </section>
   </div>
   <div class="v-stagger max-w-3xl flex items-center justify-between border border-whisper rounded-xl px-6 py-4">
     <p class="text-sm text-ash">Next renewal <span class="font-mono text-bone">SEP 1, 2026</span> · Visa ·· <span class="font-mono">4242</span></p>
     <div class="flex gap-3">
-      <button class="press border border-whisper rounded-lg px-4 py-2 text-sm hover:bg-forged">Pause</button>
-      <button class="press border border-whisper rounded-lg px-4 py-2 text-sm hover:bg-forged">Update payment</button>
+      <button id="sub-pause" class="press border border-whisper rounded-lg px-4 py-2 text-sm hover:bg-forged">Pause</button>
+      <button id="sub-payment" class="press border border-whisper rounded-lg px-4 py-2 text-sm hover:bg-forged">Update payment</button>
     </div>
   </div>
   <p class="v-stagger font-mono text-[11px] text-ash mt-6">BILLED ON THE WEB VIA STRIPE · NO APP-STORE COMMISSION</p>`,
@@ -1322,7 +1323,7 @@ community: { title: "Community & Prayer Wall", phase2: true, html: `
     <aside>
       <h3 class="v-stagger text-lg font-semibold tracking-tight mb-6 mt-14">Prayer Wall</h3>
       <div class="v-stagger bg-iron border border-whisper rounded-xl p-4 mb-4">
-        <input placeholder="Share a request" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2.5 text-sm placeholder:text-ash focus:border-ember focus:ring-0"/>
+        <input id="pw-in" placeholder="Share a request — press Enter" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2.5 text-sm placeholder:text-ash focus:border-ember focus:ring-0"/>
       </div>
       ${[["Daniel","Interviewing Thursday for a job that would let me be home for dinner.","12"],
          ["Robert","My father starts chemo Monday.","31"],
@@ -1342,24 +1343,24 @@ messages: { title: "Messages", phase2: true, html: `
   <div class="grid grid-cols-[300px_1fr] gap-6" style="height:calc(100vh - 180px)">
     <aside class="v-stagger bg-iron border border-whisper rounded-xl overflow-hidden">
       <div class="p-4 border-b border-whisper">
-        <input placeholder="Search" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2 text-sm placeholder:text-ash focus:border-ember focus:ring-0"/>
+        <input id="msg-search" placeholder="Search" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2 text-sm placeholder:text-ash focus:border-ember focus:ring-0"/>
       </div>
-      <div class="flex items-center gap-3 p-4 bg-forged cursor-pointer">
+      <button class="conv-row w-full text-left flex items-center gap-3 p-4 bg-forged" data-thread="coach" data-name="coach cayman">
         <img onerror="this.remove()" loading="lazy" decoding="async" src="assets/coach-profile.jpg" alt="Coach Cayman" class="w-10 h-10 rounded-full object-cover border border-ember/40"/>
         <div class="flex-1 min-w-0"><div class="flex justify-between"><span class="text-sm font-medium">Coach Cayman</span><span class="font-mono text-[10px] text-ash">7:12</span></div>
         <p class="text-xs text-ash truncate">Strong week. Watch the OHP lockout —</p></div>
-        <span class="w-2 h-2 rounded-full bg-ember"></span>
-      </div>
-      <div class="flex items-center gap-3 p-4 hover:bg-forged cursor-pointer">
+        <span class="w-2 h-2 rounded-full bg-ember" id="conv-dot"></span>
+      </button>
+      <button class="conv-row w-full text-left flex items-center gap-3 p-4 hover:bg-forged" data-thread="bros" data-name="brothers">
         <div class="w-10 h-10 rounded-full bg-forged border border-whisper flex items-center justify-center text-[11px] font-mono">BR</div>
         <div class="flex-1 min-w-0"><div class="flex justify-between"><span class="text-sm">Brothers</span><span class="font-mono text-[10px] text-ash">YDA</span></div>
         <p class="text-xs text-ash truncate">J. Whitfield: 5 AM crew tomorrow?</p></div>
-      </div>
+      </button>
     </aside>
     <section class="v-stagger bg-iron border border-whisper rounded-xl flex flex-col min-h-0">
       <div class="flex items-center gap-3 px-6 py-4 border-b border-whisper">
         <img onerror="this.remove()" loading="lazy" decoding="async" src="assets/coach-profile.jpg" alt="Coach Cayman" class="w-9 h-9 rounded-full object-cover border border-ember/40"/>
-        <div><p class="text-sm font-medium">Coach Cayman</p><p class="text-[11px] text-ok">Online</p></div>
+        <div><p class="text-sm font-medium" id="thread-name">Coach Cayman</p><p class="text-[11px] text-ok">Online</p></div>
       </div>
       <div class="flex-1 overflow-y-auto p-6 space-y-4" id="thread">
         <div class="max-w-md msg"><div class="bg-forged rounded-xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed">How did Day 2 feel? Bench looked heavy on the last set in your log.</div><p class="font-mono text-[10px] text-ash mt-1">6:58 AM</p></div>
@@ -1372,7 +1373,7 @@ messages: { title: "Messages", phase2: true, html: `
         <div class="max-w-md msg"><div class="bg-forged rounded-xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed">Strong week. Watch the OHP lockout — we bump bench to 210 next session.</div><p class="font-mono text-[10px] text-ash mt-1">7:12 AM</p></div>
       </div>
       <div class="p-4 border-t border-whisper flex gap-3">
-        <button aria-label="Attach a file" class="press w-10 h-10 rounded-lg border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("attach_file")}</button>
+        <button id="msg-attach" aria-label="Attach a file" class="press w-10 h-10 rounded-lg border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("attach_file")}</button>
         <input id="msg-in" placeholder="Message Coach Cayman" class="flex-1 bg-forged border border-whisper rounded-lg px-4 text-sm placeholder:text-ash focus:border-ember focus:ring-0"/>
         <button id="msg-send" aria-label="Send message" class="press w-10 h-10 rounded-lg bg-ember text-furnace flex items-center justify-center">${ICON("arrow_upward")}</button>
       </div>
@@ -1399,9 +1400,9 @@ nutrition: { title: "Nutrition & Macros", phase2: true, html: `
           <div><p class="text-sm font-medium">${m}</p><p class="text-xs text-ash">${f}</p></div>
           <span class="font-mono text-xs text-ash">${mac}</span>
         </div>`).join("")}
-        <div class="v-stagger flex items-center justify-between py-4">
-          <div><p class="text-sm font-medium">Dinner</p><p class="text-xs text-ash">Not logged yet</p></div>
-          <button class="press border border-whisper rounded-lg px-4 py-2 text-xs hover:bg-forged">Log meal</button>
+        <div class="v-stagger flex items-center justify-between py-4" id="dinner-row">
+          <div><p class="text-sm font-medium">Dinner</p><p class="text-xs text-ash" id="dinner-sub">Not logged yet</p></div>
+          <button id="log-meal" class="press border border-whisper rounded-lg px-4 py-2 text-xs hover:bg-forged">Log meal</button>
         </div>
       </div>
       <div class="v-stagger mt-8">
@@ -1516,7 +1517,7 @@ recipe: {
       <section>
         <div class="v-stagger flex items-center justify-between bg-iron border border-whisper rounded-lg px-4 py-2.5 mb-1">
           <p class="font-mono text-xs tracking-widest text-ash">METHOD</p>
-          <p class="font-mono text-[10px] text-ash">BASED ON ${r.servings} SERVINGS</p>
+          <p class="font-mono text-[10px] text-ash" id="sv-label">BASED ON ${r.servings} SERVINGS</p>
         </div>
         ${r.method.map((m, i) => `
         <div class="v-stagger flex gap-3.5 py-3 border-b" style="border-color:var(--c-whisper)">
@@ -1561,7 +1562,7 @@ faith: { title: "Faith & Mind", phase2: true, html: `
       <p class="text-ash text-sm italic mt-1">"…the form of the fourth is like the Son of God."</p></div>
     <div class="flex items-center gap-6">
       <span class="font-mono text-sm text-ash">DAY <span class="count" data-to="9">0</span> / 21</span>
-      <button class="press bg-ember rounded-lg px-6 py-3 text-sm font-semibold" style="color:var(--c-furnace)">Continue Day 9</button>
+      <button id="faith-continue" class="press bg-ember rounded-lg px-6 py-3 text-sm font-semibold" style="color:var(--c-furnace)">Continue Day 9</button>
     </div>
   </section>
   <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-4">DEVOTIONALS</p>
@@ -1570,7 +1571,7 @@ faith: { title: "Faith & Mind", phase2: true, html: `
        ["Man Shall Not Live by Bread Alone — Fasting","0","7 DAYS · NOT STARTED","assets/gen2-fast.png"],
        ["New Wine, New Wineskins","100","COMPLETED · JUL 2026","assets/post-DUWecGFkRWU.jpg"]]
       .map(([t,p,s,img])=>`
-    <div class="v-stagger bg-iron border border-whisper rounded-xl overflow-hidden hover:bg-forged cursor-pointer">
+    <div class="v-stagger bg-iron border border-whisper rounded-xl overflow-hidden">
       <div class="h-32 overflow-hidden"><img onerror="this.remove()" loading="lazy" decoding="async" src="${img}" alt="" class="ig-img"/></div>
       <div class="p-5">
         <p class="text-sm font-medium mb-3 leading-snug">${t}</p>
@@ -1583,19 +1584,19 @@ faith: { title: "Faith & Mind", phase2: true, html: `
     <section>
       <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-4">MIND</p>
       ${[["Morning Focus","10:00"],["Breath Under Load","15:00"],["Evening Examen","12:00"]].map(([t,d])=>`
-      <div class="v-stagger flex items-center gap-4 py-3 border-b hover:bg-iron px-2 rounded cursor-pointer" style="border-color:var(--c-whisper)">
-        ${ICON("play_circle","text-ember")}<span class="flex-1 text-sm">${t}</span><span class="font-mono text-xs text-ash">${d}</span>
-      </div>`).join("")}
+      <button class="mind-row v-stagger w-full text-left flex items-center gap-4 py-3 border-b hover:bg-iron px-2 rounded" style="border-color:var(--c-whisper)">
+        ${ICON("play_circle","text-ember mr-ic")}<span class="flex-1 text-sm mr-t">${t}</span><span class="font-mono text-xs text-ash">${d}</span>
+      </button>`).join("")}
     </section>
     <section>
       <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-4">TEACHING · FROM COACH CAYMAN</p>
       ${[["When Faith Meets Hustle, Mountains Move","assets/post-DG067emRgOd.jpg"],
          ["It's More Than Working Out — Purification of the Heart","assets/gen2-circuit.png"],
          ["Are You Willing to Sprint When the Distance Is Unknown?","assets/gen2-sprint.png"]].map(([t,img])=>`
-      <div class="v-stagger flex items-center gap-4 py-3 border-b hover:bg-iron px-2 rounded cursor-pointer" style="border-color:var(--c-whisper)">
+      <button class="mind-row v-stagger w-full text-left flex items-center gap-4 py-3 border-b hover:bg-iron px-2 rounded" style="border-color:var(--c-whisper)">
         <div class="w-16 h-11 rounded overflow-hidden shrink-0"><img onerror="this.remove()" loading="lazy" decoding="async" src="${img}" alt="" class="ig-img"/></div>
-        <span class="flex-1 text-sm leading-snug">${t}</span>${ICON("play_circle","text-ember")}
-      </div>`).join("")}
+        <span class="flex-1 text-sm leading-snug mr-t">${t}</span>${ICON("play_circle","text-ember mr-ic")}
+      </button>`).join("")}
     </section>
   </div>`,
 },
@@ -1647,7 +1648,7 @@ blood: { title: "Blood Panel", phase2: true, html: (() => {
       <div><p class="font-mono text-xs tracking-widest text-ash mb-1">TESTOSTERONE · TOTAL</p>
         <p class="font-mono text-2xl">688 <span class="text-ash text-sm">NG/DL</span> <span class="text-ok text-sm">▲ +76 SINCE MAR</span></p></div>
       <div class="flex gap-2">
-        ${["6M", "1Y", "ALL"].map((r, i) => `<span class="font-mono text-[11px] px-3 py-1 rounded-lg ${i === 0 ? "bg-forged text-ember" : "text-ash"}">${r}</span>`).join("")}
+        ${["6M", "1Y", "ALL"].map((r, i) => `<button class="bp-range press font-mono text-[11px] px-3 py-1 rounded-lg ${i === 0 ? "bg-forged text-ember" : "text-ash"}">${r}</button>`).join("")}
       </div>
     </div>
     <svg viewBox="0 0 720 160" class="w-full" style="height:160px" role="img" aria-label="Testosterone trend across four lab draws">
@@ -1689,14 +1690,14 @@ blood: { title: "Blood Panel", phase2: true, html: (() => {
       <div class="v-stagger flex items-center gap-4 py-4 border-b" style="border-color:var(--c-whisper)">
         ${ICON("description", "text-ash")}
         <div class="flex-1"><p class="text-sm">${t}</p><p class="font-mono text-xs text-ash">${m}</p></div>
-        <button class="press border border-whisper rounded-lg px-4 py-2 text-xs hover:bg-forged">View</button>
+        <button class="bp-view press border border-whisper rounded-lg px-4 py-2 text-xs hover:bg-forged">View</button>
       </div>`).join("")}
     </div>
     <aside class="v-stagger bg-iron rounded-xl p-8 text-center border-2 border-dashed h-fit" style="border-color:var(--c-whisper)">
       ${ICON("upload_file", "text-ash")}
       <p class="text-sm font-medium mt-3 mb-1">Upload your results PDF</p>
       <p class="text-xs text-ash leading-relaxed mb-4">Get tested anywhere. Your PDF stays private, visible only to you and your coach. Markers come from the reports you upload — nothing connects to a lab, nothing leaves this vault.</p>
-      <button class="press border border-whisper rounded-lg px-5 py-2.5 text-sm hover:bg-forged">Choose file</button>
+      <button id="bp-upload" class="press border border-whisper rounded-lg px-5 py-2.5 text-sm hover:bg-forged">Choose file</button>
     </aside>
   </div>`;
 })(),
@@ -1722,17 +1723,17 @@ partners: { title: "Partner Network", phase2: true, html: `
         </div>
         <p class="text-xs text-ash mb-1">${loc}</p>
         <p class="font-mono text-xs text-ash mb-4">NEXT: ${next}</p>
-        <button class="press w-full border border-whisper rounded-lg px-4 py-2 text-sm ${sel?"bg-forged":"hover:bg-forged"}">Book a session</button>
+        <button class="book-btn press w-full border border-whisper rounded-lg px-4 py-2 text-sm ${sel?"bg-forged":"hover:bg-forged"}" data-n="${n}" data-s="${s}">Book a session</button>
       </div>`).join("")}
     </div>
     <aside class="v-stagger bg-iron border border-whisper rounded-xl p-6 h-fit">
       <p class="font-mono text-xs tracking-widest text-ash mb-1">BOOKING</p>
-      <p class="text-sm font-medium mb-6">Dr. A. Reyes · Sports Chiropractic</p>
+      <p class="text-sm font-medium mb-6" id="bk-who">Dr. A. Reyes · Sports Chiropractic</p>
       <div class="grid grid-cols-5 gap-2 text-center mb-6">
         ${[["WED","13"],["THU","14"],["FRI","15"],["SAT","16"],["MON","18"]].map(([d,n],i)=>`
-          <div class="${i===1?"border border-ember/40 rounded-lg py-1":""}">
-            <p class="font-mono text-[10px] ${i===1?"text-ember":"text-ash"} mb-1">${d}</p>
-            <p class="font-mono text-sm ${i===1?"text-ember":""}">${n}</p></div>`).join("")}
+          <button class="day press rounded-lg py-1 ${i===1?"border border-ember/40":""}">
+            <p class="font-mono text-[10px] ${i===1?"text-ember":"text-ash"} mb-1 day-d">${d}</p>
+            <p class="font-mono text-sm ${i===1?"text-ember":""} day-n">${n}</p></button>`).join("")}
       </div>
       <div class="grid grid-cols-3 gap-2 mb-6" id="slots">
         ${["11:00","1:30","2:30","4:00","5:15","6:30"].map((t,i)=>`
@@ -1760,7 +1761,7 @@ gear: { title: "4th Man Gear", phase2: true, html: `
       <h3 class="text-xl font-semibold tracking-tight mb-2">The Fourth Man Hoodie</h3>
       <p class="text-ash text-sm mb-6 max-w-md leading-relaxed">Heavyweight fleece in furnace black. Embroidered mark, no print. Built for 5 AM parking lots.</p>
       <div class="flex items-center gap-5">
-        <button class="press bg-ember text-furnace rounded-lg px-6 py-3 text-sm font-semibold">Shop the drop</button>
+        <button id="shop-drop" class="press bg-ember text-furnace rounded-lg px-6 py-3 text-sm font-semibold">Shop the drop</button>
         <span class="font-mono text-lg">$58</span>
       </div>
     </div>
@@ -1768,9 +1769,9 @@ gear: { title: "4th Man Gear", phase2: true, html: `
   </section>
   <div class="grid grid-cols-3 gap-5">
     ${[["Standard Tee — Charcoal","$32","apparel",true,"assets/gen-tee-charcoal.png"],
-       ["Standard Tee — Bone","$32","apparel",false,"assets/gen-tee-bone.png"],["Field Cap","$28","podcasts",false,"assets/gen-cap.png"],
+       ["Standard Tee — Bone","$32","apparel",true,"assets/gen-tee-bone.png"],["Field Cap","$28","podcasts",false,"assets/gen-cap.png"],
        ["Gym Towel","$18","dry_cleaning",false,"assets/gen-towel.png"],["Shaker Bottle","$24","water_bottle",false,"assets/gen-shaker.png"],
-       ["The Fourth Man Hoodie","$58","apparel",false,"assets/gen-hoodie.png"]]
+       ["The Fourth Man Hoodie","$58","apparel",true,"assets/gen-hoodie.png"]]
       .map(([n,p,ic,sizes,img])=>`
     <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
       <div class="h-36 rounded-lg bg-forged mb-4 flex items-center justify-center overflow-hidden">${img?`<img loading="lazy" decoding="async" src="${img}" alt="${n}" class="ig-img" onerror="this.remove()"/>`:ICON(ic,"text-ash")}</div>
@@ -1795,6 +1796,7 @@ coach: { title: "Coach — Dashboard", phase2: false, html: `
       <p class="font-mono text-3xl ${c}"><span class="count" data-to="${v}">0</span></p>
     </div>`).join("")}
   </div>
+  <div class="table-scroll"><div>
   <div class="v-stagger grid grid-cols-[1.4fr_1fr_1fr_1fr_.7fr] font-mono text-[11px] tracking-widest text-ash px-4 pb-3">
     <span>CLIENT</span><span>PLAN</span><span>COMPLIANCE</span><span>LAST SESSION</span><span>STREAK</span>
   </div>
@@ -1810,7 +1812,8 @@ coach: { title: "Coach — Dashboard", phase2: false, html: `
       <span class="font-mono text-xs">${p}</span><span class="font-mono text-sm">${c}</span>
       <span class="font-mono text-xs text-ash">${l}</span><span class="font-mono text-sm">${s}</span>
     </a>`).join("")}
-  </div>`,
+  </div>
+  </div></div>`,
 },
 
 client: { title: "Coach — Marcus T.", phase2: false, html: `
@@ -1826,7 +1829,7 @@ client: { title: "Coach — Marcus T.", phase2: false, html: `
     <div>
       <p class="v-stagger font-mono text-xs tracking-widest text-ash mb-3">DAILY SIX · LAST 7 DAYS</p>
       <div class="v-stagger bg-iron border border-whisper rounded-xl p-5 mb-8">
-        <div class="grid grid-cols-8 gap-2 font-mono text-[10px] text-ash">
+        <div id="six-grid" class="grid grid-cols-8 gap-2 font-mono text-[10px] text-ash">
           <span></span>${["M","T","W","T","F","S","S"].map(d=>`<span class="text-center">${d}</span>`).join("")}
           ${["HYD","BIB","PRA","MED","REA","TRN"].map((h,r)=>`
             <span class="leading-6">${h}</span>
@@ -1871,30 +1874,30 @@ builder: { title: "Coach — Program Builder", phase2: false, html: `
     <div><h2 class="text-2xl font-semibold tracking-tight">Program Builder</h2>
       <p class="text-ash text-sm mt-1">Foundations of Iron · <span class="font-mono">8 WEEKS · 4 DAYS/WK</span></p></div>
     <div class="flex gap-3">
-      <button class="press border border-whisper rounded-lg px-5 py-2.5 text-sm hover:bg-forged">Save Draft</button>
-      <button class="press bg-ember text-furnace rounded-lg px-5 py-2.5 text-sm font-semibold">Assign to Client</button>
+      <button id="bld-save" class="press border border-whisper rounded-lg px-5 py-2.5 text-sm hover:bg-forged">Save Draft</button>
+      <button id="bld-assign" class="press bg-ember text-furnace rounded-lg px-5 py-2.5 text-sm font-semibold">Assign to Client</button>
     </div>
   </div>
   <div class="grid grid-cols-[340px_1fr] gap-8">
     <section class="v-stagger bg-iron rounded-xl border border-whisper p-5 h-fit">
       <p class="font-mono text-xs tracking-widest text-ash mb-4">EXERCISE LIBRARY · LICENSED</p>
-      <input placeholder="Search exercises" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2.5 text-sm placeholder:text-ash focus:border-ember focus:ring-0 mb-4"/>
+      <input id="bld-search" placeholder="Search exercises" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2.5 text-sm placeholder:text-ash focus:border-ember focus:ring-0 mb-4"/>
       <div class="flex flex-wrap gap-2 mb-5">
         ${["CHEST","BACK","LEGS","SHOULDERS","BARBELL"].map((c,i)=>`
-          <span class="font-mono text-[11px] px-3 py-1 rounded-lg bg-forged ${i===0?"text-ember border border-ember/40":"text-ash"}">${c}</span>`).join("")}
+          <button class="bld-filter press font-mono text-[11px] px-3 py-1 rounded-lg bg-forged ${i===0?"text-ember border border-ember/40":"text-ash"}" data-f="${c}">${c}</button>`).join("")}
       </div>
       ${[["Barbell Bench Press","Chest · Barbell","assets/gen-bench.png"],
          ["Overhead Press","Shoulders · Barbell","assets/gen2-ohp.png"],
          ["Seated Cable Row","Back · Cable","assets/gen2-row.png"],
          ["Incline Dumbbell Press","Chest · Dumbbell",""]]
         .map(([n,t,img])=>`
-      <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-forged cursor-grab border border-transparent hover:border-whisper">
+      <button class="bld-ex w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-forged border border-transparent hover:border-whisper" data-name="${n.toLowerCase()}" data-ex="${n}">
         <div class="w-16 h-10 rounded overflow-hidden bg-forged flex items-center justify-center relative shrink-0">
           ${img?`<img onerror="this.remove()" loading="lazy" decoding="async" src="${img}" alt="${n}" class="ig-img"/><span class="absolute inset-0 flex items-center justify-center">${ICON("play_arrow","text-white")}</span>`:ICON("play_arrow","text-ash")}
         </div>
         <div class="flex-1"><p class="text-sm">${n}</p><p class="text-xs text-ash">${t}</p></div>
         ${ICON("add","text-ash")}
-      </div>`).join("")}
+      </button>`).join("")}
       <p class="font-mono text-xs text-ash mt-4">1,240 EXERCISES · $10–50/MO LICENSED</p>
     </section>
     <section class="space-y-4">
@@ -1908,22 +1911,32 @@ builder: { title: "Coach — Program Builder", phase2: false, html: `
           <div class="py-4 border-b" style="border-color:var(--c-whisper)">
             <div class="flex items-center justify-between mb-4">
               <span class="text-sm text-ember">Day 2 · Push</span>
-              <button class="press font-mono text-xs text-ash border border-whisper rounded px-3 py-1 hover:text-bone">+ ADD EXERCISE</button></div>
+              <button id="bld-add-ex" class="press font-mono text-xs text-ash border border-whisper rounded px-3 py-1 hover:text-bone">+ ADD EXERCISE</button></div>
+            <div id="bld-day2">
             ${[["Barbell Bench Press","4 × 8","90s"],["Incline Dumbbell Press","3 × 10","75s"],["Overhead Press","4 × 6","120s"],["Cable Fly","3 × 12","60s"]]
               .map(([n,sr,rest])=>`
-            <div class="flex items-center gap-4 bg-forged rounded-lg px-4 py-3 mb-2">
-              ${ICON("drag_indicator","text-ash cursor-grab")}
+            <div class="bld-row flex items-center gap-4 bg-forged rounded-lg px-4 py-3 mb-2">
+              ${ICON("drag_indicator","text-ash")}
               <span class="flex-1 text-sm">${n}</span>
               <span class="font-mono text-sm">${sr}</span><span class="font-mono text-xs text-ash">${rest}</span>
-              ${ICON("close","text-ash cursor-pointer")}
+              <button class="bld-del press" aria-label="Remove ${n}">${ICON("close","text-ash")}</button>
             </div>`).join("")}
+            </div>
           </div>
           <div class="py-3 flex items-center justify-between">
             <span class="text-sm text-ash">Day 3 · Legs</span><span class="font-mono text-xs text-ash">6 EXERCISES</span></div>
         </div>
       </div>
-      <div class="v-stagger bg-iron rounded-xl border border-whisper px-5 py-4 flex items-center justify-between">
-        <span class="font-mono text-xs tracking-widest text-ash">WEEK 4</span>${ICON("expand_more","text-ash")}
+      <div class="v-stagger bg-iron rounded-xl border border-whisper">
+        <button id="bld-wk4" class="w-full px-5 py-4 flex items-center justify-between" aria-expanded="false">
+          <span class="font-mono text-xs tracking-widest text-ash">WEEK 4</span>${ICON("expand_more","text-ash bld-wk4-chev")}
+        </button>
+        <div id="bld-wk4-body" class="hidden px-5 pb-3">
+          ${[["Day 1 · Test: Bench","5 EXERCISES"],["Day 2 · Test: Row","5 EXERCISES"],["Day 3 · Test: Squat","6 EXERCISES"],["Day 4 · Deload circuit","4 EXERCISES"]].map(([d,c])=>`
+          <div class="py-3 flex items-center justify-between border-t" style="border-color:var(--c-whisper)">
+            <span class="text-sm text-ash">${d}</span><span class="font-mono text-xs text-ash">${c}</span>
+          </div>`).join("")}
+        </div>
       </div>
     </section>
   </div>`,
@@ -1940,6 +1953,7 @@ billing: { title: "Coach — Billing", phase2: false, html: `
   </div>
   <div class="grid grid-cols-[1fr_280px] gap-8">
     <section>
+      <div class="table-scroll"><div>
       <div class="v-stagger grid grid-cols-[1.4fr_1fr_.8fr_1fr_.8fr] font-mono text-[11px] tracking-widest text-ash px-4 pb-3">
         <span>CLIENT</span><span>PLAN</span><span>STATUS</span><span>RENEWAL</span><span class="text-right">LTV</span>
       </div>
@@ -1950,19 +1964,20 @@ billing: { title: "Coach — Billing", phase2: false, html: `
            ["R. Ortega","ESSENTIAL · $97","Paused","ash","—","$873"],
            ["K. Boateng","ELITE · $147","Active","ok","AUG 27","$441"],
            ["S. Nguyen","ESSENTIAL · $97","Past due","bad","AUG 6","$194"]].map(([n,p,s,c,r,l])=>`
-        <div class="v-stagger grid grid-cols-[1.4fr_1fr_.8fr_1fr_.8fr] items-center px-4 py-4 hover:bg-iron rounded-lg">
+        <a href="#/client" class="v-stagger grid grid-cols-[1.4fr_1fr_.8fr_1fr_.8fr] items-center px-4 py-4 hover:bg-iron rounded-lg cursor-pointer">
           <span class="text-sm">${n}</span><span class="font-mono text-xs">${p}</span>
           <span class="flex items-center gap-2 text-xs text-${c}"><span class="w-1.5 h-1.5 rounded-full bg-${c}"></span>${s}</span>
           <span class="font-mono text-sm text-ash">${r}</span><span class="font-mono text-sm text-right">${l}</span>
-        </div>`).join("")}
+        </a>`).join("")}
       </div>
+      </div></div>
     </section>
     <aside class="space-y-4">
       <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
         <p class="font-mono text-xs tracking-widest text-ash mb-4">STRIPE</p>
         <p class="text-sm text-ash mb-1">Last payout</p>
         <p class="font-mono text-xl mb-4">$1,240 <span class="text-ash text-sm">· AUG 8</span></p>
-        <button class="press w-full border border-whisper rounded-lg px-4 py-2.5 text-sm hover:bg-forged">Open Stripe Dashboard</button>
+        <button id="open-stripe" class="press w-full border border-whisper rounded-lg px-4 py-2.5 text-sm hover:bg-forged">Open Stripe Dashboard</button>
       </div>
       <div class="v-stagger bg-iron border border-whisper rounded-xl p-5">
         <p class="font-mono text-xs tracking-widest text-ash mb-3">WEB BILLING</p>
