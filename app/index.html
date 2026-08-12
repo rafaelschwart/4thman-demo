@@ -213,6 +213,8 @@ tailwind.config = {
     /* 1: sign-in gate — scrollable, fits, branded */
     #gate { grid-template-columns: 1fr; overflow-y: auto; align-items: start;
       padding: 24px 16px calc(24px + env(safe-area-inset-bottom)); display: block; }
+    /* the display:block above must never resurrect a dismissed gate */
+    #gate.hidden { display: none !important; }
     #gate > div:last-child { border-left: 0 !important; min-height: 0; padding: 8px 0; }
     #gate #g4 { width: 100%; max-width: 400px; margin: 0 auto; padding: 22px; }
     #gate #g4 img[src*="coach-transform"] { max-height: 130px; object-fit: cover; }
