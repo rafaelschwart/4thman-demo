@@ -22,6 +22,7 @@
     moveMarker();
   };
   applyTheme((function () { try { return localStorage.getItem("fm-theme") === "light"; } catch (e) { return false; } })());
+  if (reduced) { const gv = $("#gate-photo video"); if (gv) { gv.removeAttribute("autoplay"); gv.pause(); } }
   const tt = $("#theme-toggle"), gt = $("#gate-theme");
   if (tt) tt.addEventListener("click", () => toggleTheme(tt));
   if (gt) gt.addEventListener("click", () => toggleTheme(gt));
@@ -340,16 +341,22 @@
     }
 
     if (key === "session") {
-      $$(".ex-row", view).forEach((r) => r.addEventListener("click", () => {
+      $$(".ex-row", view).forEach((r) => {
+        const head = r.querySelector('[role="button"]') || r;
+        const toggle = () => {
         const tip = r.querySelector(".ex-tip"), chev = r.querySelector(".ex-chev");
         const vid = tip.querySelector("video");
         const opening = tip.classList.contains("hidden");
+        head.setAttribute("aria-expanded", opening ? "true" : "false");
         tip.classList.toggle("hidden");
         // form videos decode only while their row is open (perf + interruptible)
         if (vid) { if (opening && !reduced) vid.play().catch(() => {}); else vid.pause(); }
         if (chev) anime({ targets: chev, rotate: opening ? 180 : 0, duration: D(250), easing: "easeOutQuart" });
         if (opening) anime({ targets: tip, opacity: [0, 1], translateY: [-6, 0], duration: D(260), easing: "easeOutQuart" });
-      }));
+        };
+        head.addEventListener("click", toggle);
+        head.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); toggle(); } });
+      });
     }
 
     if (key === "today") {

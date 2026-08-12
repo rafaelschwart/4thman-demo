@@ -3,7 +3,7 @@
 //  .count[data-to][data-suffix] — number roll-up
 //  .bar-fill[data-w] — width fill
 //  .ring-fg[data-pct] — SVG ring fill (r=26, C≈163.4)
-const ICON = (n, cls = "") => `<span class="material-symbols-outlined ${cls}">${n}</span>`;
+const ICON = (n, cls = "") => `<span class="material-symbols-outlined ${cls}" aria-hidden="true">${n}</span>`;
 const ring = (pct, label, value, unit) => `
   <div class="v-stagger bg-iron border border-whisper rounded-xl p-5 flex items-center gap-4">
     <svg width="64" height="64" viewBox="0 0 64 64" class="-rotate-90">
@@ -713,9 +713,9 @@ program: {
     return `
   <div class="max-w-2xl mx-auto">
     <div class="v-stagger flex items-center gap-3 mb-6">
-      <a href="#/programs" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("arrow_back")}</a>
+      <a href="#/programs" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone" aria-label="Back">${ICON("arrow_back")}</a>
       <p class="font-mono text-xs tracking-[0.2em] text-ash mx-auto text-center flex-1">${p.name.toUpperCase()}</p>
-      <button class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("more_vert")}</button>
+      <button class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone" aria-label="More options">${ICON("more_vert")}</button>
     </div>
 
     <div class="v-stagger relative rounded-xl overflow-hidden border border-whisper mb-6 h-64">
@@ -783,7 +783,7 @@ session: {
       const med = exMedia(e.n, e.k);
       return `
       <div class="ex-row border-b" style="border-color:var(--c-whisper)">
-        <div class="flex items-center gap-4 py-3 px-1 cursor-pointer">
+        <div class="flex items-center gap-4 py-3 px-1 cursor-pointer" role="button" tabindex="0" aria-expanded="false" aria-label="Show form video: ${e.n}">
           <div class="relative w-20 rounded-lg overflow-hidden bg-forged flex items-center justify-center shrink-0" style="height:52px">
             <img onerror="this.remove()" loading="lazy" decoding="async" src="${med.img}" alt="${e.n}" class="ig-img"/>
             <span class="absolute inset-0 flex items-center justify-center" style="background:rgba(12,12,14,.25)">${ICON("play_arrow","text-white")}</span>
@@ -829,7 +829,7 @@ session: {
     };
     return `
   <div class="v-stagger flex items-center gap-3 mb-6">
-    <a href="#/program/${id}" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("arrow_back")}</a>
+    <a href="#/program/${id}" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone" aria-label="Back">${ICON("arrow_back")}</a>
     <p class="font-mono text-xs tracking-[0.2em] text-ash mx-auto pr-9 text-center flex-1">SELF-GUIDED</p>
   </div>
   <div class="max-w-2xl pb-24">
@@ -910,7 +910,7 @@ logbook: {
     const loggedCount = Object.keys(book.entries).length;
     return `
   <div class="v-stagger flex items-center gap-3 mb-6">
-    <a href="#/session/${id}/${di + 1}" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("close")}</a>
+    <a href="#/session/${id}/${di + 1}" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone" aria-label="Close logbook">${ICON("close")}</a>
     <p class="font-mono text-xs tracking-[0.2em] text-ash mx-auto pr-9 text-center flex-1">REVIEW LOGBOOK</p>
   </div>
   <div class="max-w-2xl mx-auto">
@@ -948,7 +948,7 @@ workout: {
     return `
   <div class="max-w-2xl mx-auto" id="wo-root" data-pid="${id}" data-day="${di + 1}">
     <div class="v-stagger flex items-center gap-3 mb-5">
-      <a href="#/session/${id}/${di + 1}" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("arrow_back")}</a>
+      <a href="#/session/${id}/${di + 1}" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone" aria-label="Back">${ICON("arrow_back")}</a>
       <div class="mx-auto text-center flex-1">
         <p class="font-mono text-xs tracking-[0.2em] text-ash">GUIDED WORKOUT</p>
         <p class="text-xs text-ash mt-0.5">${p.name} · Week ${p.week || 1}, Day ${di + 1} · ${d.t}</p>
@@ -1208,9 +1208,9 @@ messages: { title: "Messages", phase2: true, html: `
         <div class="max-w-md msg"><div class="bg-forged rounded-xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed">Strong week. Watch the OHP lockout — we bump bench to 210 next session.</div><p class="font-mono text-[10px] text-ash mt-1">7:12 AM</p></div>
       </div>
       <div class="p-4 border-t border-whisper flex gap-3">
-        <button class="press w-10 h-10 rounded-lg border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("attach_file")}</button>
+        <button aria-label="Attach a file" class="press w-10 h-10 rounded-lg border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("attach_file")}</button>
         <input id="msg-in" placeholder="Message Coach Cayman" class="flex-1 bg-forged border border-whisper rounded-lg px-4 text-sm placeholder:text-ash focus:border-ember focus:ring-0"/>
-        <button id="msg-send" class="press w-10 h-10 rounded-lg bg-ember text-furnace flex items-center justify-center">${ICON("arrow_upward")}</button>
+        <button id="msg-send" aria-label="Send message" class="press w-10 h-10 rounded-lg bg-ember text-furnace flex items-center justify-center">${ICON("arrow_upward")}</button>
       </div>
     </section>
   </div>`,
@@ -1324,7 +1324,7 @@ recipe: {
     return `
   <div class="max-w-2xl mx-auto pb-10">
     <div class="v-stagger flex items-center gap-3 mb-6">
-      <a href="#/recipes" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("arrow_back")}</a>
+      <a href="#/recipes" class="press w-9 h-9 rounded-full bg-iron border border-whisper flex items-center justify-center text-ash hover:text-bone" aria-label="Back">${ICON("arrow_back")}</a>
       <p class="font-mono text-xs tracking-[0.2em] text-ash mx-auto pr-9 text-center flex-1">RECIPE</p>
     </div>
     <div class="v-stagger rounded-xl overflow-hidden border border-whisper h-64 mb-6"><img src="${r.img}" alt="${r.name}" class="ig-img"/></div>
@@ -1336,9 +1336,9 @@ recipe: {
       <div class="flex items-center justify-between mb-4">
         <p class="text-sm font-semibold">Number of servings</p>
         <div class="flex items-center gap-4">
-          <button id="sv-minus" class="press w-8 h-8 rounded-full border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("remove")}</button>
+          <button id="sv-minus" aria-label="Decrease servings" class="press w-8 h-8 rounded-full border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("remove")}</button>
           <span class="font-mono text-lg" id="sv-count" data-base="${r.servings}">${r.servings}</span>
-          <button id="sv-plus" class="press w-8 h-8 rounded-full border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("add")}</button>
+          <button id="sv-plus" aria-label="Increase servings" class="press w-8 h-8 rounded-full border border-whisper flex items-center justify-center text-ash hover:text-bone">${ICON("add")}</button>
         </div>
       </div>
       <button id="add-list" class="press w-full bg-ember rounded-full py-3.5 text-sm font-bold tracking-widest" style="color:var(--c-furnace)">ADD TO SHOPPING LIST</button>
