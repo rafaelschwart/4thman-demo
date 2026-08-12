@@ -158,10 +158,11 @@ tailwind.config = {
       background: var(--c-glass); backdrop-filter: blur(12px);
       border-top: 1px solid var(--c-whisper);
       padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); justify-content: space-around; }
-    #bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 2px;
+    #bottom-nav .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px;
       color: var(--c-ash); font-size: 10px; font-family: "Geist Mono", monospace;
-      letter-spacing: .06em; padding: 4px 10px; border-radius: 10px; min-width: 56px; }
-    #bottom-nav a.active { color: var(--c-ember); }
+      letter-spacing: .06em; padding: 4px 10px; border-radius: 10px; min-width: 56px;
+      background: none; border: 0; line-height: 1.3; }
+    #bottom-nav .nav-item.active, #bn-more[aria-expanded="true"] { color: var(--c-ember); }
     #view .grid-cols-2, #view .grid-cols-3, #view .grid-cols-4,
     #view .grid-cols-\[1fr_360px\], #view .grid-cols-\[1fr_340px\], #view .grid-cols-\[1fr_320px\],
     #view .grid-cols-\[1fr_280px\], #view .grid-cols-\[1\.3fr_1fr\], #view .grid-cols-\[1\.5fr_1fr\],
@@ -206,7 +207,7 @@ tailwind.config = {
   #more-sheet .ms-tiles a.ms-active .material-symbols-outlined { color: var(--c-ember); }
   #more-sheet .ms-foot { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--c-whisper); }
   @media (min-width: 1024px) { #more-sheet { display: none; } }
-  #bottom-nav a.active { background: transparent; }
+  #bottom-nav .nav-item.active { background: transparent; }
 
   @media (max-width: 1023px) {
     /* 1: sign-in gate — scrollable, fits, branded */
@@ -272,6 +273,12 @@ tailwind.config = {
     #view .text-4xl { font-size: 1.75rem; line-height: 1.15; }
     #view .text-2xl { font-size: 1.35rem; }
     #view .absolute.left-8.right-8 { left: 20px; right: 20px; }
+    /* 19: header never crowds — title truncates, right cluster tightens */
+    #view-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 38vw; }
+    #shell header > .flex.items-center.gap-3 { min-width: 0; flex: 1; overflow: hidden; }
+    #shell header > .flex.items-center.gap-5 { gap: 14px; flex-shrink: 0; }
+    /* 20: year planner reads as 2-up months, not a 12-deep stack */
+    #view #yr-plan { grid-template-columns: repeat(2, 1fr) !important; }
   }
 </style>
 </head>
