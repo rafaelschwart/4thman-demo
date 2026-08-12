@@ -87,7 +87,7 @@ tailwind.config = {
   .play-badge { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
   .play-badge > span { width: 48px; height: 48px; border-radius: 9999px; display: flex; align-items: center;
     justify-content: center; background: rgba(12,12,14,.62); border: 1px solid rgba(244,242,238,.25);
-    color: #f4f2ee; backdrop-filter: blur(6px); }
+    color: #f4f2ee; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
   .dur-chip { position: absolute; right: 10px; bottom: 10px; font-family: "Geist Mono", monospace;
     font-size: 10px; letter-spacing: .08em; color: #f4f2ee; background: rgba(12,12,14,.72);
     padding: 3px 8px; border-radius: 6px; }
@@ -155,7 +155,7 @@ tailwind.config = {
     #gate { grid-template-columns: 1fr; }
     #gate-photo { display: none; }
     #bottom-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
-      background: var(--c-glass); backdrop-filter: blur(12px);
+      background: var(--c-glass); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
       border-top: 1px solid var(--c-whisper);
       padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); justify-content: space-around; }
     #bottom-nav .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px;
@@ -259,7 +259,10 @@ tailwind.config = {
     #view .wt-dot { position: relative; }
     #view .wt-dot::after { content: ""; position: absolute; inset: -16px; }
     #view #wt-dots { gap: 16px !important; }
-    #view .cal-tab, #view .r-filter, #view .slot, #view .pray-btn, #view .day, #view .bld-filter { min-height: 44px; }
+    #view .cal-tab, #view .r-filter, #view .slot, #view .day, #view .bld-filter,
+    #view .cm-tab, #view .amen-btn, #view .cmt-toggle, #view .bp-range, #view .bp-view,
+    #view .book-btn, #view .wk-tab, #view .yr-pick, #view #sub-pause, #view #sub-payment,
+    #view #bld-add-ex { min-height: 44px; }
     #view .size { min-width: 42px; min-height: 42px; }
     #view .wo-check, #view #sv-minus, #view #sv-plus { min-width: 44px; min-height: 44px; }
     /* 14: charts scale by aspect ratio, labels stay legible */
@@ -279,6 +282,28 @@ tailwind.config = {
     #shell header > .flex.items-center.gap-5 { gap: 14px; flex-shrink: 0; }
     /* 20: year planner reads as 2-up months, not a 12-deep stack */
     #view #yr-plan { grid-template-columns: repeat(2, 1fr) !important; }
+    /* 21: workflow-audit round — header controls reach 40px+ hit areas */
+    #shell header #theme-toggle { width: 44px; height: 44px; }
+    #shell header a[href="#/account"] { width: 40px; height: 40px; }
+    #shell header a[href="#/progress"] { padding: 12px 4px; margin: -12px -4px; }
+    /* 22: workout set rows fit 320px — tighter rail columns, fluid inputs */
+    #view .grid-cols-\[48px_1fr_1fr_48px\] { grid-template-columns: 36px 1fr 1fr 44px !important; }
+    #view .grid-cols-\[48px_1fr_1fr_48px\] input { width: 100% !important; min-width: 0; }
+    /* 23: session form video spans the card, not the desktop thumbnail column */
+    #view .ex-tip.pl-24 { padding-left: 16px !important; }
+    /* 24: chart labels stay legible after viewBox scaling */
+    #view svg[viewBox="0 0 440 120"] text { font-size: 14px; }
+    #view svg[viewBox="0 0 720 160"] text { font-size: 16px; }
+    /* 25: community sidebar loses its desktop alignment offset when stacked */
+    #view .grid-cols-\[1\.5fr_1fr\] aside > div:first-child { margin-top: 0 !important; }
+    /* 26: walkthrough footer — dots get their own centered line, buttons share the next */
+    #view #wt-foot { flex-wrap: wrap; }
+    #view #wt-dots { order: -1; width: 100%; justify-content: center; gap: 12px !important; margin-bottom: 14px; }
+    /* 27: coach-card section meters stay 4-up; card actions reach 40px */
+    #view .grid-cols-4.gap-2 { grid-template-columns: repeat(4, 1fr) !important; }
+    #view a[href^="#/client/"].press, #view span a[href="#/messages"].press { min-height: 40px; display: inline-flex; align-items: center; }
+    /* 28: builder row controls are tappable without growing the rows */
+    #view .bld-del { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; margin: -10px 0; }
   }
 
   /* ---------- Touch: hover lifts off, taps answer instantly ---------- */
@@ -309,7 +334,7 @@ tailwind.config = {
     </div>
   </div>
   <div class="flex items-center justify-center border-l border-whisper relative">
-    <button id="gate-theme" aria-label="Toggle light or dark theme" class="absolute top-6 right-6 w-10 h-10 rounded-lg border border-whisper flex items-center justify-center text-ash hover:text-bone" title="Toggle theme">
+    <button id="gate-theme" style="z-index:10" aria-label="Toggle light or dark theme" class="absolute top-6 right-6 w-10 h-10 rounded-lg border border-whisper flex items-center justify-center text-ash hover:text-bone" title="Toggle theme">
       <span class="material-symbols-outlined theme-ic">light_mode</span>
     </button>
     <div id="g4" class="v-stagger w-96 bg-iron border border-whisper rounded-xl p-8">
@@ -383,7 +408,7 @@ tailwind.config = {
 
     <div class="flex-1 ml-64">
       <header class="sticky top-0 z-40 h-16 border-b border-whisper flex items-center justify-between px-10"
-              style="background:var(--c-glass);backdrop-filter:blur(12px)">
+              style="background:var(--c-glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)">
         <div class="flex items-center gap-3">
           <h1 id="view-title" class="text-sm font-medium"></h1>
           <span id="phase-tag" class="hidden font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-2 py-0.5">PHASE 2 PREVIEW</span>
@@ -459,7 +484,7 @@ tailwind.config = {
   </div>
 </div>
 
-<script src="exmedia.js?v=26"></script>
-<script src="views.js?v=26"></script>
-<script src="app.js?v=26"></script>
+<script src="exmedia.js?v=27"></script>
+<script src="views.js?v=27"></script>
+<script src="app.js?v=27"></script>
 </body></html>

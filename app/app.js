@@ -34,6 +34,10 @@
     .add({ targets: "#g3", opacity: [0, 1], translateY: [14, 0], duration: D(500) }, "-=400")
     .add({ targets: "#g4", opacity: [0, 1], translateX: [24, 0], duration: D(600) }, "-=450");
 
+  if (window.matchMedia("(max-width: 1023px)").matches) {
+    const gv = $("#gate-photo video");
+    if (gv) { gv.removeAttribute("autoplay"); gv.pause(); gv.removeAttribute("src"); gv.load(); }
+  }
   $("#enter-btn").addEventListener("click", enterApp);
   ["#em", "#pw"].forEach((sel) => { const f = $(sel); if (f) f.addEventListener("keydown", (e) => { if (e.key === "Enter") enterApp(); }); });
   const cb = $("#create-btn");
@@ -505,8 +509,8 @@
           $("#wo-set-rows").innerHTML = [1, 2, 3].map((n) => `
             <div class="grid grid-cols-[48px_1fr_1fr_48px] gap-3 items-center bg-iron border border-whisper rounded-xl px-1 py-2">
               <span class="font-mono text-sm text-center">${n}</span>
-              <input value="185" inputmode="numeric" aria-label="Weight set ${n}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
-              <input value="${reps}" inputmode="numeric" aria-label="Reps set ${n}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
+              <input value="185" style="width:100%;min-width:0" inputmode="numeric" aria-label="Weight set ${n}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
+              <input value="${reps}" style="width:100%;min-width:0" inputmode="numeric" aria-label="Reps set ${n}" class="bg-forged border border-whisper rounded-lg px-3 py-2 font-mono text-sm w-24 focus:border-ember focus:ring-0"/>
               <button class="wo-check w-9 h-9 mx-auto rounded-lg border border-whisper text-ash flex items-center justify-center"><span class="material-symbols-outlined">check</span></button>
             </div>`).join("");
           $$(".wo-check", view).forEach((b) => b.addEventListener("click", () => {
@@ -873,7 +877,7 @@
           if (opening) {
             anime({ targets: block.querySelectorAll(".cmt"), opacity: [0, 1], translateY: [8, 0],
               duration: D(280), delay: anime.stagger(D(60)), easing: "easeOutQuart" });
-            block.querySelector(".cmt-in").focus();
+            if (window.matchMedia("(hover: hover)").matches) block.querySelector(".cmt-in").focus();
           }
         }));
         $$(".cmt-in", scope || view).forEach((inp) => inp.addEventListener("keydown", (ev) => {

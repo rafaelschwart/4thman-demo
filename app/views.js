@@ -623,7 +623,7 @@ walkthrough: { title: "Walk-through", phase2: false, html: () => `
         </div>
       </div>
     </div>
-    <div class="v-stagger flex items-center justify-between">
+    <div class="v-stagger flex items-center justify-between" id="wt-foot">
       <button id="wt-prev" class="press border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged">Back</button>
       <div class="flex gap-1.5" id="wt-dots"></div>
       <button id="wt-next" class="press bg-ember rounded-lg px-6 py-3 text-sm font-semibold" style="color:var(--c-furnace)">Next</button>
@@ -982,7 +982,7 @@ logbook: {
   <div class="max-w-2xl mx-auto">
     <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-1">${p.days[di].t}</h2>
     <p class="v-stagger text-ash text-sm mb-3">${p.name}: Week ${p.week || 1}, Day ${di + 1}</p>
-    <div class="v-stagger flex items-center gap-3 mb-8">
+    <div class="v-stagger flex items-center gap-3 mb-8 flex-wrap">
       ${book.completedAt
         ? `<span class="font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-2 py-1">COMPLETED ${book.completedAt}</span>`
         : `<span class="font-mono text-[10px] tracking-widest text-ash border border-whisper rounded px-2 py-1">NOT STARTED</span>`}
