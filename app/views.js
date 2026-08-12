@@ -377,6 +377,17 @@ const FML = {
   },
 };
 
+/* ---- Year plan store: program per month block ---- */
+const FMY = {
+  key: "fm-yearplan",
+  load() { try { return JSON.parse(localStorage.getItem(this.key)) || {}; } catch (e) { return {}; } },
+  set(m, pid) {
+    const s = this.load();
+    if (pid) s[m] = pid; else delete s[m];
+    try { localStorage.setItem(this.key, JSON.stringify(s)); } catch (e) {}
+  },
+};
+
 /* Flatten a session into an ordered, traceable exercise sequence */
 const flatWorkout = (pid, di) => {
   const S = sessOf(pid, di);
@@ -396,6 +407,149 @@ const flatWorkout = (pid, di) => {
 };
 
 const VIEWS = {
+
+overview: { title: "Overview", phase2: false, html: () => {
+  const pid = "foundations", p = PROGRAMS[pid];
+  const nd = FMP.next(pid), doneArr = FMP.done(pid);
+  const total = p.weeks * p.days.length, cur = Math.min(total, (p.done || 0) + doneArr.length);
+  // this week: map training days onto MON-SUN with Sunday rest
+  const weekDays = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+  const todayIdx = 1; // demo anchor: Tuesday
+  const schedule = weekDays.map((w, i) => {
+    if (i >= p.days.length) return { w, rest: true };
+    return { w, d: p.days[i], n: i + 1, done: doneArr.includes(i + 1), today: i === todayIdx - 0 && false };
+  });
+  const plan = FMY.load();
+  const months = ["SEP", "OCT", "NOV", "DEC"];
+  return `
+  <div class="max-w-4xl mx-auto">
+    <h2 class="v-stagger text-3xl font-semibold tracking-tight mb-1 text-center">Overview</h2>
+    <p class="v-stagger text-ash text-sm mb-10 text-center">Your training, planned — this week, this block, and the rest of the year.</p>
+
+    <div class="grid grid-cols-4 gap-4 mb-10 rgrid">
+      <div class="v-stagger bg-iron border border-whisper rounded-xl p-5"><p class="font-mono text-xs tracking-widest text-ash mb-2">STREAK</p><p class="font-mono text-3xl"><span class="count" data-to="23">0</span> <span class="text-sm text-ash">DAYS</span></p></div>
+      <div class="v-stagger bg-iron border border-whisper rounded-xl p-5"><p class="font-mono text-xs tracking-widest text-ash mb-2">THIS BLOCK</p><p class="font-mono text-3xl">${cur}<span class="text-ash text-lg">/${total}</span></p></div>
+      <div class="v-stagger bg-iron border border-whisper rounded-xl p-5"><p class="font-mono text-xs tracking-widest text-ash mb-2">WEEK VOLUME</p><p class="font-mono text-3xl">12,480 <span class="text-sm text-ash">LB</span></p></div>
+      <div class="v-stagger bg-iron border border-whisper rounded-xl p-5"><p class="font-mono text-xs tracking-widest text-ash mb-2">CONSISTENCY</p><p class="font-mono text-3xl"><span class="count" data-to="87">0</span>%</p></div>
+    </div>
+
+    <h3 class="v-stagger text-xl font-semibold tracking-tight mb-4">This week</h3>
+    <div class="grid grid-cols-7 gap-2.5 mb-12 rgrid-week">
+      ${schedule.map((sd, i) => sd.rest ? `
+      <div class="v-stagger bg-iron/40 border border-whisper rounded-xl p-3 text-center opacity-70">
+        <p class="font-mono text-[10px] tracking-widest text-ash mb-2">${sd.w}</p>
+        <div class="h-14 rounded-lg bg-forged/50 flex items-center justify-center mb-2">${ICON("self_improvement", "text-ash")}</div>
+        <p class="text-[11px] text-ash leading-tight">Sabbath rest</p>
+      </div>` : `
+      <a href="#/session/${pid}/${sd.n}" class="v-stagger block bg-iron border ${sd.done ? "border-ember/50" : sd.n === nd ? "border-ember" : "border-whisper"} rounded-xl p-3 text-center hover:bg-forged relative">
+        ${sd.done ? `<span class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-ember flex items-center justify-center" style="color:var(--c-furnace)"><span class="material-symbols-outlined" style="font-size:13px">check</span></span>` : ""}
+        ${sd.n === nd && !sd.done ? `<span class="absolute -top-2 left-1/2 -translate-x-1/2 font-mono text-[8px] tracking-widest bg-ember rounded px-1.5 py-0.5" style="color:var(--c-furnace)">UP NEXT</span>` : ""}
+        <p class="font-mono text-[10px] tracking-widest text-ash mb-2">${sd.w}</p>
+        <div class="h-14 rounded-lg overflow-hidden mb-2"><img src="${sd.d.img}" alt="" class="ig-img" loading="lazy"/></div>
+        <p class="text-[11px] leading-tight" style="min-height:2.2em">${sd.d.t.replace("Strength & conditioning: ", "")}</p>
+        <p class="font-mono text-[10px] text-ash mt-1">${sd.d.min} MIN</p>
+      </a>`).join("")}
+    </div>
+
+    <h3 class="v-stagger text-xl font-semibold tracking-tight mb-4">Current program</h3>
+    <a href="#/program/${pid}" class="v-stagger block bg-iron border border-ember/40 rounded-xl overflow-hidden hover:bg-forged mb-12">
+      <div class="grid grid-cols-[220px_1fr] rgrid items-stretch">
+        <div class="min-h-[130px] overflow-hidden"><img src="${p.cover}" alt="${p.name}" class="ig-img"/></div>
+        <div class="p-6">
+          <div class="flex items-center gap-3 mb-1.5">
+            <p class="text-lg font-semibold">${p.name}</p>
+            <span class="font-mono text-[9px] tracking-widest text-ember border border-ember/50 rounded px-1.5 py-0.5">WEEK ${p.week} OF ${p.weeks}</span>
+          </div>
+          <p class="text-sm text-ash mb-4">${weekOf(p, p.week).name} — next up: Day ${nd} · ${p.days[nd - 1].t}</p>
+          <div class="flex items-center gap-3 max-w-md">
+            <span class="font-mono text-[11px]">${cur}/${total}</span>
+            <div class="flex-1 h-1 rounded bg-forged"><div class="bar-fill h-1 rounded" data-w="${Math.round(cur / total * 100)}%"></div></div>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <div class="flex items-baseline justify-between mb-1">
+      <h3 class="v-stagger text-xl font-semibold tracking-tight">Plan the rest of the year</h3>
+      <p class="v-stagger font-mono text-xs text-ash" id="yr-summary"></p>
+    </div>
+    <p class="v-stagger text-sm text-ash mb-5">Four-week blocks. Tap an open month to choose its program — your coach reviews every plan before it starts.</p>
+    <div class="grid grid-cols-5 gap-4 mb-3 rgrid" id="yr-plan">
+      <div class="v-stagger bg-iron border border-ember/50 rounded-xl overflow-hidden">
+        <div class="h-20 overflow-hidden relative"><img src="${p.cover}" alt="" class="ig-img"/>
+          <span class="absolute top-2 left-2 font-mono text-[9px] tracking-widest text-bone rounded px-1.5 py-0.5" style="background:rgba(12,12,14,.72)">AUG</span></div>
+        <div class="p-3"><p class="text-xs font-semibold leading-snug mb-1">${p.name}</p><p class="font-mono text-[10px] text-ember">IN PROGRESS · WK ${p.week}/${p.weeks}</p></div>
+      </div>
+      ${months.map((m) => {
+        const sel = plan[m];
+        const sp = sel ? PROGRAMS[sel] : null;
+        return `
+      <button class="v-stagger yr-slot text-left bg-iron border ${sp ? "border-whisper" : "border-dashed"} rounded-xl overflow-hidden hover:bg-forged" data-m="${m}" style="${sp ? "" : "border-color:var(--c-whisper)"}">
+        ${sp ? `
+        <div class="h-20 overflow-hidden relative"><img src="${sp.cover}" alt="" class="ig-img"/>
+          <span class="absolute top-2 left-2 font-mono text-[9px] tracking-widest text-bone rounded px-1.5 py-0.5" style="background:rgba(12,12,14,.72)">${m}</span></div>
+        <div class="p-3"><p class="text-xs font-semibold leading-snug mb-1">${sp.name}</p><p class="font-mono text-[10px] text-ash">${sp.weeks} WEEKS · ${sp.tag}</p></div>` : `
+        <div class="h-20 flex items-center justify-center relative">
+          <span class="absolute top-2 left-2 font-mono text-[9px] tracking-widest text-ash rounded px-1.5 py-0.5 bg-forged">${m}</span>
+          ${ICON("add", "text-ash")}
+        </div>
+        <div class="p-3"><p class="text-xs text-ash">Plan this block</p></div>`}
+      </button>`;
+      }).join("")}
+    </div>
+    <div id="yr-picker" class="hidden mb-10 bg-iron border border-whisper rounded-xl p-4">
+      <p class="font-mono text-xs tracking-widest text-ash mb-3">CHOOSE A PROGRAM FOR <span id="yr-picker-month" class="text-ember"></span></p>
+      <div class="flex flex-wrap gap-2.5">
+        ${Object.entries(PROGRAMS).map(([id2, pp]) => `
+        <button class="yr-pick press flex items-center gap-2.5 border border-whisper rounded-lg pl-1.5 pr-4 py-1.5 hover:bg-forged" data-pick="${id2}">
+          <span class="w-9 h-9 rounded-md overflow-hidden inline-block"><img src="${pp.cover}" alt="" class="ig-img"/></span>
+          <span class="text-sm">${pp.name}</span>
+          <span class="font-mono text-[10px] text-ash">${pp.tag}</span>
+        </button>`).join("")}
+        <button class="yr-pick press border border-whisper rounded-lg px-4 py-1.5 text-sm text-ash hover:bg-forged" data-pick="">Leave open</button>
+      </div>
+    </div>
+
+    <div class="v-stagger bg-iron border border-whisper rounded-xl p-6 mb-4 flex items-start gap-4">
+      <img src="assets/coach-profile.jpg" alt="Coach Cayman" class="w-11 h-11 rounded-full object-cover border border-ember/40 shrink-0"/>
+      <div>
+        <p class="font-mono text-xs tracking-widest text-ash mb-1.5">COACH'S NOTE ON YOUR PLAN</p>
+        <p class="text-sm leading-relaxed">Strength, then engine, then strength again — with a recovery block before the holidays. That's how a year gets built without burning out. Fill the open months and I'll review the order on Monday's call.</p>
+      </div>
+    </div>
+  </div>`;
+},
+},
+
+walkthrough: { title: "Walk-through", phase2: false, html: () => `
+  <div class="max-w-3xl mx-auto" id="wt-root">
+    <div class="v-stagger text-center mb-8">
+      <p class="font-mono text-xs tracking-[0.25em] text-ash mb-2">4TH MAN PLATFORM · GUIDED TOUR</p>
+      <h2 class="text-3xl font-semibold tracking-tight">Cayman, this is your method —<br/>built into a platform.</h2>
+    </div>
+    <div class="v-stagger flex items-center gap-4 mb-8">
+      <div class="flex-1 h-1 rounded bg-forged"><div id="wt-bar" class="h-1 rounded bg-ember" style="width:0%"></div></div>
+      <span class="font-mono text-xs text-ash" id="wt-count"></span>
+    </div>
+    <div class="v-stagger bg-iron border border-whisper rounded-xl overflow-hidden mb-6">
+      <div class="player h-72" id="wt-media"></div>
+      <div class="p-7">
+        <p class="font-mono text-xs tracking-widest text-ember mb-2" id="wt-eyebrow"></p>
+        <h3 class="text-2xl font-semibold tracking-tight mb-3" id="wt-title"></h3>
+        <p class="text-sm text-ash leading-relaxed mb-5" id="wt-body"></p>
+        <div class="flex items-center gap-3 flex-wrap">
+          <a id="wt-cta" href="#/today" class="press bg-ember rounded-lg px-6 py-3 text-sm font-semibold" style="color:var(--c-furnace)"></a>
+          <span class="text-xs text-ash" id="wt-try"></span>
+        </div>
+      </div>
+    </div>
+    <div class="v-stagger flex items-center justify-between">
+      <button id="wt-prev" class="press border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged">Back</button>
+      <div class="flex gap-1.5" id="wt-dots"></div>
+      <button id="wt-next" class="press bg-ember rounded-lg px-6 py-3 text-sm font-semibold" style="color:var(--c-furnace)">Next</button>
+    </div>
+  </div>`,
+},
 
 today: { title: "Today", phase2: false, html: () => {
   const pid = "foundations", p = PROGRAMS[pid];

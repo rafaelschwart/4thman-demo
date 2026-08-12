@@ -132,8 +132,117 @@
     anime({ targets: marker, top, height: active.offsetHeight, duration: D(350), easing: "easeOutQuart" });
   }
 
+  /* ---------- walk-through steps (addressed to Cayman) ---------- */
+  const WT_STEPS = [
+    { eyebrow: "WELCOME", title: "Twelve years of coaching, one login",
+      body: "Everything you already do over WhatsApp — the plans, the check-ins, the habit reminders, the payment chasing — lives in one system that carries your name, your pillars, and your standard. This tour walks you through it exactly the way a client will experience it.",
+      cta: "Start at the sign-in", href: "#/today", media: { img: "assets/post-C9U3l8gOpmm.jpg" }, tryIt: "Spiritual strength. Mental fortitude. Physical fitness. Your words, on the front door." },
+    { eyebrow: "THE DAILY SIX", title: "Your differentiator becomes measurable",
+      body: "Hydration, Bible, Prayer, Meditation, Reading, Training — the six habits you teach, counted instead of remembered. A client opens the app on a Tuesday morning and knows exactly what to do; Training checks itself when the session ends, and you see everyone's streaks without asking for screenshots.",
+      cta: "Open Today", href: "#/today", media: { img: "assets/gen-bench.png", vid: "assets/gen2-bench.mp4" }, tryIt: "Try it: tap a habit tile — the streak reacts instantly." },
+    { eyebrow: "PROGRAMS", title: "Five programs, built like a year of coaching",
+      body: "Foundations of Iron, The Fourth Man Protocol, Furnace Conditioning, Iron Sharpens Iron, Steward the Temple. Four-week blocks, each week with its own focus, description, and demonstration video. Build a program once — every client gets assigned it, nothing retyped by hand ever again.",
+      cta: "Browse programs", href: "#/programs", media: { img: "assets/gen2-partner.png", vid: "assets/wk-deadlift.mp4" }, tryIt: "Open any program and tap the week tabs — every week is different." },
+    { eyebrow: "GUIDED WORKOUT", title: "The app walks them through every rep",
+      body: "Start a session and it leads exercise by exercise — a form video for each movement, the coaching cue in your voice, set logging, and rest countdowns between rounds. Finish the last exercise and the Training habit checks itself, the streak advances, and the next day is queued.",
+      cta: "Start a guided session", href: "#/workout/foundations/1", media: { img: "assets/ex-goblet-squat.png", vid: "assets/ex-goblet-squat.mp4" }, tryIt: "Every one of the 83 exercises has its own video. All of it swaps for your footage in production." },
+    { eyebrow: "LOGBOOK", title: "Every set, remembered",
+      body: "Weights, reps, and completions are recorded per session, per exercise, per round — the receipts of the work. When a client says it's not working, the logbook says whether they worked. That conversation changes everything.",
+      cta: "Open a logbook", href: "#/logbook/foundations/1", media: { img: "assets/ex-deadlift.png", vid: "assets/ex-barbell-row.mp4" }, tryIt: "Complete a session in the tour and come back — your numbers will be here." },
+    { eyebrow: "PROGRESS", title: "Six months of work on one screen",
+      body: "Personal records, weekly volume, consistency percentage, and the private photo timeline — the story that today lives buried in chat history. Visible progress is what makes a man renew in month four.",
+      cta: "See Progress", href: "#/progress", media: { img: "assets/gen2-progress-4.png" }, tryIt: "Photos are private by default — visible only to the client and to you, encrypted at rest." },
+    { eyebrow: "OVERVIEW & PLANNER", title: "Plan a client's whole year in one screen",
+      body: "The week's schedule, the current block, and the rest of the year laid out in four-week blocks — strength, engine, strength, recovery. You review every plan; the system holds it. No more rebuilding the calendar every month.",
+      cta: "Open Overview", href: "#/overview", media: { img: "assets/gen2-walk.png", vid: "assets/wk-incline.mp4" }, tryIt: "Tap an open month and assign a program — it sticks." },
+    { eyebrow: "NUTRITION · PHASE 2", title: "Meals that match the training",
+      body: "Macro targets from your plan, daily meal logging, hydration tied to the Daily Six, and a recipe library with dietary filters, method steps, and full nutrition tables. Phase two — shown here so you can see where this goes.",
+      cta: "Open Nutrition", href: "#/nutrition", media: { img: "assets/food-salmon.png" }, tryIt: "Open a recipe: servings stepper, shopping list, the works." },
+    { eyebrow: "COMMUNITY · PHASE 2", title: "A band of brothers, not a feed",
+      body: "Amens instead of likes. A prayer wall instead of comments. Your pinned word at the top of the week. The WhatsApp group grows into a place with your standard on it — and the human conversation stays yours.",
+      cta: "See the Community", href: "#/community", media: { img: "assets/gen2-community-3.png" }, tryIt: "Tap 'Pray for this' on the wall." },
+    { eyebrow: "BLOOD PANEL · PHASE 2", title: "Track what the work does inside",
+      body: "Clients upload their own lab PDFs; the dashboard turns them into trends — testosterone, lipids, inflammation, recovery — against optimal ranges. Nothing connects to a lab, nothing leaves the vault. Get tested anywhere, see the direction here.",
+      cta: "Open the Blood Panel", href: "#/blood", media: { img: "assets/gen2-fast.png" }, tryIt: "Twelve markers, four categories, one honest picture." },
+    { eyebrow: "THE COACH SIDE", title: "Who is slipping — before they cancel",
+      body: "Your dashboard sorts slipping-first: compliance, last session, streaks, payment status. Today you learn a client drifted when he cancels; here you see it on day three and send one message. That is retention, and retention is the business.",
+      cta: "Open the Coach dashboard", href: "#/coach", media: { img: "assets/gen2-community-2.png" }, tryIt: "Billing runs on Stripe on the web — $97 and $147 renew without you asking, and no app store takes 30%." },
+    { eyebrow: "WHAT HAPPENS NEXT", title: "Four weeks from yes to live",
+      body: "Everything you just toured is Phase 1 scope: one login, the Daily Six, programs, guided sessions, logbook, progress, photos, and Stripe subscriptions — live in four weeks. Phase 2 (community, nutrition, blood panel, partners, store) gets quoted when Phase 1 is live and earning. Confirm, send the brand kit and Stripe access, and week one begins.",
+      cta: "Back to the beginning", href: "#/today", media: { img: "assets/logo.png", contain: true }, tryIt: "Your method. Your clients. Your platform." },
+  ];
+
   /* ---------- per-view interactions ---------- */
   function wire(key, param) {
+    if (key === "overview") {
+      let activeMonth = null;
+      const openPicker = (m) => {
+        activeMonth = m;
+        $("#yr-picker-month").textContent = m;
+        const pk = $("#yr-picker");
+        pk.classList.remove("hidden");
+        anime({ targets: pk, opacity: [0, 1], translateY: [-8, 0], duration: D(260), easing: "easeOutQuart" });
+        pk.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
+      };
+      const summary = () => {
+        const plan = FMY.load();
+        const n = Object.keys(plan).length;
+        const wks = 4 + Object.values(plan).reduce((a, id) => a + (PROGRAMS[id] ? PROGRAMS[id].weeks : 0), 0);
+        $("#yr-summary").textContent = (n + 1) + " BLOCKS PLANNED · " + wks + " WEEKS";
+      };
+      $$(".yr-slot", view).forEach((b) => b.addEventListener("click", () => openPicker(b.dataset.m)));
+      $$(".yr-pick", view).forEach((b) => b.addEventListener("click", () => {
+        if (!activeMonth) return;
+        FMY.set(activeMonth, b.dataset.pick || null);
+        const slot = $('.yr-slot[data-m="' + activeMonth + '"]', view);
+        const pid2 = b.dataset.pick, pp = pid2 ? PROGRAMS[pid2] : null;
+        slot.innerHTML = pp ? `
+        <div class="h-20 overflow-hidden relative"><img src="${pp.cover}" alt="" class="ig-img"/>
+          <span class="absolute top-2 left-2 font-mono text-[9px] tracking-widest text-bone rounded px-1.5 py-0.5" style="background:rgba(12,12,14,.72)">${activeMonth}</span></div>
+        <div class="p-3"><p class="text-xs font-semibold leading-snug mb-1">${pp.name}</p><p class="font-mono text-[10px] text-ash">${pp.weeks} WEEKS · ${pp.tag}</p></div>` : `
+        <div class="h-20 flex items-center justify-center relative">
+          <span class="absolute top-2 left-2 font-mono text-[9px] tracking-widest text-ash rounded px-1.5 py-0.5 bg-forged">${activeMonth}</span>
+          <span class="material-symbols-outlined text-ash">add</span>
+        </div>
+        <div class="p-3"><p class="text-xs text-ash">Plan this block</p></div>`;
+        anime({ targets: slot, scale: [0.96, 1], opacity: [0.6, 1], duration: D(300), easing: "easeOutQuart" });
+        $("#yr-picker").classList.add("hidden");
+        activeMonth = null;
+        summary();
+      }));
+      summary();
+    }
+
+    if (key === "walkthrough") {
+      let i = 0;
+      const dots = $("#wt-dots");
+      dots.innerHTML = WT_STEPS.map((_, n) => `<button class="wt-dot w-2 h-2 rounded-full bg-forged" data-n="${n}" aria-label="Step ${n + 1}"></button>`).join("");
+      const renderWT = () => {
+        const st = WT_STEPS[i];
+        $("#wt-count").textContent = "STEP " + (i + 1) + " OF " + WT_STEPS.length;
+        anime({ targets: "#wt-bar", width: ((i + 1) / WT_STEPS.length * 100) + "%", duration: D(300), easing: "easeOutQuart" });
+        $("#wt-media").innerHTML = st.media.vid
+          ? `<video src="${st.media.vid}" poster="${st.media.img}" autoplay loop muted playsinline class="ig-img"></video>`
+          : `<img src="${st.media.img}" alt="" class="${st.media.contain ? "" : "kenburns "}ig-img" style="${st.media.contain ? "object-fit:contain;padding:3rem;background:#0c0c0e" : ""}"/>`;
+        if (reduced) { const v = $("#wt-media video"); if (v) { v.removeAttribute("autoplay"); v.pause(); } }
+        $("#wt-eyebrow").textContent = st.eyebrow;
+        $("#wt-title").textContent = st.title;
+        $("#wt-body").textContent = st.body;
+        $("#wt-cta").textContent = st.cta;
+        $("#wt-cta").setAttribute("href", st.href);
+        $("#wt-try").textContent = st.tryIt;
+        $("#wt-prev").style.visibility = i === 0 ? "hidden" : "visible";
+        $("#wt-next").textContent = i === WT_STEPS.length - 1 ? "Finish tour" : "Next";
+        $$(".wt-dot", view).forEach((d, n) => { d.className = "wt-dot w-2 h-2 rounded-full " + (n === i ? "bg-ember" : "bg-forged"); });
+        anime({ targets: ["#wt-media", "#wt-eyebrow", "#wt-title", "#wt-body"], opacity: [0, 1], translateY: [10, 0],
+          duration: D(320), delay: anime.stagger(D(45)), easing: "easeOutQuart" });
+      };
+      $("#wt-next").addEventListener("click", () => { if (i < WT_STEPS.length - 1) { i++; renderWT(); } else location.hash = "#/today"; });
+      $("#wt-prev").addEventListener("click", () => { if (i > 0) { i--; renderWT(); } });
+      $$(".wt-dot", view).forEach((d) => d.addEventListener("click", () => { i = parseInt(d.dataset.n); renderWT(); }));
+      renderWT();
+    }
+
     if (key === "program") {
       const prog = PROGRAMS[param] || PROGRAMS.foundations;
       $$(".wk-tab", view).forEach((tab) => tab.addEventListener("click", () => {
