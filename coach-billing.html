@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>4TH MAN — Billing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{furnace:"#0c0c0e",iron:"#161618",forged:"#232326",bone:"#f4f2ee",ash:"#8e8e93",ember:"#c99b4a",ok:"#5ba872",bad:"#c0554d"},fontFamily:{sans:["Geist","sans-serif"],mono:["Geist Mono","monospace"]},borderColor:{whisper:"rgba(244,242,238,0.08)"}}}}
+</script>
+<style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300;font-size:20px}</style>
+</head>
+<body class="bg-furnace text-bone font-sans">
+<div class="flex min-h-screen">
+  <aside class="w-60 shrink-0 border-r border-whisper bg-iron p-6 flex flex-col gap-1">
+    <span class="font-semibold tracking-tight mb-8">4TH MAN <span class="text-ash font-normal text-sm">/ Coach</span></span>
+    <a href="coach-dashboard.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-ash hover:text-bone"><span class="material-symbols-outlined">group</span>Clients</a>
+    <a href="program-builder.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-ash hover:text-bone"><span class="material-symbols-outlined">fitness_center</span>Programs</a>
+    <a href="coach-dashboard.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-ash hover:text-bone"><span class="material-symbols-outlined">check_circle</span>Habits</a>
+    <a href="coach-billing.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-forged text-ember"><span class="material-symbols-outlined">credit_card</span>Billing</a>
+    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-ash hover:text-bone"><span class="material-symbols-outlined">settings</span>Settings</a>
+  </aside>
+
+  <main class="flex-1 p-10">
+    <h1 class="text-2xl font-semibold tracking-tight mb-1">Billing</h1>
+    <p class="text-ash text-sm mb-8">Subscriptions renew, upgrade and pause without a reminder.</p>
+
+    <div class="grid grid-cols-4 gap-4 mb-10">
+      <div class="bg-iron border border-whisper rounded-xl p-5"><p class="text-xs font-mono text-ash tracking-widest mb-2">MRR</p><p class="font-mono text-2xl">$3,182</p></div>
+      <div class="bg-iron border border-whisper rounded-xl p-5"><p class="text-xs font-mono text-ash tracking-widest mb-2">ACTIVE</p><p class="font-mono text-2xl">28</p></div>
+      <div class="bg-iron border border-whisper rounded-xl p-5"><p class="text-xs font-mono text-ash tracking-widest mb-2">PAST DUE</p><p class="font-mono text-2xl text-bad">2</p></div>
+      <div class="bg-iron border border-whisper rounded-xl p-5"><p class="text-xs font-mono text-ash tracking-widest mb-2">PAUSED</p><p class="font-mono text-2xl text-ash">1</p></div>
+    </div>
+
+    <div class="grid grid-cols-[1fr_300px] gap-8">
+      <section>
+        <div class="grid grid-cols-[1.4fr_1fr_.8fr_1fr_.8fr] text-xs font-mono text-ash tracking-widest px-4 pb-3">
+          <span>CLIENT</span><span>PLAN</span><span>STATUS</span><span>NEXT RENEWAL</span><span class="text-right">LTV</span>
+        </div>
+        <div class="divide-y" style="border-color:rgba(244,242,238,0.08)">
+          <div class="grid grid-cols-[1.4fr_1fr_.8fr_1fr_.8fr] items-center px-4 py-4 hover:bg-iron rounded-lg">
+            <span class="text-sm">Marcus T.</span><span class="font-mono text-xs">ELITE · $147</span>
+            <span class="flex items-center gap-2 text-xs text-ok"><span class="w-1.5 h-1.5 rounded-full bg-ok"></span>Active</span>
+            <span class="font-mono text-sm text-ash">Aug 18</span><span class="font-mono text-sm text-right">$1,764</span>
+          </div>
+          <div class="grid grid-cols-[1.4fr_1fr_.8fr_1fr_.8fr] items-center px-4 py-4 hover:bg-iron rounded-lg">
+            <span class="text-sm">D. Alvarez</span><span class="font-mono text-xs">ESSENTIAL · $97</span>
+            <span class="flex items-center gap-2 text-xs text-bad"><span class="w-1.5 h-1.5 rounded-full bg-bad"></span>Past due</span>
+            <span class="font-mono text-sm text-ash">Aug 9</span><span class="font-mono text-sm text-right">$582</span>
+          </div>
+          <div class="grid grid-cols-[1.4fr_1fr_.8fr_1fr_.8fr] items-center px-4 py-4 hover:bg-iron rounded-lg">
+            <span class="text-sm">J. Whitfield</span><span class="font-mono text-xs">ELITE · $147</span>
+            <span class="flex items-center gap-2 text-xs text-ok"><span class="w-1.5 h-1.5 rounded-full bg-ok"></span>Active</span>
+            <span class="font-mono text-sm text-ash">Aug 21</span><span class="font-mono text-sm text-right">$2,205</span>
+          </div>
+          <div class="grid grid-cols-[1.4fr_1fr_.8fr_1fr_.8fr] items-center px-4 py-4 hover:bg-iron rounded-lg">
+            <span class="text-sm">R. Ortega</span><span class="font-mono text-xs">ESSENTIAL · $97</span>
+            <span class="flex items-center gap-2 text-xs text-ash"><span class="w-1.5 h-1.5 rounded-full bg-ash"></span>Paused</span>
+            <span class="font-mono text-sm text-ash">—</span><span class="font-mono text-sm text-right">$873</span>
+          </div>
+          <div class="grid grid-cols-[1.4fr_1fr_.8fr_1fr_.8fr] items-center px-4 py-4 hover:bg-iron rounded-lg">
+            <span class="text-sm">K. Boateng</span><span class="font-mono text-xs">ELITE · $147</span>
+            <span class="flex items-center gap-2 text-xs text-ok"><span class="w-1.5 h-1.5 rounded-full bg-ok"></span>Active</span>
+            <span class="font-mono text-sm text-ash">Aug 27</span><span class="font-mono text-sm text-right">$441</span>
+          </div>
+          <div class="grid grid-cols-[1.4fr_1fr_.8fr_1fr_.8fr] items-center px-4 py-4 hover:bg-iron rounded-lg">
+            <span class="text-sm">S. Nguyen</span><span class="font-mono text-xs">ESSENTIAL · $97</span>
+            <span class="flex items-center gap-2 text-xs text-bad"><span class="w-1.5 h-1.5 rounded-full bg-bad"></span>Past due</span>
+            <span class="font-mono text-sm text-ash">Aug 6</span><span class="font-mono text-sm text-right">$194</span>
+          </div>
+        </div>
+      </section>
+
+      <aside class="space-y-4">
+        <div class="bg-iron border border-whisper rounded-xl p-5">
+          <p class="text-xs font-mono text-ash tracking-widest mb-4">STRIPE</p>
+          <p class="text-sm text-ash mb-1">Last payout</p>
+          <p class="font-mono text-xl mb-4">$1,240 <span class="text-ash text-sm">· Aug 8</span></p>
+          <button class="w-full border border-whisper rounded-lg px-4 py-2.5 text-sm hover:bg-forged">Open Stripe Dashboard</button>
+        </div>
+        <div class="bg-iron border border-whisper rounded-xl p-5">
+          <p class="text-xs font-mono text-ash tracking-widest mb-3">WEB BILLING</p>
+          <p class="text-sm text-ash leading-relaxed">Subscriptions are sold on the web through Stripe. No 15–30% app-store commission.</p>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+<script src="nav-wire.js"></script>
+</body></html>

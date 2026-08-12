@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Weekly Review - Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed": "#1b1b1e",
+                      "on-tertiary": "#303033",
+                      "on-error-container": "#ffdad6",
+                      "primary-container": "#c99b4a",
+                      "surface": "#131412",
+                      "primary-fixed": "#ffdeab",
+                      "on-secondary-fixed": "#1b1b1d",
+                      "on-secondary-fixed-variant": "#474649",
+                      "primary-fixed-dim": "#f0bf6a",
+                      "secondary-fixed": "#e4e2e4",
+                      "on-tertiary-container": "#39393c",
+                      "on-primary-fixed-variant": "#5f4100",
+                      "surface-variant": "#343532",
+                      "surface-container-high": "#2a2a28",
+                      "on-primary": "#422c00",
+                      "tertiary-fixed-dim": "#c8c6c9",
+                      "primary": "#f0bf6a",
+                      "on-secondary-container": "#b7b4b7",
+                      "outline": "#9b8f7e",
+                      "on-tertiary-fixed-variant": "#47464a",
+                      "on-secondary": "#303032",
+                      "error": "#ffb4ab",
+                      "inverse-surface": "#e4e2de",
+                      "surface-dim": "#131412",
+                      "surface-container-low": "#1b1c1a",
+                      "outline-variant": "#4f4538",
+                      "surface-container-lowest": "#0e0e0c",
+                      "on-surface-variant": "#d2c4b2",
+                      "background": "#131412",
+                      "inverse-primary": "#7d5807",
+                      "surface-tint": "#f0bf6a",
+                      "on-background": "#e4e2de",
+                      "inverse-on-surface": "#30312e",
+                      "surface-container": "#1f201e",
+                      "on-error": "#690005",
+                      "secondary-fixed-dim": "#c8c6c8",
+                      "secondary": "#c8c6c8",
+                      "on-primary-fixed": "#271900",
+                      "on-surface": "#e4e2de",
+                      "tertiary": "#c8c6c9",
+                      "tertiary-container": "#a4a2a6",
+                      "surface-bright": "#393937",
+                      "secondary-container": "#474649",
+                      "error-container": "#93000a",
+                      "tertiary-fixed": "#e4e1e5",
+                      "surface-container-highest": "#343532",
+                      "on-primary-container": "#4d3400"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "24px",
+                      "xl": "64px",
+                      "sm": "12px",
+                      "lg": "40px",
+                      "margin-desktop": "48px",
+                      "gutter": "16px",
+                      "xs": "4px",
+                      "margin-mobile": "20px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Geist"
+                      ],
+                      "body-md": [
+                              "Geist"
+                      ],
+                      "data-lg": [
+                              "Geist Mono"
+                      ],
+                      "body-lg": [
+                              "Geist"
+                      ],
+                      "headline-lg": [
+                              "Geist"
+                      ],
+                      "scripture": [
+                              "Geist"
+                      ],
+                      "data-md": [
+                              "Geist Mono"
+                      ],
+                      "display-lg": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "data-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "scripture": [
+                              "13px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "data-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen">
+<!-- Top Navigation (Shared Component TopAppBar) -->
+<header class="fixed top-0 left-0 right-0 h-16 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant flex justify-between items-center px-margin-desktop w-full z-50">
+<div class="font-headline-md text-headline-md text-on-surface tracking-tight">
+            Command Center
+        </div>
+<nav class="hidden md:flex items-center h-full gap-lg">
+<!-- The active state logic implies this is a secondary flow, but it's part of the global system for Weekly Review. Often tied to Progress or Today. Defaulting inactive globally to prioritize content canvas if transactional, but keeping shell as requested. Since it's 'Weekly Review', none of the explicit array items directly match except conceptually Progress. Will highlight Progress. -->
+<a class="flex items-center h-full text-on-surface-variant hover:text-primary transition-colors text-body-md font-body-md" href="#">Today</a>
+<a class="flex items-center h-full text-on-surface-variant hover:text-primary transition-colors text-body-md font-body-md" href="#">Programs</a>
+<a class="flex items-center h-full text-primary border-b-2 border-primary text-body-md font-body-md" href="#">Progress</a>
+<a class="flex items-center h-full text-on-surface-variant hover:text-primary transition-colors text-body-md font-body-md" href="#">Photos</a>
+<a class="flex items-center h-full text-on-surface-variant hover:text-primary transition-colors text-body-md font-body-md" href="#">Clients</a>
+</nav>
+<div class="flex items-center gap-md">
+<button class="hidden md:flex items-center gap-xs px-md py-sm bg-primary-container text-on-primary-container rounded-lg font-bold hover:opacity-80 transition-opacity">
+                Log Session
+            </button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-xl px-margin-mobile md:px-margin-desktop flex justify-center">
+<!-- Center Column Constraint -->
+<div class="w-full max-w-[720px] flex flex-col gap-lg">
+<!-- Header Section -->
+<section class="flex flex-col gap-base">
+<h1 class="font-display-lg text-display-lg text-on-surface">Weekly Review — Week 3</h1>
+<p class="font-data-md text-data-md text-on-surface-variant tracking-wider uppercase">3 of 5 fields pre-filled from your logs</p>
+</section>
+<!-- Pre-filled Cards Section -->
+<section class="flex flex-col gap-sm">
+<!-- Training Card -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-md flex flex-col md:flex-row md:items-center justify-between gap-md">
+<div class="flex items-start md:items-center gap-md">
+<div class="bg-surface-container-high rounded-full p-sm border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+</div>
+<div>
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-xs">Training</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs flex-wrap">
+<span class="font-data-md text-data-md text-on-surface">4</span> of <span class="font-data-md text-data-md text-on-surface">4</span> sessions completed <span class="text-outline-variant mx-1">·</span> <span class="font-data-md text-data-md text-on-surface">12,480 lb</span> total volume
+                            </p>
+</div>
+</div>
+<div class="flex items-center gap-sm self-start md:self-auto shrink-0">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-data-md text-xs text-on-surface-variant tracking-widest uppercase border border-outline-variant px-2 py-1 rounded">Pre-Filled</span>
+</div>
+</div>
+<!-- Daily Six Card -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-md flex flex-col md:flex-row md:items-center justify-between gap-md">
+<div class="flex items-start md:items-center gap-md">
+<div class="bg-surface-container-high rounded-full p-sm border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+</div>
+<div>
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-xs">Daily Six</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs flex-wrap">
+<span class="font-data-md text-data-md text-on-surface">38</span> of <span class="font-data-md text-data-md text-on-surface">42</span> habit checks <span class="text-outline-variant mx-1">·</span> longest streak <span class="font-data-md text-data-md text-on-surface">23</span> days
+                            </p>
+</div>
+</div>
+<div class="flex items-center gap-sm self-start md:self-auto shrink-0">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-data-md text-xs text-on-surface-variant tracking-widest uppercase border border-outline-variant px-2 py-1 rounded">Pre-Filled</span>
+</div>
+</div>
+<!-- Body Card -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-md flex flex-col md:flex-row md:items-center justify-between gap-md">
+<div class="flex items-start md:items-center gap-md">
+<div class="bg-surface-container-high rounded-full p-sm border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">monitor_weight</span>
+</div>
+<div>
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-xs">Body</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs flex-wrap">
+                                Weight logged <span class="font-data-md text-data-md text-on-surface">3×</span> <span class="text-outline-variant mx-1">·</span> trend <span class="font-data-md text-data-md text-primary">−1.2 lb</span>
+</p>
+</div>
+</div>
+<div class="flex items-center gap-sm self-start md:self-auto shrink-0">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-data-md text-xs text-on-surface-variant tracking-widest uppercase border border-outline-variant px-2 py-1 rounded">Pre-Filled</span>
+</div>
+</div>
+</section>
+<!-- Qualitative Input Section -->
+<section class="flex flex-col gap-md mt-md">
+<!-- Wins this week -->
+<div class="flex flex-col gap-sm">
+<label class="font-headline-md text-headline-md text-on-surface" for="wins-input">Wins this week</label>
+<textarea class="w-full bg-surface-container-high border border-outline-variant rounded-lg p-md font-body-lg text-body-lg text-on-surface focus:border-primary focus:ring-0 resize-y transition-colors placeholder:text-on-surface-variant/50" id="wins-input" placeholder="What went well? E.g. Hit a PR on deadlifts, stuck to nutrition all weekend..." rows="4"></textarea>
+</div>
+<!-- Where I struggled -->
+<div class="flex flex-col gap-sm mt-sm">
+<label class="font-headline-md text-headline-md text-on-surface" for="struggles-input">Where I struggled</label>
+<textarea class="w-full bg-surface-container-high border border-outline-variant rounded-lg p-md font-body-lg text-body-lg text-on-surface focus:border-primary focus:ring-0 resize-y transition-colors placeholder:text-on-surface-variant/50" id="struggles-input" placeholder="Any roadblocks? E.g. Missed a meal prep, struggled with sleep quality..." rows="4"></textarea>
+</div>
+</section>
+<!-- Actions Section -->
+<section class="flex flex-col gap-sm mt-lg">
+<button class="w-full bg-primary text-on-primary font-headline-md text-headline-md py-md rounded-lg hover:bg-primary-fixed-dim transition-all active:scale-[0.98] flex items-center justify-center gap-sm shadow-[0_0_24px_rgba(201,155,74,0.1)]">
+                    Submit Review
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+<p class="text-center font-body-md text-body-md text-on-surface-variant/70">
+                    Your coach reads every review before Monday's call.
+                </p>
+</section>
+</div>
+</main>
+<script src="nav-wire.js"></script></body></html>

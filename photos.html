@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Progress Photos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;800;900&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#422c00",
+                        "primary-fixed": "#ffdeab",
+                        "on-tertiary": "#303033",
+                        "surface-variant": "#343532",
+                        "surface-dim": "#131412",
+                        "outline": "#9b8f7e",
+                        "on-tertiary-fixed-variant": "#47464a",
+                        "outline-variant": "#4f4538",
+                        "on-secondary-fixed": "#1b1b1d",
+                        "surface-container-low": "#1b1c1a",
+                        "inverse-on-surface": "#30312e",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#0e0e0c",
+                        "on-tertiary-fixed": "#1b1b1e",
+                        "primary-fixed-dim": "#f0bf6a",
+                        "surface-container-highest": "#343532",
+                        "on-primary-container": "#4d3400",
+                        "on-secondary-container": "#b7b4b7",
+                        "error-container": "#93000a",
+                        "secondary-fixed-dim": "#c8c6c8",
+                        "background": "#131412",
+                        "surface-container": "#1f201e",
+                        "on-tertiary-container": "#39393c",
+                        "on-secondary": "#303032",
+                        "tertiary": "#c8c6c9",
+                        "on-background": "#e4e2de",
+                        "surface-container-high": "#2a2a28",
+                        "surface-bright": "#393937",
+                        "on-primary-fixed": "#271900",
+                        "surface": "#131412",
+                        "primary-container": "#c99b4a",
+                        "tertiary-container": "#a4a2a6",
+                        "secondary-fixed": "#e4e2e4",
+                        "on-error-container": "#ffdad6",
+                        "on-surface-variant": "#d2c4b2",
+                        "inverse-surface": "#e4e2de",
+                        "on-surface": "#e4e2de",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#7d5807",
+                        "secondary-container": "#474649",
+                        "primary": "#f0bf6a",
+                        "secondary": "#c8c6c8",
+                        "tertiary-fixed-dim": "#c8c6c9",
+                        "on-primary-fixed-variant": "#5f4100",
+                        "on-secondary-fixed-variant": "#474649",
+                        "tertiary-fixed": "#e4e1e5",
+                        "surface-tint": "#f0bf6a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "48px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "sm": "12px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "lg": "40px"
+                    },
+                    "fontFamily": {
+                        "data-lg": ["Geist Mono"],
+                        "display-lg": ["Geist"],
+                        "body-md": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "scripture": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "data-md": ["Geist Mono"],
+                        "body-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "data-lg": ["24px", { "lineHeight": "1.0", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "scripture": ["13px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "data-md": ["16px", { "lineHeight": "1.0", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #131412; /* background */
+            color: #e4e2de; /* on-background */
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased overflow-x-hidden min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-full md:w-[calc(100%-16rem)] flex justify-between items-center px-margin-desktop h-20 z-40 bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-outline-variant">
+<div class="font-display-lg text-display-lg font-black tracking-widest text-primary">
+            4TH MAN
+        </div>
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:text-primary transition-all active:scale-98">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all active:scale-98">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 border-r border-outline-variant bg-surface-container-low py-xl">
+<div class="px-margin-desktop mb-lg">
+<div class="font-display-lg text-display-lg font-bold tracking-tighter text-on-surface">Iron Discipline</div>
+<div class="text-on-surface-variant font-body-md text-body-md">Vessel &amp; Spirit</div>
+</div>
+<div class="flex-1 flex flex-col">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md text-body-md">Today</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
+<span class="font-body-md text-body-md">Programs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-body-md text-body-md">Progress</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-primary font-bold border-r-2 border-primary bg-surface-container-high transition-colors duration-200" href="#" style="transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+<span class="material-symbols-outlined" data-icon="photo_library">photo_library</span>
+<span class="font-body-md text-body-md">Photos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-body-md text-body-md">Account</span>
+</a>
+</div>
+<div class="px-4 mt-auto">
+<button class="w-full py-3 bg-primary text-on-primary font-headline-md text-headline-md rounded hover:opacity-90 transition-opacity active:scale-98">
+                LOG WORKOUT
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="md:ml-64 pt-20 min-h-screen bg-background">
+<div class="px-margin-desktop py-lg max-w-4xl mx-auto">
+<!-- Lock Line / Header -->
+<div class="flex items-center justify-between mb-xl pb-md border-b border-outline-variant/30">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-md" data-icon="lock">lock</span>
+<span class="font-body-md text-body-md">Private — visible only to you and your coach.</span>
+</div>
+<button class="px-4 py-2 border border-outline-variant text-on-surface hover:bg-surface-container-low rounded flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+<span class="font-data-md text-data-md">Add photo</span>
+</button>
+</div>
+<!-- Timeline -->
+<div class="relative pl-8 border-l border-outline-variant/30 ml-4 space-y-xl">
+<!-- Entry 1 -->
+<div class="relative">
+<div class="absolute w-3 h-3 bg-primary rounded-full -left-[38px] top-1"></div>
+<div class="font-data-lg text-data-lg text-on-surface mb-md">OCT 24, 2023</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-md">
+<div class="aspect-[3/4] bg-surface-container rounded-xl overflow-hidden border border-outline-variant relative group">
+<img class="w-full h-full object-cover" data-alt="A front-facing progress photo of a muscular male physique in a stark, dimly lit gym environment. The lighting is dramatic and directional, casting strong shadows to highlight muscle definition. The mood is serious and disciplined, fitting a high-performance fitness tracker aesthetic. Colors are desaturated with deep blacks and subtle highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8Km9P-ARiGos3Dw3azFNksBMr-7-P5dyHP-AN7aSQDy_xWW5AzkDEmbFCh0V4HsIkEa75wT6zeiWZpeAN4eT82QjZ5CaBBLgIIsHQIOD2YnnuXGGfjrOfCWseTxB-T7ErMtsRoi58l1MaJTJFWb9j-dWEPrJSJrsVu47D0JylZ0xQ8xMulcslIFbKcgy00L4M8RVqLemPS5yl7wZQCTK_wvkFXNuyNRICxmvSzOavs1LuA7xEnRhk"/>
+<div class="absolute inset-0 bg-background/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+<span class="font-data-md text-data-md text-on-surface">FRONT</span>
+</div>
+</div>
+<div class="aspect-[3/4] bg-surface-container rounded-xl overflow-hidden border border-outline-variant relative group">
+<img class="w-full h-full object-cover" data-alt="A side-profile progress photo of a muscular male physique in a stark, dimly lit gym environment. The lighting is dramatic and directional, casting strong shadows to highlight muscle definition. The mood is serious and disciplined, fitting a high-performance fitness tracker aesthetic. Colors are desaturated with deep blacks and subtle highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo57weJwUb0y6eQz9KBNuhoJoyEgmybo_4ci0KAbe_12Zt8DXjOepw1y3bRvGEe1hHDBT_CPdKbQMIqUCrzY_T4hqobxsMjg3aGZZv2AHrfD-d3Cp11h4DNoa7lCroqtP_5wS-oMjTxKA3V7kXv_lvCqfj1uUcgvpIA4GOJqFHZuTQLHReyWKZIHBMXM6Pcq4RVvUHQ4Sv2Gr1b5AGThJm-MtxjN9FX-q6l9prl0bJiEZ0KurPl63z"/>
+<div class="absolute inset-0 bg-background/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+<span class="font-data-md text-data-md text-on-surface">SIDE</span>
+</div>
+</div>
+<div class="aspect-[3/4] bg-surface-container rounded-xl overflow-hidden border border-outline-variant relative group">
+<img class="w-full h-full object-cover" data-alt="A back-facing progress photo of a muscular male physique in a stark, dimly lit gym environment. The lighting is dramatic and directional, casting strong shadows to highlight muscle definition. The mood is serious and disciplined, fitting a high-performance fitness tracker aesthetic. Colors are desaturated with deep blacks and subtle highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFSh2LXQHUW-ffSuTcbf3bdcw797mqZTCAU-OjzbVDuGL9THPdwfexX6sX9XVQIsSEdv5btO2w85gH7qwEnW_3BcL_G_9bwzQU3YqLn6_Ps3dnGJBCziB9jWGVFpI2-dGEeEHveYapyfBtXE2rSX_lGww7BOvKr4YMojrvd-fgwP3iNS0VuFZyI125oEYSwOH-NZspoEXpXFG9jwDEzSG5z6tzpL97Nkp7CHB2JWeydL-8k5psWkVS"/>
+<div class="absolute inset-0 bg-background/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+<span class="font-data-md text-data-md text-on-surface">BACK</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Entry 2 -->
+<div class="relative">
+<div class="absolute w-3 h-3 bg-surface-variant rounded-full -left-[38px] top-1"></div>
+<div class="font-data-lg text-data-lg text-on-surface-variant mb-md">SEP 12, 2023</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-md opacity-80">
+<div class="aspect-[3/4] bg-surface-container rounded-xl overflow-hidden border border-outline-variant relative group">
+<img class="w-full h-full object-cover grayscale transition-all duration-300 group-hover:grayscale-0" data-alt="A front-facing progress photo of a slightly less defined male physique in a stark, dimly lit gym environment. The lighting is dramatic and directional. The mood is serious and disciplined, tracking historical progress in a high-performance fitness tracker aesthetic. Colors are desaturated with deep blacks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkqJhuXNctYe8ufJelgVCvFl1pr4_97GP0fscPkfgANhV0TYVNHJKpHSINMGgcztzIwBKp1Ued6094xVmRspZWNZlmyYcdkicfkkmuXkYYZ-BisuZ4h_lY4Kj2aTbU2VskVeWTDBKH-4LOiDxXRekm3GkTAO_Rz2-0XEluWYPDR8HSmZT0TsYHXINd7Bxx_VsNXcLXD-ODfo4QhKmeAggrm9RFwnTMLqkqj4mAuJ0UsWrOIY3pdLdl"/>
+</div>
+<div class="aspect-[3/4] bg-surface-container rounded-xl overflow-hidden border border-outline-variant relative group">
+<img class="w-full h-full object-cover grayscale transition-all duration-300 group-hover:grayscale-0" data-alt="A side-profile progress photo of a slightly less defined male physique in a stark, dimly lit gym environment. The lighting is dramatic and directional. The mood is serious and disciplined, tracking historical progress in a high-performance fitness tracker aesthetic. Colors are desaturated with deep blacks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkwO-k-f6jriRSArUK0evFgzMgs8gWaqjNU7A5bW0dOisqOBCKS0rModijpQIwneetKWV_LvhpeApqFZunTpf740MQjCeTYhXkzFycotCPH4Gknlqjqh757-BecBkRKfWNUJW9KpGBAi09OFYOEukE-HBQRBOPlnzMrH2TskoM4jbaptPDkm5Be4uz8N0IIHVGRGzyV3MvGF4eIWSYZxORX0DQ39AveLR4BR0Eik2fBpGbNleICC_q"/>
+</div>
+</div>
+</div>
+<!-- Entry 3 -->
+<div class="relative">
+<div class="absolute w-3 h-3 bg-surface-variant rounded-full -left-[38px] top-1"></div>
+<div class="font-data-lg text-data-lg text-on-surface-variant mb-md">AUG 01, 2023</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-md opacity-60">
+<div class="aspect-[3/4] bg-surface-container rounded-xl overflow-hidden border border-outline-variant relative group flex items-center justify-center">
+<img class="w-full h-full object-cover grayscale transition-all duration-300 group-hover:grayscale-0" data-alt="An older front-facing progress photo of a male physique starting a fitness journey in a stark, dimly lit gym environment. The lighting is dramatic. The mood is serious and disciplined, tracking historical baseline progress in a high-performance fitness tracker aesthetic. Colors are completely desaturated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG8pMbCkZ4HNmGvWRtJiq4mUndNaRuOK5J8So0RLSEwoK33q8S33HEQiNV8CHXmlxcFInOX5LOGqacw8tnpkQYi_c3jpk2e1ViVkhynmgApkpEx5hOOTJyOQSZmtn8KI77ce0tqeIqzE34YwOd2FQfUDoO2eNsMNRgs2gpgMhDD_DSMROnmODrU9ZM76wHIBobBMPzOe3sHxVXv4evE7AK-SQeagjvg_yIe1FzHe52RC6q2iX0YdRp"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script src="nav-wire.js"></script></body></html>

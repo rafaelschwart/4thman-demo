@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Workout Detail - 4TH MAN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#7d5807",
+                      "surface-container": "#1f201e",
+                      "surface-container-high": "#2a2a28",
+                      "on-error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#c8c6c9",
+                      "on-tertiary-container": "#39393c",
+                      "primary": "#f0bf6a",
+                      "on-surface-variant": "#d2c4b2",
+                      "on-tertiary": "#303033",
+                      "primary-container": "#c99b4a",
+                      "on-primary-fixed-variant": "#5f4100",
+                      "on-background": "#e4e2de",
+                      "on-tertiary-fixed-variant": "#47464a",
+                      "outline": "#9b8f7e",
+                      "background": "#131412",
+                      "on-secondary": "#303032",
+                      "on-primary-container": "#4d3400",
+                      "secondary-fixed": "#e4e2e4",
+                      "on-tertiary-fixed": "#1b1b1e",
+                      "outline-variant": "#4f4538",
+                      "on-secondary-fixed-variant": "#474649",
+                      "on-secondary-container": "#b7b4b7",
+                      "secondary-fixed-dim": "#c8c6c8",
+                      "on-surface": "#e4e2de",
+                      "secondary-container": "#474649",
+                      "surface-tint": "#f0bf6a",
+                      "inverse-surface": "#e4e2de",
+                      "surface": "#131412",
+                      "error-container": "#93000a",
+                      "primary-fixed": "#ffdeab",
+                      "tertiary": "#c8c6c9",
+                      "inverse-on-surface": "#30312e",
+                      "surface-container-low": "#1b1c1a",
+                      "surface-dim": "#131412",
+                      "tertiary-container": "#a4a2a6",
+                      "surface-container-lowest": "#0e0e0c",
+                      "tertiary-fixed": "#e4e1e5",
+                      "secondary": "#c8c6c8",
+                      "on-secondary-fixed": "#1b1b1d",
+                      "surface-container-highest": "#343532",
+                      "on-primary": "#422c00",
+                      "error": "#ffb4ab",
+                      "surface-bright": "#393937",
+                      "on-primary-fixed": "#271900",
+                      "primary-fixed-dim": "#f0bf6a",
+                      "on-error": "#690005",
+                      "surface-variant": "#343532"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "margin-mobile": "20px",
+                      "xs": "4px",
+                      "margin-desktop": "48px",
+                      "md": "24px",
+                      "xl": "64px",
+                      "lg": "40px",
+                      "base": "8px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Geist"
+                      ],
+                      "display-lg": [
+                              "Geist"
+                      ],
+                      "data-lg": [
+                              "Geist Mono"
+                      ],
+                      "body-md": [
+                              "Geist"
+                      ],
+                      "data-md": [
+                              "Geist Mono"
+                      ],
+                      "body-lg": [
+                              "Geist"
+                      ],
+                      "headline-md": [
+                              "Geist"
+                      ],
+                      "scripture": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "data-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "scripture": [
+                              "13px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        /* Fluid Spring Physics approximation */
+        .spring-transition {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition-duration: 300ms;
+        }
+        
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+      </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex selection:bg-primary/30 selection:text-primary">
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-outline-variant flex justify-between items-center px-margin-desktop h-20 z-40">
+<div class="font-display-lg text-display-lg font-black tracking-widest text-primary">
+            4TH MAN
+        </div>
+<div class="flex gap-4 items-center">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-all scale-98 hover:bg-surface-container-highest">
+<span class="material-symbols-outlined" data-icon="notifications" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-all scale-98 hover:bg-surface-container-highest">
+<span class="material-symbols-outlined" data-icon="account_circle" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant bg-surface-container-low flex flex-col h-full py-xl z-50">
+<div class="px-4 mb-lg">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-12 h-12 rounded-full bg-surface-container overflow-hidden">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A striking portrait of a determined male athlete in a dimly lit, industrial gym setting. The lighting is dramatic, highlighting his muscular build and focus. The aesthetic is high-performance and intense, utilizing deep shadows and crisp details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvHSP0SdrOknVAzj1Z8VVFZDUKCKeMKZ_OARGc1xNTHKhLAojaPolBOKHAJek3lylRurFjAMb8lkOtWtsd8VlTTMOPxc-CLrlcVUeOHDPJ4t_Uu4HdVtaCUgZrQ4p5U0lsFLMogkv7ooKsTDcV8nRailZporInFmqe4kolycY0P9wopMXmOIcitPnJctF6qUwzil1syzPpJI0hdmvUGVLF6W5gcbkIIv9aN0Xf4peEmrWUQ6qNk8Me"/>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md font-bold tracking-tighter text-on-surface">Iron Discipline</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Vessel &amp; Spirit</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2 px-2 flex-grow">
+<!-- Active Tab Intent: Progress/Workout -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg spring-transition" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md text-body-md">Today</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-primary font-bold border-l-2 border-primary bg-surface-container-high rounded-r-lg spring-transition" href="#">
+<span class="material-symbols-outlined" data-icon="fitness_center" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+<span class="font-body-md text-body-md">Programs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg spring-transition" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-body-md text-body-md">Progress</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg spring-transition" href="#">
+<span class="material-symbols-outlined" data-icon="photo_library">photo_library</span>
+<span class="font-body-md text-body-md">Photos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg spring-transition" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-body-md text-body-md">Account</span>
+</a>
+</div>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary text-on-primary font-body-md text-body-md font-bold py-3 rounded-lg hover:bg-primary-fixed transition-colors spring-transition">
+                LOG WORKOUT
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-20 p-margin-desktop w-full max-w-[1440px] mx-auto min-h-[calc(100vh-5rem)]">
+<!-- Header Section -->
+<div class="mb-lg">
+<div class="flex items-center gap-4 mb-4">
+<button class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-outline transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg">Barbell Bench Press</h1>
+</div>
+<div class="flex gap-2 mb-6">
+<span class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant font-data-md text-sm border border-outline-variant/50">Chest</span>
+<span class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant font-data-md text-sm border border-outline-variant/50">Barbell</span>
+</div>
+<!-- Video Player Placeholder -->
+<div class="w-full aspect-video bg-surface-container-highest rounded-xl overflow-hidden relative group border border-outline-variant/30 shadow-[0_4px_32px_rgba(0,0,0,0.2)]">
+<img alt="Video thumbnail placeholder" class="w-full h-full object-cover opacity-60" data-alt="A cinematic, high-contrast shot of a heavy barbell loaded with iron plates resting on a professional bench press rack in a dark, atmospheric gym. Dust motes float in a single shaft of stark white overhead light. The mood is intense, serious, and focused on heavy lifting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ-O5DQrOCsMvllldNBZi5rP-k_JnHNAgPIGoiPaUJ3sup4GtGja3A2qMWjU5gjIBZq15WMeCZeuNkIlr061SGpOk1sKmHXUjGmMCL21Itzo7HxIaE75JB1cfQZw-UztNttA2Y6-o3TGv0rTiptatETqJ0MWyTNz1Xpf0I06kg8liEKFSfSmchIJcyhyabAPU4Ez-6jv15KrTTerVOxreMHiTGkqd9KzGgMZQxHIhyKt4y_RZaU64B"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="w-20 h-20 rounded-full bg-primary/20 backdrop-blur-sm flex items-center justify-center border border-primary/50 text-primary group-hover:bg-primary/30 group-hover:scale-110 spring-transition">
+<span class="material-symbols-outlined text-4xl ml-2" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Workspace Split -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Side: Set Log -->
+<div class="col-span-8 bg-surface rounded-xl border border-outline-variant/30 p-6">
+<h2 class="font-headline-md text-headline-md mb-6">Set Log</h2>
+<!-- Table Header -->
+<div class="grid grid-cols-5 gap-4 px-4 py-2 border-b border-outline-variant/30 text-on-surface-variant font-data-md text-sm mb-2">
+<div class="col-span-1">SET</div>
+<div class="col-span-1">PREVIOUS</div>
+<div class="col-span-1 text-center">LBS</div>
+<div class="col-span-1 text-center">REPS</div>
+<div class="col-span-1 text-right"><span class="material-symbols-outlined text-sm" data-icon="done_all">done_all</span></div>
+</div>
+<!-- Rows -->
+<div class="flex flex-col gap-2">
+<!-- Row 1 (Completed) -->
+<div class="grid grid-cols-5 gap-4 px-4 py-3 bg-surface-container rounded-lg items-center border border-transparent">
+<div class="col-span-1 font-data-md text-data-md text-on-surface-variant">1</div>
+<div class="col-span-1 font-data-md text-data-md text-on-surface-variant opacity-50">135 × 10</div>
+<div class="col-span-1 flex justify-center">
+<input class="w-20 bg-transparent text-center font-data-md text-data-md text-on-surface border-none p-0 focus:ring-0" disabled="" type="number" value="135"/>
+</div>
+<div class="col-span-1 flex justify-center">
+<input class="w-16 bg-transparent text-center font-data-md text-data-md text-on-surface border-none p-0 focus:ring-0" disabled="" type="number" value="10"/>
+</div>
+<div class="col-span-1 flex justify-end">
+<div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="check" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</div>
+<!-- Row 2 (Completed) -->
+<div class="grid grid-cols-5 gap-4 px-4 py-3 bg-surface-container rounded-lg items-center border border-transparent">
+<div class="col-span-1 font-data-md text-data-md text-on-surface-variant">2</div>
+<div class="col-span-1 font-data-md text-data-md text-on-surface-variant opacity-50">185 × 8</div>
+<div class="col-span-1 flex justify-center">
+<input class="w-20 bg-transparent text-center font-data-md text-data-md text-on-surface border-none p-0 focus:ring-0" disabled="" type="number" value="185"/>
+</div>
+<div class="col-span-1 flex justify-center">
+<input class="w-16 bg-transparent text-center font-data-md text-data-md text-on-surface border-none p-0 focus:ring-0" disabled="" type="number" value="8"/>
+</div>
+<div class="col-span-1 flex justify-end">
+<div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="check" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+</div>
+<!-- Row 3 (Active) -->
+<div class="grid grid-cols-5 gap-4 px-4 py-3 bg-surface-container-high rounded-lg items-center border border-primary/50 shadow-[0_0_15px_rgba(240,191,106,0.05)]">
+<div class="col-span-1 font-data-md text-data-md text-primary">3</div>
+<div class="col-span-1 font-data-md text-data-md text-on-surface-variant opacity-50">205 × 6</div>
+<div class="col-span-1 flex justify-center">
+<input class="w-20 bg-surface border border-outline-variant rounded text-center font-data-md text-data-md text-on-surface focus:border-primary focus:ring-0 py-1 transition-colors" placeholder="205" type="number"/>
+</div>
+<div class="col-span-1 flex justify-center">
+<input class="w-16 bg-surface border border-outline-variant rounded text-center font-data-md text-data-md text-on-surface focus:border-primary focus:ring-0 py-1 transition-colors" placeholder="6" type="number"/>
+</div>
+<div class="col-span-1 flex justify-end">
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary hover:border-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-8">
+<button class="w-full bg-primary text-on-primary font-body-md text-body-md font-bold py-4 rounded-lg hover:bg-primary-fixed transition-colors spring-transition shadow-[0_4px_14px_rgba(240,191,106,0.15)] flex justify-center items-center gap-2">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                        LOG SET
+                    </button>
+</div>
+</div>
+<!-- Right Side: Rest Timer -->
+<div class="col-span-4 flex flex-col gap-6">
+<!-- Timer Card -->
+<div class="bg-surface-container rounded-xl border border-outline-variant/30 p-8 flex flex-col items-center justify-center relative overflow-hidden h-64">
+<!-- Subtle background pulse effect -->
+<div class="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent opacity-50 animate-pulse"></div>
+<h3 class="font-body-md text-on-surface-variant mb-2 relative z-10">REST TIMER</h3>
+<div class="font-data-lg text-display-lg text-primary mb-6 relative z-10 tracking-widest">
+                        01:30
+                    </div>
+<button class="px-6 py-2 border border-outline-variant text-on-surface rounded-full hover:bg-surface-container-highest hover:border-outline transition-colors relative z-10 font-data-md">
+                        SKIP REST
+                    </button>
+</div>
+<!-- Guidance/Notes Card -->
+<div class="bg-surface-container-low rounded-xl border border-outline-variant/20 p-6">
+<div class="flex items-center gap-2 mb-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+<h4 class="font-body-md text-sm uppercase tracking-wider">Coach Notes</h4>
+</div>
+<p class="font-body-md text-on-surface text-sm leading-relaxed">
+                        Maintain tension at the bottom of the movement. Do not bounce the bar off your chest. Keep elbows tucked at roughly 45 degrees.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<script src="nav-wire.js"></script></body></html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>4TH MAN — Platform Demo</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{furnace:"#0c0c0e",iron:"#161618",forged:"#232326",bone:"#f4f2ee",ash:"#8e8e93",ember:"#c99b4a"},fontFamily:{sans:["Geist","sans-serif"],mono:["Geist Mono","monospace"]},borderColor:{whisper:"rgba(244,242,238,0.08)"}}}}
+</script>
+</head>
+<body class="bg-furnace text-bone font-sans">
+<main class="max-w-5xl mx-auto px-8 py-16">
+  <p class="font-mono text-xs tracking-widest text-ash mb-3">4TH MAN ENTERPRISES · PLATFORM DEMO · PHASE 1 + PHASE 2 ROADMAP</p>
+  <h1 class="text-3xl font-semibold tracking-tight mb-2">Your method, built into a platform.</h1>
+  <p class="text-ash mb-14 max-w-xl leading-relaxed">Every screen below is clickable. Phase 1 is what the proposal quotes. Phase 2 screens carry the <span class="font-mono text-xs text-ember">PHASE 2 PREVIEW</span> tag — roadmap, quoted at the close of Phase 1.</p>
+
+  <h2 class="font-mono text-xs tracking-widest text-ash mb-5">PHASE 1 · CLIENT</h2>
+  <div class="grid grid-cols-4 gap-4 mb-12">
+    <a href="signin.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Sign In</p><p class="text-xs text-ash">One login, phone and desktop</p></a>
+    <a href="today.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Today</p><p class="text-xs text-ash">Session + the Daily Six</p></a>
+    <a href="today-mobile.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Today — Mobile</p><p class="text-xs text-ash">Same screen, on the phone</p></a>
+    <a href="programs.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Programs</p><p class="text-xs text-ash">Assigned plans and history</p></a>
+    <a href="workout.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Workout Logger</p><p class="text-xs text-ash">Sets, reps, rest timer</p></a>
+    <a href="progress.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Progress</p><p class="text-xs text-ash">PRs, volume, consistency</p></a>
+    <a href="photos.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Progress Photos</p><p class="text-xs text-ash">Private, dated timeline</p></a>
+    <a href="weekly-review.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Weekly Review</p><p class="text-xs text-ash">Half fills itself</p></a>
+    <a href="subscription.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Subscription</p><p class="text-xs text-ash">$97 / $147 · Stripe</p></a>
+  </div>
+
+  <h2 class="font-mono text-xs tracking-widest text-ash mb-5">PHASE 1 · COACH ADMIN</h2>
+  <div class="grid grid-cols-4 gap-4 mb-12">
+    <a href="coach-dashboard.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Dashboard</p><p class="text-xs text-ash">Who is on track, who is slipping</p></a>
+    <a href="coach-client.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Client Detail</p><p class="text-xs text-ash">One client, whole picture</p></a>
+    <a href="program-builder.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Program Builder</p><p class="text-xs text-ash">Build once, assign forever</p></a>
+    <a href="coach-billing.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Billing</p><p class="text-xs text-ash">MRR, renewals, Stripe</p></a>
+  </div>
+
+  <h2 class="font-mono text-xs tracking-widest text-ash mb-5">PHASE 2 · THE ECOSYSTEM <span class="text-ember ml-2">ROADMAP — QUOTED AT CLOSE OF PHASE 1</span></h2>
+  <div class="grid grid-cols-4 gap-4">
+    <a href="prayer-wall.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Community &amp; Prayer Wall</p><p class="text-xs text-ash">A band of brothers, not a feed</p></a>
+    <a href="messages.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Messages</p><p class="text-xs text-ash">Client ↔ coach, in the system</p></a>
+    <a href="nutrition.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Nutrition &amp; Macros</p><p class="text-xs text-ash">Targets, meals, hydration</p></a>
+    <a href="faith-mind.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Faith &amp; Mind</p><p class="text-xs text-ash">Devotionals, mind, teaching</p></a>
+    <a href="blood-panel.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Blood Panel</p><p class="text-xs text-ash">Upload your labs, see trends</p></a>
+    <a href="partner-network.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Partner Network</p><p class="text-xs text-ash">Vetted specialists, booked in-app</p></a>
+    <a href="store.html" class="bg-iron border border-whisper rounded-xl p-5 hover:bg-forged"><p class="text-sm font-medium mb-1">Apparel Store</p><p class="text-xs text-ash">Wear the standard</p></a>
+  </div>
+
+  <p class="font-mono text-[11px] text-ash mt-16">ARQENTIA · DEMO BUILD · SUPABASE + NEXT.JS + STRIPE ARCHITECTURE · ALL DATA IS SAMPLE DATA</p>
+</main>
+</body></html>

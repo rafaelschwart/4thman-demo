@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>4TH MAN — Program Builder</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{furnace:"#0c0c0e",iron:"#161618",forged:"#232326",bone:"#f4f2ee",ash:"#8e8e93",ember:"#c99b4a",emberdeep:"#8f6a2e",ok:"#5ba872",bad:"#c0554d"},fontFamily:{sans:["Geist","sans-serif"],mono:["Geist Mono","monospace"]},borderColor:{whisper:"rgba(244,242,238,0.08)"}}}}
+</script>
+<style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300;font-size:20px}</style>
+</head>
+<body class="bg-furnace text-bone font-sans">
+<div class="flex min-h-screen">
+  <aside class="w-60 shrink-0 border-r border-whisper bg-iron p-6 flex flex-col gap-1">
+    <span class="font-semibold tracking-tight mb-8">4TH MAN <span class="text-ash font-normal text-sm">/ Coach</span></span>
+    <a href="coach-dashboard.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-ash hover:text-bone"><span class="material-symbols-outlined">group</span>Clients</a>
+    <a href="program-builder.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-forged text-ember"><span class="material-symbols-outlined">fitness_center</span>Programs</a>
+    <a href="coach-dashboard.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-ash hover:text-bone"><span class="material-symbols-outlined">check_circle</span>Habits</a>
+    <a href="coach-billing.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-ash hover:text-bone"><span class="material-symbols-outlined">credit_card</span>Billing</a>
+    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-ash hover:text-bone"><span class="material-symbols-outlined">settings</span>Settings</a>
+  </aside>
+
+  <main class="flex-1 p-10">
+    <div class="flex items-start justify-between mb-8">
+      <div>
+        <h1 class="text-2xl font-semibold tracking-tight">Program Builder</h1>
+        <p class="text-ash text-sm mt-1">Foundations of Iron · <span class="font-mono">8 WEEKS · 4 DAYS/WK</span></p>
+      </div>
+      <div class="flex gap-3">
+        <button class="border border-whisper rounded-lg px-5 py-2.5 text-sm hover:bg-forged">Save Draft</button>
+        <button class="bg-ember text-furnace rounded-lg px-5 py-2.5 text-sm font-semibold active:translate-y-px">Assign to Client</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-[380px_1fr] gap-8">
+      <!-- Exercise library -->
+      <section class="bg-iron rounded-xl border border-whisper p-5">
+        <h2 class="text-xs font-mono tracking-widest text-ash mb-4">EXERCISE LIBRARY · LICENSED</h2>
+        <input placeholder="Search exercises" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2.5 text-sm placeholder:text-ash focus:border-ember focus:ring-0 mb-4"/>
+        <div class="flex flex-wrap gap-2 mb-5">
+          <span class="text-xs font-mono px-3 py-1 rounded-lg bg-forged text-ember border border-ember/40">CHEST</span>
+          <span class="text-xs font-mono px-3 py-1 rounded-lg bg-forged text-ash">BACK</span>
+          <span class="text-xs font-mono px-3 py-1 rounded-lg bg-forged text-ash">LEGS</span>
+          <span class="text-xs font-mono px-3 py-1 rounded-lg bg-forged text-ash">SHOULDERS</span>
+          <span class="text-xs font-mono px-3 py-1 rounded-lg bg-forged text-ash">BARBELL</span>
+          <span class="text-xs font-mono px-3 py-1 rounded-lg bg-forged text-ash">DUMBBELL</span>
+        </div>
+        <div class="space-y-3" id="library">
+          <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-forged cursor-grab border border-transparent hover:border-whisper">
+            <div class="w-20 h-12 rounded bg-forged flex items-center justify-center"><span class="material-symbols-outlined text-ash">play_arrow</span></div>
+            <div class="flex-1"><p class="text-sm">Barbell Bench Press</p><p class="text-xs text-ash">Chest · Barbell</p></div>
+            <span class="material-symbols-outlined text-ash">add</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-forged cursor-grab border border-transparent hover:border-whisper">
+            <div class="w-20 h-12 rounded bg-forged flex items-center justify-center"><span class="material-symbols-outlined text-ash">play_arrow</span></div>
+            <div class="flex-1"><p class="text-sm">Incline Dumbbell Press</p><p class="text-xs text-ash">Chest · Dumbbell</p></div>
+            <span class="material-symbols-outlined text-ash">add</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-forged cursor-grab border border-transparent hover:border-whisper">
+            <div class="w-20 h-12 rounded bg-forged flex items-center justify-center"><span class="material-symbols-outlined text-ash">play_arrow</span></div>
+            <div class="flex-1"><p class="text-sm">Overhead Press</p><p class="text-xs text-ash">Shoulders · Barbell</p></div>
+            <span class="material-symbols-outlined text-ash">add</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-forged cursor-grab border border-transparent hover:border-whisper">
+            <div class="w-20 h-12 rounded bg-forged flex items-center justify-center"><span class="material-symbols-outlined text-ash">play_arrow</span></div>
+            <div class="flex-1"><p class="text-sm">Cable Fly</p><p class="text-xs text-ash">Chest · Cable</p></div>
+            <span class="material-symbols-outlined text-ash">add</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-forged cursor-grab border border-transparent hover:border-whisper">
+            <div class="w-20 h-12 rounded bg-forged flex items-center justify-center"><span class="material-symbols-outlined text-ash">play_arrow</span></div>
+            <div class="flex-1"><p class="text-sm">Triceps Rope Pushdown</p><p class="text-xs text-ash">Arms · Cable</p></div>
+            <span class="material-symbols-outlined text-ash">add</span>
+          </div>
+        </div>
+        <p class="text-xs text-ash mt-5 font-mono">1,240 EXERCISES · LICENSED LIBRARY</p>
+      </section>
+
+      <!-- Program canvas -->
+      <section class="space-y-4">
+        <div class="bg-iron rounded-xl border border-whisper">
+          <div class="flex items-center justify-between px-5 py-4 border-b border-whisper">
+            <span class="text-sm font-mono text-ash">WEEK 3</span>
+            <span class="material-symbols-outlined text-ash">expand_less</span>
+          </div>
+          <div class="px-5 py-2 divide-y" style="border-color:rgba(244,242,238,0.08)">
+            <div class="py-3 flex items-center justify-between">
+              <span class="text-sm text-ash">Day 1 · Pull</span><span class="text-xs font-mono text-ash">5 EXERCISES</span>
+            </div>
+            <div class="py-4">
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-sm text-ember">Day 2 · Push</span>
+                <button class="text-xs font-mono text-ash border border-whisper rounded px-3 py-1 hover:text-bone">+ ADD EXERCISE</button>
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-center gap-4 bg-forged rounded-lg px-4 py-3">
+                  <span class="material-symbols-outlined text-ash cursor-grab">drag_indicator</span>
+                  <span class="flex-1 text-sm">Barbell Bench Press</span>
+                  <span class="font-mono text-sm">4 × 8</span><span class="font-mono text-xs text-ash">90s</span>
+                  <span class="material-symbols-outlined text-ash cursor-pointer">close</span>
+                </div>
+                <div class="flex items-center gap-4 bg-forged rounded-lg px-4 py-3">
+                  <span class="material-symbols-outlined text-ash cursor-grab">drag_indicator</span>
+                  <span class="flex-1 text-sm">Incline Dumbbell Press</span>
+                  <span class="font-mono text-sm">3 × 10</span><span class="font-mono text-xs text-ash">75s</span>
+                  <span class="material-symbols-outlined text-ash cursor-pointer">close</span>
+                </div>
+                <div class="flex items-center gap-4 bg-forged rounded-lg px-4 py-3">
+                  <span class="material-symbols-outlined text-ash cursor-grab">drag_indicator</span>
+                  <span class="flex-1 text-sm">Overhead Press</span>
+                  <span class="font-mono text-sm">4 × 6</span><span class="font-mono text-xs text-ash">120s</span>
+                  <span class="material-symbols-outlined text-ash cursor-pointer">close</span>
+                </div>
+                <div class="flex items-center gap-4 bg-forged rounded-lg px-4 py-3">
+                  <span class="material-symbols-outlined text-ash cursor-grab">drag_indicator</span>
+                  <span class="flex-1 text-sm">Cable Fly</span>
+                  <span class="font-mono text-sm">3 × 12</span><span class="font-mono text-xs text-ash">60s</span>
+                  <span class="material-symbols-outlined text-ash cursor-pointer">close</span>
+                </div>
+                <div class="flex items-center gap-4 bg-forged rounded-lg px-4 py-3">
+                  <span class="material-symbols-outlined text-ash cursor-grab">drag_indicator</span>
+                  <span class="flex-1 text-sm">Triceps Rope Pushdown</span>
+                  <span class="font-mono text-sm">3 × 12</span><span class="font-mono text-xs text-ash">60s</span>
+                  <span class="material-symbols-outlined text-ash cursor-pointer">close</span>
+                </div>
+              </div>
+            </div>
+            <div class="py-3 flex items-center justify-between">
+              <span class="text-sm text-ash">Day 3 · Legs</span><span class="text-xs font-mono text-ash">6 EXERCISES</span>
+            </div>
+            <div class="py-3 flex items-center justify-between">
+              <span class="text-sm text-ash">Day 4 · Full Body</span><span class="text-xs font-mono text-ash">5 EXERCISES</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-iron rounded-xl border border-whisper px-5 py-4 flex items-center justify-between">
+          <span class="text-sm font-mono text-ash">WEEK 4</span>
+          <span class="material-symbols-outlined text-ash">expand_more</span>
+        </div>
+        <p class="text-xs text-ash">When a client finishes a session, the training habit checks itself, the streak advances and the volume enters the chart.</p>
+      </section>
+    </div>
+  </main>
+</div>
+<script src="nav-wire.js"></script>
+</body></html>

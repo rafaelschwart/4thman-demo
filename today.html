@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>4TH MAN - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&amp;family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#393937",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-container": "#a4a2a6",
+                        "on-tertiary-container": "#39393c",
+                        "on-tertiary-fixed": "#1b1b1e",
+                        "inverse-on-surface": "#30312e",
+                        "secondary": "#c8c6c8",
+                        "primary": "#f0bf6a",
+                        "on-tertiary-fixed-variant": "#47464a",
+                        "on-background": "#e4e2de",
+                        "on-primary-container": "#4d3400",
+                        "surface-container": "#1f201e",
+                        "surface-container-lowest": "#0e0e0c",
+                        "surface-container-highest": "#343532",
+                        "outline-variant": "#4f4538",
+                        "outline": "#9b8f7e",
+                        "on-secondary": "#303032",
+                        "error": "#ffb4ab",
+                        "inverse-surface": "#e4e2de",
+                        "on-primary-fixed-variant": "#5f4100",
+                        "primary-fixed": "#ffdeab",
+                        "on-primary-fixed": "#271900",
+                        "inverse-primary": "#7d5807",
+                        "on-surface-variant": "#d2c4b2",
+                        "on-primary": "#422c00",
+                        "primary-container": "#c99b4a",
+                        "on-surface": "#e4e2de",
+                        "secondary-fixed-dim": "#c8c6c8",
+                        "surface": "#131412",
+                        "tertiary": "#c8c6c9",
+                        "secondary-fixed": "#e4e2e4",
+                        "surface-container-low": "#1b1c1a",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#b7b4b7",
+                        "secondary-container": "#474649",
+                        "on-tertiary": "#303033",
+                        "surface-tint": "#f0bf6a",
+                        "surface-variant": "#343532",
+                        "background": "#131412",
+                        "tertiary-fixed-dim": "#c8c6c9",
+                        "surface-dim": "#131412",
+                        "on-secondary-fixed": "#1b1b1d",
+                        "tertiary-fixed": "#e4e1e5",
+                        "on-error": "#690005",
+                        "surface-container-high": "#2a2a28",
+                        "on-secondary-fixed-variant": "#474649",
+                        "primary-fixed-dim": "#f0bf6a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "40px",
+                        "gutter": "16px",
+                        "base": "8px",
+                        "xl": "64px",
+                        "xs": "4px",
+                        "margin-mobile": "20px",
+                        "md": "24px",
+                        "margin-desktop": "48px",
+                        "sm": "12px"
+                    },
+                    "fontFamily": {
+                        "data-lg": ["Geist Mono"],
+                        "data-md": ["Geist Mono"],
+                        "display-lg": ["Geist"],
+                        "body-md": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "scripture": ["Geist"]
+                    },
+                    "fontSize": {
+                        "data-lg": ["24px", { "lineHeight": "1.0", "fontWeight": "500" }],
+                        "data-md": ["16px", { "lineHeight": "1.0", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "scripture": ["13px", { "lineHeight": "1.4", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #131412; /* Furnace Black */
+            color: #e4e2de; /* Bone White / on-surface */
+        }
+        
+        /* Smooth Fluid Physics simulation via CSS transitions */
+        .spring-transition {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .card-surface {
+            background-color: #1b1c1a; /* Iron Surface / surface-container-low */
+        }
+        
+        .forged-edge {
+            background-color: #343532; /* Forged Edge / surface-variant */
+        }
+        
+        .whisper-line {
+            border-color: rgba(228, 226, 222, 0.1);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant bg-surface-container-low flex flex-col h-full py-xl z-50">
+<!-- Brand / Header -->
+<div class="px-6 mb-12 flex flex-col items-center">
+<div class="w-16 h-16 rounded-full overflow-hidden mb-4 border border-outline-variant bg-surface">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A moody, high-contrast, black and white portrait photo of a physically fit man in shadow, serving as a premium avatar. The style is raw, masculine, and evocative of early morning training in a dark gym environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKCJff1cnyy1B0en7GX4Ch730KJ3x6RK_YpmZPiSwnaPxnzhX8AmNwhNZk8o4P6E2VEUZuzhZ3xrlKetjYOr5wuhaD6nuFspOmDq6HHy23Lt5ouUZ_3SP7YAD4lkFZr2_uBZBcseRLagsB0R3rRX-pz2KwHpJS2z2pNnVluz9SeCf29YSsV2kbv7WYmZ70zUaj1LID6FmGMYXwgsFLsNUNjLSQnbXcRzZb-k4W3kCTWgA9GJGMjOoI"/>
+</div>
+<h1 class="font-display-lg text-headline-md font-bold tracking-tighter text-on-surface uppercase text-center mb-1">Iron Discipline</h1>
+<p class="font-data-md text-data-md text-on-surface-variant uppercase tracking-widest text-xs">Vessel &amp; Spirit</p>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 flex flex-col gap-2">
+<!-- Active: Today -->
+<a class="flex items-center gap-3 px-4 py-3 text-primary font-bold border-r-2 border-primary bg-surface-container-high hover:bg-surface-container-highest transition-colors duration-200" href="#" style="transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1); transition-duration: 400ms;">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="uppercase tracking-wider">Today</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="uppercase tracking-wider">Programs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="uppercase tracking-wider">Progress</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">photo_library</span>
+<span class="uppercase tracking-wider">Photos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="uppercase tracking-wider">Account</span>
+</a>
+</nav>
+<!-- CTA -->
+<div class="px-6 mt-auto pb-8">
+<button class="w-full bg-primary text-on-primary font-headline-md text-headline-md py-4 rounded-sm uppercase tracking-widest hover:bg-primary-container transition-colors spring-transition">
+                LOG WORKOUT
+            </button>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] backdrop-blur-md border-b border-outline-variant bg-surface/80 dark:bg-surface/80 flex justify-between items-center px-margin-desktop h-20 z-40">
+<div class="font-display-lg text-display-lg font-black tracking-widest text-primary">
+            4TH MAN
+        </div>
+<div class="flex gap-6 items-center">
+<button class="text-on-surface-variant hover:text-primary transition-all active:scale-95 spring-transition">
+<span class="material-symbols-outlined text-[28px]">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all active:scale-95 spring-transition">
+<span class="material-symbols-outlined text-[28px]">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-32 px-margin-desktop pb-24 min-h-screen">
+<!-- Header -->
+<div class="mb-12">
+<p class="font-data-md text-data-md text-on-surface-variant mb-2 uppercase tracking-widest">Tuesday, August 11</p>
+<h2 class="font-display-lg text-display-lg font-bold text-on-surface uppercase">Today</h2>
+</div>
+<!-- 2-Column Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Dominant Session Card -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<div class="card-surface p-8 rounded-lg border border-outline-variant relative overflow-hidden group">
+<!-- Subtle background texture/gradient -->
+<div class="absolute inset-0 bg-gradient-to-br from-surface-container-high/50 to-transparent pointer-events-none"></div>
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div>
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary text-xl">fitness_center</span>
+<span class="font-data-md text-data-md text-primary uppercase tracking-widest">Today's Session</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface uppercase mb-4 leading-tight">Foundations of Iron<br/><span class="text-on-surface-variant">Week 3 · Day 2 · Push</span></h3>
+<div class="flex items-center gap-6 mb-10 border-t border-b border-outline-variant py-4 whisper-line">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">format_list_bulleted</span>
+<span class="font-data-md text-data-md text-on-surface">5 EXERCISES</span>
+</div>
+<div class="w-1 h-1 rounded-full bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">schedule</span>
+<span class="font-data-md text-data-md text-on-surface">~52 MIN</span>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary font-headline-md text-headline-md py-5 rounded-sm uppercase tracking-widest hover:bg-primary-fixed transition-colors spring-transition mt-8">
+                            START SESSION
+                        </button>
+</div>
+</div>
+</div>
+<!-- Right Column: The Daily Six -->
+<div class="lg:col-span-4 flex flex-col">
+<div class="flex justify-between items-end mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface uppercase">The Daily Six</h3>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-data-md text-data-md text-primary uppercase">23-DAY STREAK</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- Complete: Hydration -->
+<div class="card-surface p-4 border-2 border-primary rounded-sm flex flex-col items-center justify-center aspect-square cursor-pointer spring-transition active:scale-95">
+<span class="material-symbols-outlined text-primary text-3xl mb-3" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+<span class="font-data-md text-data-md text-on-surface uppercase text-center text-sm">Hydration</span>
+</div>
+<!-- Complete: Bible -->
+<div class="card-surface p-4 border-2 border-primary rounded-sm flex flex-col items-center justify-center aspect-square cursor-pointer spring-transition active:scale-95">
+<span class="material-symbols-outlined text-primary text-3xl mb-3" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-data-md text-data-md text-on-surface uppercase text-center text-sm">Bible</span>
+</div>
+<!-- Complete: Prayer -->
+<div class="card-surface p-4 border-2 border-primary rounded-sm flex flex-col items-center justify-center aspect-square cursor-pointer spring-transition active:scale-95">
+<span class="material-symbols-outlined text-primary text-3xl mb-3" style="font-variation-settings: 'FILL' 1;">folded_hands</span>
+<span class="font-data-md text-data-md text-on-surface uppercase text-center text-sm">Prayer</span>
+</div>
+<!-- Incomplete: Meditation -->
+<div class="card-surface p-4 border border-outline-variant rounded-sm flex flex-col items-center justify-center aspect-square cursor-pointer hover:border-outline transition-colors spring-transition active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl mb-3">self_improvement</span>
+<span class="font-data-md text-data-md text-on-surface-variant uppercase text-center text-sm">Meditation</span>
+</div>
+<!-- Incomplete: Reading -->
+<div class="card-surface p-4 border border-outline-variant rounded-sm flex flex-col items-center justify-center aspect-square cursor-pointer hover:border-outline transition-colors spring-transition active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl mb-3">auto_stories</span>
+<span class="font-data-md text-data-md text-on-surface-variant uppercase text-center text-sm">Reading</span>
+</div>
+<!-- Incomplete: Training -->
+<div class="card-surface p-4 border border-outline-variant rounded-sm flex flex-col items-center justify-center aspect-square cursor-pointer hover:border-outline transition-colors spring-transition active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl mb-3">fitness_center</span>
+<span class="font-data-md text-data-md text-on-surface-variant uppercase text-center text-sm">Training</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script src="nav-wire.js"></script></body></html>

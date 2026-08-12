@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>4TH MAN — Messages</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{furnace:"#0c0c0e",iron:"#161618",forged:"#232326",bone:"#f4f2ee",ash:"#8e8e93",ember:"#c99b4a",ok:"#5ba872"},fontFamily:{sans:["Geist","sans-serif"],mono:["Geist Mono","monospace"]},borderColor:{whisper:"rgba(244,242,238,0.08)"}}}}
+</script>
+<style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300;font-size:20px}</style>
+</head>
+<body class="bg-furnace text-bone font-sans">
+<header class="sticky top-0 z-40 border-b border-whisper" style="background:rgba(12,12,14,.8);backdrop-filter:blur(12px)">
+  <div class="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
+    <span class="font-semibold tracking-tight">4TH MAN</span>
+    <nav class="flex gap-8 text-sm">
+      <a class="text-ash hover:text-bone" href="today.html">Today</a>
+      <a class="text-ash hover:text-bone" href="programs.html">Programs</a>
+      <a class="text-ash hover:text-bone" href="progress.html">Progress</a>
+      <a class="text-ash hover:text-bone" href="photos.html">Photos</a>
+      <a class="text-ember" href="messages.html">Messages</a>
+      <a class="text-ash hover:text-bone" href="subscription.html">Account</a>
+    </nav>
+    <div class="w-8 h-8 rounded-full bg-forged flex items-center justify-center text-xs font-mono">MT</div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-8 py-8">
+  <div class="flex items-center gap-4 mb-6">
+    <h1 class="text-2xl font-semibold tracking-tight">Messages</h1>
+    <span class="font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-2 py-1">PHASE 2 PREVIEW</span>
+  </div>
+
+  <div class="grid grid-cols-[320px_1fr] gap-6 h-[620px]">
+    <aside class="bg-iron border border-whisper rounded-xl overflow-hidden">
+      <div class="p-4 border-b border-whisper">
+        <input placeholder="Search" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2 text-sm placeholder:text-ash focus:border-ember focus:ring-0"/>
+      </div>
+      <div class="divide-y" style="border-color:rgba(244,242,238,0.08)">
+        <div class="flex items-center gap-3 p-4 bg-forged cursor-pointer">
+          <div class="w-10 h-10 rounded-full bg-ember/20 border border-ember/40 flex items-center justify-center text-xs font-mono text-ember">CM</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between"><span class="text-sm font-medium">Coach Cayman</span><span class="font-mono text-[10px] text-ash">7:12 AM</span></div>
+            <p class="text-xs text-ash truncate">Strong week. Watch the OHP lockout —</p>
+          </div>
+          <span class="w-2 h-2 rounded-full bg-ember"></span>
+        </div>
+        <div class="flex items-center gap-3 p-4 hover:bg-forged cursor-pointer">
+          <div class="w-10 h-10 rounded-full bg-forged border border-whisper flex items-center justify-center text-xs font-mono">BR</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between"><span class="text-sm">Brothers</span><span class="font-mono text-[10px] text-ash">YESTERDAY</span></div>
+            <p class="text-xs text-ash truncate">J. Whitfield: 5 AM crew tomorrow?</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <section class="bg-iron border border-whisper rounded-xl flex flex-col">
+      <div class="flex items-center gap-3 px-6 py-4 border-b border-whisper">
+        <div class="w-9 h-9 rounded-full bg-ember/20 border border-ember/40 flex items-center justify-center text-xs font-mono text-ember">CM</div>
+        <div><p class="text-sm font-medium">Coach Cayman</p><p class="text-[11px] text-ok">Online</p></div>
+      </div>
+      <div class="flex-1 overflow-y-auto p-6 space-y-4" id="thread">
+        <div class="max-w-md">
+          <div class="bg-forged rounded-xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed">How did Day 2 feel? Bench looked heavy on the last set in your log.</div>
+          <p class="font-mono text-[10px] text-ash mt-1">6:58 AM</p>
+        </div>
+        <div class="max-w-md ml-auto">
+          <div class="bg-ember/15 border border-ember/25 rounded-xl rounded-tr-sm px-4 py-3 text-sm leading-relaxed">Heavy but clean. Locked out everything.</div>
+          <p class="font-mono text-[10px] text-ash mt-1 text-right">7:04 AM</p>
+        </div>
+        <div class="max-w-md ml-auto">
+          <div class="border border-whisper bg-furnace rounded-xl px-4 py-3">
+            <p class="font-mono text-[10px] tracking-widest text-ash mb-1">SESSION LOGGED</p>
+            <p class="text-sm">Foundations of Iron · Day 2</p>
+            <p class="font-mono text-sm mt-1">4×8 @ 205 lb <span class="text-ember">✓</span></p>
+          </div>
+          <p class="font-mono text-[10px] text-ash mt-1 text-right">7:05 AM</p>
+        </div>
+        <div class="max-w-md">
+          <div class="bg-forged rounded-xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed">Strong week. Watch the OHP lockout — we bump bench to 210 next session.</div>
+          <p class="font-mono text-[10px] text-ash mt-1">7:12 AM</p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-whisper flex gap-3">
+        <button class="w-10 h-10 rounded-lg border border-whisper flex items-center justify-center text-ash hover:text-bone"><span class="material-symbols-outlined">attach_file</span></button>
+        <input id="msg" placeholder="Message Coach Cayman" class="flex-1 bg-forged border border-whisper rounded-lg px-4 text-sm placeholder:text-ash focus:border-ember focus:ring-0"/>
+        <button onclick="send()" class="w-10 h-10 rounded-lg bg-ember text-furnace flex items-center justify-center active:translate-y-px"><span class="material-symbols-outlined">arrow_upward</span></button>
+      </div>
+    </section>
+  </div>
+</main>
+<script>
+function send(){
+  var i=document.getElementById('msg'); if(!i.value.trim()) return;
+  var t=document.getElementById('thread');
+  var w=document.createElement('div'); w.className='max-w-md ml-auto';
+  var b=document.createElement('div'); b.className='bg-ember/15 border border-ember/25 rounded-xl rounded-tr-sm px-4 py-3 text-sm leading-relaxed'; b.textContent=i.value;
+  var s=document.createElement('p'); s.className='font-mono text-[10px] text-ash mt-1 text-right'; s.textContent='NOW';
+  w.appendChild(b); w.appendChild(s); t.appendChild(w); t.scrollTop=t.scrollHeight; i.value='';
+}
+document.getElementById('msg').addEventListener('keydown',function(e){if(e.key==='Enter')send();});
+</script>
+<script src="nav-wire.js"></script>
+</body></html>

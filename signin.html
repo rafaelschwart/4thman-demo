@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>4TH MAN - Sign In</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#131412",
+                      "primary-fixed-dim": "#f0bf6a",
+                      "on-primary": "#422c00",
+                      "on-tertiary-fixed": "#1b1b1e",
+                      "tertiary-container": "#a4a2a6",
+                      "surface-bright": "#393937",
+                      "tertiary-fixed": "#e4e1e5",
+                      "surface-container": "#1f201e",
+                      "outline-variant": "#4f4538",
+                      "surface-tint": "#f0bf6a",
+                      "outline": "#9b8f7e",
+                      "on-secondary": "#303032",
+                      "surface-container-high": "#2a2a28",
+                      "surface-container-highest": "#343532",
+                      "secondary-fixed-dim": "#c8c6c8",
+                      "error-container": "#93000a",
+                      "surface-container-lowest": "#0e0e0c",
+                      "secondary": "#c8c6c8",
+                      "inverse-primary": "#7d5807",
+                      "on-tertiary": "#303033",
+                      "surface": "#131412",
+                      "on-primary-fixed": "#271900",
+                      "primary-container": "#c99b4a",
+                      "surface-container-low": "#1b1c1a",
+                      "on-secondary-container": "#b7b4b7",
+                      "inverse-surface": "#e4e2de",
+                      "on-tertiary-fixed-variant": "#47464a",
+                      "on-secondary-fixed": "#1b1b1d",
+                      "secondary-fixed": "#e4e2e4",
+                      "on-background": "#e4e2de",
+                      "on-surface": "#e4e2de",
+                      "tertiary": "#c8c6c9",
+                      "on-primary-container": "#4d3400",
+                      "on-primary-fixed-variant": "#5f4100",
+                      "primary-fixed": "#ffdeab",
+                      "error": "#ffb4ab",
+                      "on-surface-variant": "#d2c4b2",
+                      "surface-variant": "#343532",
+                      "background": "#131412",
+                      "tertiary-fixed-dim": "#c8c6c9",
+                      "on-tertiary-container": "#39393c",
+                      "secondary-container": "#474649",
+                      "on-error": "#690005",
+                      "inverse-on-surface": "#30312e",
+                      "primary": "#f0bf6a",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary-fixed-variant": "#474649"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "64px",
+                      "lg": "40px",
+                      "xs": "4px",
+                      "margin-mobile": "20px",
+                      "gutter": "16px",
+                      "sm": "12px",
+                      "md": "24px",
+                      "margin-desktop": "48px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "data-lg": [
+                              "Geist Mono"
+                      ],
+                      "body-lg": [
+                              "Geist"
+                      ],
+                      "headline-md": [
+                              "Geist"
+                      ],
+                      "headline-lg": [
+                              "Geist"
+                      ],
+                      "data-md": [
+                              "Geist Mono"
+                      ],
+                      "body-md": [
+                              "Geist"
+                      ],
+                      "scripture": [
+                              "Geist"
+                      ],
+                      "display-lg": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "data-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "scripture": [
+                              "13px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;600;900&family=Geist+Mono:wght@500&display=swap');
+        
+        body {
+            background-color: #0C0C0E;
+            color: #e4e2de;
+        }
+
+        .input-forge {
+            background-color: #232326;
+            border-color: rgba(228, 226, 222, 0.1);
+        }
+
+        .input-forge:focus {
+            border-color: #C99B4A;
+            box-shadow: none;
+            outline: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Left Panel: Brand Context -->
+<div class="hidden md:flex flex-col justify-center px-margin-desktop w-1/2 relative z-10 border-r border-outline-variant/30 bg-[#0C0C0E]">
+<div class="max-w-md mx-auto">
+<h1 class="font-display-lg text-display-lg text-on-surface mb-gutter">4TH MAN</h1>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-xl">Train the whole man.</h2>
+<p class="font-scripture text-scripture text-on-surface-variant italic mt-xl border-l-2 border-outline-variant pl-4 py-2">
+                "...the form of the fourth is like the Son of God. — Daniel 3:25"
+            </p>
+</div>
+<!-- Ambient decorative elements -->
+<div class="absolute inset-0 pointer-events-none opacity-5" style="background-image: radial-gradient(circle at 30% 50%, #f0bf6a 0%, transparent 50%);"></div>
+</div>
+<!-- Right Panel: Auth Surface -->
+<div class="flex-1 flex flex-col justify-center px-margin-mobile md:px-margin-desktop bg-[#0C0C0E]">
+<!-- Mobile Header (hidden on md) -->
+<div class="md:hidden text-center mb-xl mt-lg">
+<h1 class="font-display-lg text-display-lg text-on-surface">4TH MAN</h1>
+</div>
+<!-- Auth Card -->
+<div class="w-full max-w-md mx-auto bg-[#161618] p-lg rounded-xl border border-outline-variant/50 shadow-2xl relative z-20">
+<div class="mb-lg">
+<h2 class="font-headline-md text-headline-md text-on-surface">Sign In</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Access your training matrix.</p>
+</div>
+<form class="space-y-gutter">
+<!-- Email Input -->
+<div class="space-y-xs">
+<label class="block font-body-md text-body-md text-on-surface-variant" for="email">Email</label>
+<input class="w-full input-forge border rounded-lg px-4 py-3 font-body-lg text-body-lg text-on-surface transition-colors duration-200 placeholder-on-surface-variant/50" id="email" name="email" placeholder="user@example.com" required="" type="email"/>
+</div>
+<!-- Password Input -->
+<div class="space-y-xs">
+<label class="block font-body-md text-body-md text-on-surface-variant" for="password">Password</label>
+<div class="relative">
+<input class="w-full input-forge border rounded-lg px-4 py-3 font-body-lg text-body-lg text-on-surface transition-colors duration-200 placeholder-on-surface-variant/50 pr-12" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">visibility</span>
+</button>
+</div>
+</div>
+<!-- Actions -->
+<div class="pt-sm space-y-gutter">
+<button class="w-full bg-primary-container text-on-primary-container font-headline-md text-headline-md py-3 px-6 rounded-xl hover:bg-primary transition-all duration-200 active:scale-[0.98]" type="submit">
+                        Sign In
+                    </button>
+<button class="w-full bg-transparent border border-outline-variant text-on-surface font-body-lg text-body-lg py-3 px-6 rounded-xl hover:bg-surface-container-high hover:border-outline transition-all duration-200 active:scale-[0.98]" type="button">
+                        Create Account
+                    </button>
+</div>
+</form>
+<div class="mt-lg text-center">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">
+                    Forgot password?
+                </a>
+</div>
+</div>
+</div>
+<script src="nav-wire.js"></script></body></html>

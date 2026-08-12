@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>4TH MAN — Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: { extend: {
+    colors: {
+      furnace: "var(--c-furnace)", iron: "var(--c-iron)", forged: "var(--c-forged)",
+      bone: "var(--c-bone)", ash: "var(--c-ash)",
+      ember: "rgb(var(--c-ember-rgb) / <alpha-value>)",
+      emberdeep: "#8f6a2e", ok: "#5ba872", bad: "#c0554d"
+    },
+    fontFamily: { sans: ["Geist","sans-serif"], mono: ["Geist Mono","monospace"] },
+    borderColor: { whisper: "var(--c-whisper)" }
+  }}
+};
+</script>
+<style>
+  :root {
+    --c-furnace:#0c0c0e; --c-iron:#161618; --c-forged:#232326;
+    --c-bone:#f4f2ee; --c-ash:#8e8e93;
+    --c-ember:#c99b4a; --c-ember-rgb:201 155 74;
+    --c-whisper:rgba(244,242,238,0.08); --c-glass:rgba(12,12,14,.82);
+  }
+  html.light {
+    --c-furnace:#f3f1ec; --c-iron:#fbfaf7; --c-forged:#e7e3da;
+    --c-bone:#1a1a1d; --c-ash:#70706c;
+    --c-ember:#a87c2f; --c-ember-rgb:168 124 47;
+    --c-whisper:rgba(26,26,29,0.12); --c-glass:rgba(243,241,236,.85);
+  }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300; font-size: 20px; }
+  html { scrollbar-color: var(--c-forged) var(--c-furnace); }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--c-furnace); }
+  ::-webkit-scrollbar-thumb { background: var(--c-forged); border-radius: 6px; border: 2px solid var(--c-furnace); }
+  :focus-visible { outline: 1px solid var(--c-ember); outline-offset: 2px; }
+  body { -webkit-font-smoothing: antialiased; background: var(--c-furnace); color: var(--c-bone); }
+
+  /* Cayman's wordmark is white typography — invert it on the light theme */
+  html.light .brand-logo { filter: invert(1) opacity(.88); }
+  .brand-logo { filter: none; }
+  /* Partner org logos are light-on-dark: keep them on a fixed dark chip in both themes */
+  .org-chip { background: #161618; }
+
+  #forge-line { position: fixed; top: 0; left: 0; height: 2px; z-index: 100;
+    background: linear-gradient(90deg, #8f6a2e, #c99b4a); width: 0%; }
+
+  #nav-marker { position: absolute; left: 0; width: 2px; background: var(--c-ember); border-radius: 2px; }
+  .nav-item { position: relative; }
+  .nav-item.active { color: var(--c-bone); background: var(--c-forged); }
+  .nav-item.active .material-symbols-outlined { color: var(--c-ember); }
+
+  .v-stagger { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { .v-stagger { opacity: 1 !important; transform: none !important; } }
+
+  .habit-tile { transition: border-color .2s; cursor: pointer; user-select: none; }
+  .habit-tile.done { border-color: rgba(201,155,74,.7) !important; }
+  html.light .habit-tile.done { border-color: rgba(168,124,47,.8) !important; }
+  .habit-tile.done .h-ic { color: var(--c-ember); }
+  .habit-tile.done .h-check { opacity: 1; }
+  .h-check { opacity: 0; }
+
+  .bar-fill { width: 0; background: var(--c-ember); }
+  .ig-img { object-fit: cover; width: 100%; height: 100%; }
+
+  /* Sample "video" surfaces: slow Ken Burns drift under player chrome */
+  .player { position: relative; overflow: hidden; background: #0c0c0e; }
+  .player img { object-fit: cover; width: 100%; height: 100%; }
+  .kenburns { animation: kb 16s ease-in-out infinite; will-change: transform; }
+  @keyframes kb {
+    0% { transform: scale(1.02) translate(0, 0); }
+    50% { transform: scale(1.1) translate(-1.5%, -1%); }
+    100% { transform: scale(1.02) translate(0, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .kenburns { animation: none; } }
+  .play-badge { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .play-badge > span { width: 48px; height: 48px; border-radius: 9999px; display: flex; align-items: center;
+    justify-content: center; background: rgba(12,12,14,.62); border: 1px solid rgba(244,242,238,.25);
+    color: #f4f2ee; backdrop-filter: blur(6px); }
+  .dur-chip { position: absolute; right: 10px; bottom: 10px; font-family: "Geist Mono", monospace;
+    font-size: 10px; letter-spacing: .08em; color: #f4f2ee; background: rgba(12,12,14,.72);
+    padding: 3px 8px; border-radius: 6px; }
+  .press:active { transform: translateY(1px); }
+  td, th { font-variant-numeric: tabular-nums; }
+
+  #gate-photo { background-size: cover; background-position: center 20%; }
+  #gate-photo::after { content:""; position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(12,12,14,.55) 0%, rgba(12,12,14,.35) 45%, rgba(12,12,14,.92) 100%); }
+
+  /* ---------- Mobile (≤ 1023px): sidebar becomes bottom nav, grids collapse ---------- */
+  #bottom-nav { display: none; }
+  @media (max-width: 1023px) {
+    #sidebar { display: none; }
+    #shell .ml-64 { margin-left: 0; }
+    #view { padding: 20px 16px 96px; }
+    #shell header { padding: 0 16px; }
+    #gate { grid-template-columns: 1fr; }
+    #gate-photo { display: none; }
+    #bottom-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+      background: var(--c-glass); backdrop-filter: blur(12px);
+      border-top: 1px solid var(--c-whisper);
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); justify-content: space-around; }
+    #bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 2px;
+      color: var(--c-ash); font-size: 10px; font-family: "Geist Mono", monospace;
+      letter-spacing: .06em; padding: 4px 10px; border-radius: 10px; min-width: 56px; }
+    #bottom-nav a.active { color: var(--c-ember); }
+    #view .grid-cols-2, #view .grid-cols-3, #view .grid-cols-4,
+    #view .grid-cols-\[1fr_360px\], #view .grid-cols-\[1fr_340px\], #view .grid-cols-\[1fr_320px\],
+    #view .grid-cols-\[1fr_280px\], #view .grid-cols-\[1\.3fr_1fr\], #view .grid-cols-\[1\.5fr_1fr\],
+    #view .grid-cols-\[340px_1fr\], #view .grid-cols-\[300px_1fr\], #view .grid-cols-\[1fr_400px\],
+    #view .rgrid { grid-template-columns: 1fr !important; }
+    #view .grid-cols-8 { grid-template-columns: repeat(4, 1fr) !important; }
+    #view .text-3xl { font-size: 1.55rem; }
+    .fixed.bottom-6.left-64 { left: 0 !important; bottom: 88px; }
+    #rest-sheet { left: 0 !important; }
+    #week-tabs { justify-content: flex-start !important; }
+  }
+</style>
+</head>
+<body class="font-sans overflow-x-hidden">
+<div id="forge-line"></div>
+
+<!-- SIGN-IN GATE -->
+<div id="gate" class="fixed inset-0 z-50 grid grid-cols-2" style="background:var(--c-furnace)">
+  <div id="gate-photo" class="relative flex flex-col justify-between p-14" style="background-image:url('assets/post-C9U3l8gOpmm.jpg')">
+    <img id="g1" src="assets/logo.png" alt="CaymanLikeTheIsland" class="v-stagger relative z-10 w-56 brand-logo" style="filter:none"/>
+    <div class="relative z-10">
+      <h1 id="g2" class="v-stagger text-4xl font-semibold tracking-tight leading-[1.15] mb-5 text-[#f4f2ee]">Spiritual strength.<br/>Mental fortitude.<br/>Physical fitness.</h1>
+      <p id="g3" class="v-stagger text-sm max-w-md leading-relaxed text-[#c9c6c0] italic">"Do not conform to the pattern of this world, but be transformed by the renewing of your mind."<span class="not-italic font-mono text-xs ml-2 text-[#c99b4a]">ROMANS 12:2</span></p>
+    </div>
+  </div>
+  <div class="flex items-center justify-center border-l border-whisper relative">
+    <button id="gate-theme" class="absolute top-6 right-6 w-10 h-10 rounded-lg border border-whisper flex items-center justify-center text-ash hover:text-bone" title="Toggle theme">
+      <span class="material-symbols-outlined theme-ic">light_mode</span>
+    </button>
+    <div id="g4" class="v-stagger w-96 bg-iron border border-whisper rounded-xl p-8">
+      <p class="font-mono text-[10px] tracking-[0.25em] text-ash mb-2">4TH MAN ENTERPRISES</p>
+      <h2 class="text-lg font-semibold mb-6">Sign in</h2>
+      <label class="block text-xs text-ash mb-1.5" for="em">Email</label>
+      <input id="em" type="email" value="marcus.t@example.com" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2.5 text-sm mb-4 focus:border-ember focus:ring-0 text-bone"/>
+      <label class="block text-xs text-ash mb-1.5" for="pw">Password</label>
+      <input id="pw" type="password" value="••••••••••" class="w-full bg-forged border border-whisper rounded-lg px-4 py-2.5 text-sm mb-6 focus:border-ember focus:ring-0 text-bone"/>
+      <button id="enter-btn" class="press w-full bg-ember rounded-lg py-3 text-sm font-semibold mb-3" style="color:var(--c-furnace)">Sign in</button>
+      <button class="press w-full border border-whisper rounded-lg py-3 text-sm text-ash hover:text-bone">Create account</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="shell" class="hidden">
+  <div class="flex min-h-screen">
+    <aside class="w-64 shrink-0 border-r border-whisper bg-iron flex flex-col fixed inset-y-0 overflow-y-auto" id="sidebar">
+      <div class="px-6 pt-6 pb-8">
+        <img src="assets/logo.png" alt="CaymanLikeTheIsland" class="brand-logo w-40 mb-1.5"/>
+        <p class="font-mono text-[10px] tracking-widest text-ash">4TH MAN PLATFORM · DEMO</p>
+      </div>
+      <nav class="flex-1 px-3 space-y-6 relative" id="nav">
+        <div id="nav-marker"></div>
+        <div>
+          <p class="px-3 font-mono text-[10px] tracking-widest text-ash mb-2">TRAIN</p>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/today"><span class="material-symbols-outlined">bolt</span>Today</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/programs"><span class="material-symbols-outlined">fitness_center</span>Programs</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/workout"><span class="material-symbols-outlined">timer</span>Workout</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/progress"><span class="material-symbols-outlined">monitoring</span>Progress</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/photos"><span class="material-symbols-outlined">photo_library</span>Photos</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/review"><span class="material-symbols-outlined">rate_review</span>Weekly Review</a>
+        </div>
+        <div>
+          <p class="px-3 font-mono text-[10px] tracking-widest text-ash mb-2">ECOSYSTEM · <span class="text-ember">PHASE 2</span></p>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/community"><span class="material-symbols-outlined">diversity_3</span>Community</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/messages"><span class="material-symbols-outlined">chat_bubble</span>Messages</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/nutrition"><span class="material-symbols-outlined">restaurant</span>Nutrition</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/recipes"><span class="material-symbols-outlined">skillet</span>Recipes</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/faith"><span class="material-symbols-outlined">menu_book</span>Faith &amp; Mind</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/blood"><span class="material-symbols-outlined">labs</span>Blood Panel</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/partners"><span class="material-symbols-outlined">handshake</span>Partners</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/gear"><span class="material-symbols-outlined">apparel</span>Gear</a>
+        </div>
+        <div>
+          <p class="px-3 font-mono text-[10px] tracking-widest text-ash mb-2">COACH</p>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/coach"><span class="material-symbols-outlined">grid_view</span>Dashboard</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/client"><span class="material-symbols-outlined">person</span>Client Detail</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/builder"><span class="material-symbols-outlined">design_services</span>Program Builder</a>
+          <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/billing"><span class="material-symbols-outlined">credit_card</span>Billing</a>
+        </div>
+      </nav>
+      <div class="p-3 border-t border-whisper">
+        <a class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone" href="#/account"><span class="material-symbols-outlined">card_membership</span>Subscription</a>
+        <button id="signout" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-ash hover:text-bone"><span class="material-symbols-outlined">logout</span>Sign out</button>
+      </div>
+    </aside>
+
+    <div class="flex-1 ml-64">
+      <header class="sticky top-0 z-40 h-16 border-b border-whisper flex items-center justify-between px-10"
+              style="background:var(--c-glass);backdrop-filter:blur(12px)">
+        <div class="flex items-center gap-3">
+          <h1 id="view-title" class="text-sm font-medium"></h1>
+          <span id="phase-tag" class="hidden font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-2 py-0.5">PHASE 2 PREVIEW</span>
+        </div>
+        <div class="flex items-center gap-5">
+          <button id="theme-toggle" class="w-9 h-9 rounded-lg border border-whisper flex items-center justify-center text-ash hover:text-bone" title="Toggle light / dark">
+            <span class="material-symbols-outlined theme-ic" style="font-size:18px">light_mode</span>
+          </button>
+          <div class="flex items-center gap-2" title="Current streak">
+            <span class="material-symbols-outlined text-ember" style="font-size:16px">local_fire_department</span>
+            <span class="font-mono text-sm" id="streak-count">23</span>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-forged border border-whisper flex items-center justify-center text-[11px] font-mono">MT</div>
+        </div>
+      </header>
+      <main id="view" class="px-10 py-8 max-w-[1100px] mx-auto"></main>
+    </div>
+  </div>
+  <nav id="bottom-nav" aria-label="Primary">
+    <a class="nav-item" href="#/today"><span class="material-symbols-outlined">bolt</span>Today</a>
+    <a class="nav-item" href="#/programs"><span class="material-symbols-outlined">fitness_center</span>Programs</a>
+    <a class="nav-item" href="#/recipes"><span class="material-symbols-outlined">skillet</span>Meals</a>
+    <a class="nav-item" href="#/progress"><span class="material-symbols-outlined">monitoring</span>Progress</a>
+    <a class="nav-item" href="#/coach"><span class="material-symbols-outlined">grid_view</span>Coach</a>
+  </nav>
+</div>
+
+<script src="views.js?v=9"></script>
+<script src="app.js?v=9"></script>
+</body></html>

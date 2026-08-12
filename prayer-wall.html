@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Community &amp; Prayer Wall (Web) — Phase 2</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#1b1c1a",
+                      "surface-dim": "#131412",
+                      "on-surface": "#e4e2de",
+                      "on-secondary-fixed-variant": "#474649",
+                      "on-error": "#690005",
+                      "secondary-container": "#474649",
+                      "secondary-fixed": "#e4e2e4",
+                      "inverse-surface": "#e4e2de",
+                      "outline": "#9b8f7e",
+                      "tertiary-container": "#a4a2a6",
+                      "error": "#ffb4ab",
+                      "on-primary-fixed": "#271900",
+                      "surface-tint": "#f0bf6a",
+                      "on-secondary": "#303032",
+                      "tertiary": "#c8c6c9",
+                      "on-tertiary-fixed-variant": "#47464a",
+                      "primary-container": "#c99b4a",
+                      "surface-variant": "#343532",
+                      "on-tertiary-container": "#39393c",
+                      "surface-container-high": "#2a2a28",
+                      "background": "#131412",
+                      "on-primary-container": "#4d3400",
+                      "surface-container-lowest": "#0e0e0c",
+                      "on-tertiary": "#303033",
+                      "secondary": "#c8c6c8",
+                      "surface-container-highest": "#343532",
+                      "secondary-fixed-dim": "#c8c6c8",
+                      "surface": "#131412",
+                      "outline-variant": "#4f4538",
+                      "surface-bright": "#393937",
+                      "on-secondary-fixed": "#1b1b1d",
+                      "tertiary-fixed": "#e4e1e5",
+                      "primary-fixed": "#ffdeab",
+                      "on-secondary-container": "#b7b4b7",
+                      "on-primary": "#422c00",
+                      "on-error-container": "#ffdad6",
+                      "on-background": "#e4e2de",
+                      "inverse-on-surface": "#30312e",
+                      "primary-fixed-dim": "#f0bf6a",
+                      "inverse-primary": "#7d5807",
+                      "on-tertiary-fixed": "#1b1b1e",
+                      "tertiary-fixed-dim": "#c8c6c9",
+                      "primary": "#f0bf6a",
+                      "on-primary-fixed-variant": "#5f4100",
+                      "on-surface-variant": "#d2c4b2",
+                      "error-container": "#93000a",
+                      "surface-container": "#1f201e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "margin-mobile": "20px",
+                      "base": "8px",
+                      "xl": "64px",
+                      "lg": "40px",
+                      "gutter": "16px",
+                      "sm": "12px",
+                      "md": "24px",
+                      "margin-desktop": "48px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Geist"
+                      ],
+                      "headline-md": [
+                              "Geist"
+                      ],
+                      "headline-lg": [
+                              "Geist"
+                      ],
+                      "data-md": [
+                              "Geist Mono"
+                      ],
+                      "body-md": [
+                              "Geist"
+                      ],
+                      "data-lg": [
+                              "Geist Mono"
+                      ],
+                      "body-lg": [
+                              "Geist"
+                      ],
+                      "scripture": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "data-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "scripture": [
+                              "13px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 hidden md:block">
+<div class="flex justify-between items-center px-margin-desktop h-20 w-full max-w-screen-2xl mx-auto">
+<div class="font-display-lg text-display-lg font-bold text-primary tracking-tighter">
+                IRON &amp; EMBER
+            </div>
+<nav class="flex gap-lg h-full items-center font-body-md text-body-md uppercase tracking-widest">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center h-full hover:bg-surface-variant/50 px-4 active:scale-95" href="#">Today</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center h-full hover:bg-surface-variant/50 px-4 active:scale-95" href="#">Programs</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center h-full hover:bg-surface-variant/50 px-4 active:scale-95" href="#">Progress</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors flex items-center h-full hover:bg-surface-variant/50 px-4 active:scale-95" href="#">Photos</a>
+<a class="text-primary font-bold border-b-2 border-primary flex items-center h-full px-4 pt-1 active:scale-95" href="#">Clients</a>
+</nav>
+<div class="flex items-center gap-md">
+<button class="bg-primary text-on-primary font-body-md uppercase px-md py-sm font-bold active:scale-95 transition-transform">
+                    LOG WORKOUT
+                </button>
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden cursor-pointer hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined text-on-surface">person</span>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-xl px-margin-mobile md:px-margin-desktop max-w-screen-2xl mx-auto">
+<!-- Header -->
+<div class="mb-xl">
+<div class="flex items-center gap-md mb-sm">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Community &amp; Prayer Wall</h1>
+<span class="font-data-md text-data-md text-primary border border-primary px-sm py-xs rounded uppercase tracking-widest text-xs">PHASE 2 PREVIEW</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Stand firm in the faith, be courageous, be strong. Share your journey and support your brothers.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-xl">
+<!-- Left Column: Community Feed -->
+<div class="lg:col-span-8 flex flex-col gap-lg">
+<!-- Compose Box -->
+<div class="bg-surface-container-low p-md rounded-lg border border-outline-variant/30 flex items-start gap-md">
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center font-data-md text-on-surface flex-shrink-0">
+                        ME
+                    </div>
+<div class="flex-grow">
+<textarea class="w-full bg-transparent border-b border-outline-variant/50 text-on-surface font-body-md placeholder-on-surface-variant focus:outline-none focus:border-primary resize-none py-sm" placeholder="Share your progress or a word of encouragement..." rows="1"></textarea>
+<div class="flex justify-end mt-sm">
+<button class="bg-primary text-on-primary font-body-md px-md py-sm font-bold uppercase active:scale-95 transition-transform hover:bg-primary-fixed">POST</button>
+</div>
+</div>
+</div>
+<!-- Pinned Post: Coach -->
+<div class="bg-surface-container-low p-md rounded-lg border border-outline-variant/30 flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-data-md">
+                                CC
+                            </div>
+<div>
+<div class="flex items-center gap-xs">
+<span class="font-body-md font-bold text-on-surface">Coach Cayman</span>
+<span class="font-data-md text-xs text-primary bg-primary/10 px-xs rounded">COACH</span>
+</div>
+<span class="font-data-md text-xs text-on-surface-variant">Pinned • 2h ago</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">push_pin</span>
+</div>
+<p class="font-body-md text-on-surface">Discipline is not about motivation. It's about taking action when motivation is entirely absent. Keep showing up. God honors the work. Remember to log your macros this week—no excuses.</p>
+<div class="flex gap-lg border-t border-outline-variant/20 pt-sm mt-sm">
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">folded_hands</span>
+<span class="font-data-md text-data-md">24</span>
+<span class="font-body-md text-sm uppercase tracking-wider ml-1">Amen</span>
+</button>
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-sm">chat_bubble</span>
+<span class="font-data-md text-data-md">5</span>
+</button>
+</div>
+</div>
+<!-- Standard Post -->
+<div class="bg-surface-container-low p-md rounded-lg border border-outline-variant/30 flex flex-col gap-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface flex items-center justify-center font-data-md">
+                            MT
+                        </div>
+<div>
+<span class="font-body-md font-bold text-on-surface block">Marcus T.</span>
+<span class="font-data-md text-xs text-on-surface-variant">4h ago</span>
+</div>
+</div>
+<p class="font-body-md text-on-surface">Hit a new PR on deadlifts today—315 lbs. Felt heavy but smooth. More importantly, the solitude of the early morning session brought a lot of clarity. Philippians 4:13 holding true.</p>
+<div class="flex gap-lg border-t border-outline-variant/20 pt-sm mt-sm">
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">folded_hands</span>
+<span class="font-data-md text-data-md">12</span>
+<span class="font-body-md text-sm uppercase tracking-wider ml-1">Amen</span>
+</button>
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-sm">chat_bubble</span>
+<span class="font-data-md text-data-md">2</span>
+</button>
+</div>
+</div>
+<!-- Standard Post -->
+<div class="bg-surface-container-low p-md rounded-lg border border-outline-variant/30 flex flex-col gap-md">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface flex items-center justify-center font-data-md">
+                            JD
+                        </div>
+<div>
+<span class="font-body-md font-bold text-on-surface block">James D.</span>
+<span class="font-data-md text-xs text-on-surface-variant">Yesterday</span>
+</div>
+</div>
+<p class="font-body-md text-on-surface">Struggling with consistency this week due to work travel. Managed to get a hotel room workout in, but it wasn't the same. Need to stay focused.</p>
+<div class="flex gap-lg border-t border-outline-variant/20 pt-sm mt-sm">
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">folded_hands</span>
+<span class="font-data-md text-data-md">8</span>
+<span class="font-body-md text-sm uppercase tracking-wider ml-1">Amen</span>
+</button>
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-sm">chat_bubble</span>
+<span class="font-data-md text-data-md">4</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Column: Prayer Wall -->
+<div class="lg:col-span-4 flex flex-col gap-lg">
+<div class="flex items-center justify-between border-b border-outline-variant/30 pb-sm">
+<h2 class="font-headline-md text-headline-md text-on-surface">Prayer Wall</h2>
+<span class="material-symbols-outlined text-on-surface-variant">candle</span>
+</div>
+<!-- Compose Request -->
+<button class="w-full border border-outline-variant/50 border-dashed rounded-lg p-md text-on-surface-variant font-body-md flex items-center justify-center gap-sm hover:text-on-surface hover:border-outline-variant transition-colors">
+<span class="material-symbols-outlined">add</span>
+                    SHARE A REQUEST
+                </button>
+<div class="flex flex-col gap-md">
+<!-- Prayer Card -->
+<div class="bg-surface-container-low p-md rounded-lg border-l-4 border-l-primary flex flex-col gap-sm relative">
+<span class="font-body-md font-bold text-on-surface text-sm">David</span>
+<p class="font-body-md text-on-surface text-sm">Prayers for my father's health. He is undergoing surgery tomorrow morning. Asking for steady hands for the surgeons and peace for our family.</p>
+<div class="flex items-center justify-between mt-sm">
+<button class="border border-outline-variant/50 text-on-surface font-body-md text-sm px-sm py-xs uppercase tracking-wider hover:bg-surface-variant transition-colors">PRAY FOR THIS</button>
+<span class="font-data-md text-data-md text-primary">12 praying</span>
+</div>
+</div>
+<!-- Prayer Card -->
+<div class="bg-surface-container-low p-md rounded-lg border-l-4 border-l-surface-variant flex flex-col gap-sm relative">
+<span class="font-body-md font-bold text-on-surface text-sm">Michael</span>
+<p class="font-body-md text-on-surface text-sm">Facing a major career decision this week. Need discernment to follow God's will rather than my own ambition.</p>
+<div class="flex items-center justify-between mt-sm">
+<button class="border border-outline-variant/50 text-on-surface font-body-md text-sm px-sm py-xs uppercase tracking-wider hover:bg-surface-variant transition-colors">PRAY FOR THIS</button>
+<span class="font-data-md text-data-md text-on-surface-variant">7 praying</span>
+</div>
+</div>
+<!-- Prayer Card -->
+<div class="bg-surface-container-low p-md rounded-lg border-l-4 border-l-surface-variant flex flex-col gap-sm relative">
+<span class="font-body-md font-bold text-on-surface text-sm">Anonymous</span>
+<p class="font-body-md text-on-surface text-sm">Battling old temptations. Pray for strength and the discipline to walk away.</p>
+<div class="flex items-center justify-between mt-sm">
+<button class="border border-primary text-primary font-body-md text-sm px-sm py-xs uppercase tracking-wider hover:bg-primary/10 transition-colors">PRAYING</button>
+<span class="font-data-md text-data-md text-primary">34 praying</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script src="nav-wire.js"></script></body></html>

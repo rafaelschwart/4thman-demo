@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>4TH MAN — Gear</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{furnace:"#0c0c0e",iron:"#161618",forged:"#232326",bone:"#f4f2ee",ash:"#8e8e93",ember:"#c99b4a"},fontFamily:{sans:["Geist","sans-serif"],mono:["Geist Mono","monospace"]},borderColor:{whisper:"rgba(244,242,238,0.08)"}}}}
+</script>
+<style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300;font-size:20px}</style>
+</head>
+<body class="bg-furnace text-bone font-sans">
+<header class="sticky top-0 z-40 border-b border-whisper" style="background:rgba(12,12,14,.8);backdrop-filter:blur(12px)">
+  <div class="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
+    <span class="font-semibold tracking-tight">4TH MAN</span>
+    <nav class="flex gap-8 text-sm">
+      <a class="text-ash hover:text-bone" href="today.html">Today</a>
+      <a class="text-ash hover:text-bone" href="programs.html">Programs</a>
+      <a class="text-ash hover:text-bone" href="progress.html">Progress</a>
+      <a class="text-ember" href="store.html">Gear</a>
+      <a class="text-ash hover:text-bone" href="subscription.html">Account</a>
+    </nav>
+    <div class="flex items-center gap-5">
+      <div class="relative">
+        <span class="material-symbols-outlined text-ash">shopping_bag</span>
+        <span class="absolute -top-1.5 -right-2 font-mono text-[10px] text-ember">2</span>
+      </div>
+      <div class="w-8 h-8 rounded-full bg-forged flex items-center justify-center text-xs font-mono">MT</div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-8 py-10">
+  <div class="flex items-center gap-4 mb-2">
+    <h1 class="text-2xl font-semibold tracking-tight">4th Man Gear</h1>
+    <span class="font-mono text-[10px] tracking-widest text-ember border border-ember/40 rounded px-2 py-1">PHASE 2 PREVIEW</span>
+  </div>
+  <p class="text-ash text-sm mb-10">Wear the standard.</p>
+
+  <section class="bg-iron border border-whisper rounded-xl p-8 mb-10 grid grid-cols-[1fr_280px] items-center gap-8">
+    <div>
+      <p class="text-xs font-mono tracking-widest text-ash mb-2">FOUNDATION COLLECTION</p>
+      <h2 class="text-xl font-semibold tracking-tight mb-2">The Fourth Man Hoodie</h2>
+      <p class="text-ash text-sm mb-6 max-w-md leading-relaxed">Heavyweight fleece in furnace black. Embroidered mark, no print. Built for 5 AM parking lots.</p>
+      <div class="flex items-center gap-5">
+        <button class="bg-ember text-furnace rounded-lg px-6 py-3 text-sm font-semibold active:translate-y-px">Shop the drop</button>
+        <span class="font-mono text-lg">$58</span>
+      </div>
+    </div>
+    <div class="h-52 rounded-xl bg-forged flex items-center justify-center">
+      <span class="material-symbols-outlined text-ash" style="font-size:56px">apparel</span>
+    </div>
+  </section>
+
+  <div class="grid grid-cols-3 gap-5">
+    <div class="bg-iron border border-whisper rounded-xl p-5">
+      <div class="h-44 rounded-lg bg-forged mb-4 flex items-center justify-center"><span class="material-symbols-outlined text-ash" style="font-size:40px">apparel</span></div>
+      <div class="flex justify-between items-center mb-3"><p class="text-sm">Standard Tee — Charcoal</p><span class="font-mono text-sm">$32</span></div>
+      <div class="flex gap-1.5 mb-4" id="sizes">
+        <button class="size border border-whisper rounded px-2 py-1 font-mono text-[11px] text-ash">S</button>
+        <button class="size border border-ember text-ember rounded px-2 py-1 font-mono text-[11px]">M</button>
+        <button class="size border border-whisper rounded px-2 py-1 font-mono text-[11px] text-ash">L</button>
+        <button class="size border border-whisper rounded px-2 py-1 font-mono text-[11px] text-ash">XL</button>
+        <button class="size border border-whisper rounded px-2 py-1 font-mono text-[11px] text-ash">XXL</button>
+      </div>
+      <button class="w-full border border-whisper rounded-lg py-2 text-sm hover:bg-forged">Add to cart</button>
+    </div>
+    <div class="bg-iron border border-whisper rounded-xl p-5">
+      <div class="h-44 rounded-lg bg-forged mb-4 flex items-center justify-center"><span class="material-symbols-outlined text-ash" style="font-size:40px">apparel</span></div>
+      <div class="flex justify-between items-center mb-3"><p class="text-sm">Standard Tee — Bone</p><span class="font-mono text-sm">$32</span></div>
+      <p class="font-mono text-[11px] text-ash mb-4">S · M · L · XL · XXL</p>
+      <button class="w-full border border-whisper rounded-lg py-2 text-sm hover:bg-forged">Add to cart</button>
+    </div>
+    <div class="bg-iron border border-whisper rounded-xl p-5">
+      <div class="h-44 rounded-lg bg-forged mb-4 flex items-center justify-center"><span class="material-symbols-outlined text-ash" style="font-size:40px">podcasts</span></div>
+      <div class="flex justify-between items-center mb-3"><p class="text-sm">Field Cap</p><span class="font-mono text-sm">$28</span></div>
+      <p class="font-mono text-[11px] text-ash mb-4">ONE SIZE</p>
+      <button class="w-full border border-whisper rounded-lg py-2 text-sm hover:bg-forged">Add to cart</button>
+    </div>
+    <div class="bg-iron border border-whisper rounded-xl p-5">
+      <div class="h-44 rounded-lg bg-forged mb-4 flex items-center justify-center"><span class="material-symbols-outlined text-ash" style="font-size:40px">dry_cleaning</span></div>
+      <div class="flex justify-between items-center mb-3"><p class="text-sm">Gym Towel</p><span class="font-mono text-sm">$18</span></div>
+      <p class="font-mono text-[11px] text-ash mb-4">COTTON · 40×80</p>
+      <button class="w-full border border-whisper rounded-lg py-2 text-sm hover:bg-forged">Add to cart</button>
+    </div>
+    <div class="bg-iron border border-whisper rounded-xl p-5">
+      <div class="h-44 rounded-lg bg-forged mb-4 flex items-center justify-center"><span class="material-symbols-outlined text-ash" style="font-size:40px">water_bottle</span></div>
+      <div class="flex justify-between items-center mb-3"><p class="text-sm">Shaker Bottle</p><span class="font-mono text-sm">$24</span></div>
+      <p class="font-mono text-[11px] text-ash mb-4">28 OZ · MATTE BLACK</p>
+      <button class="w-full border border-whisper rounded-lg py-2 text-sm hover:bg-forged">Add to cart</button>
+    </div>
+    <div class="bg-iron border border-whisper rounded-xl p-5">
+      <div class="h-44 rounded-lg bg-forged mb-4 flex items-center justify-center"><span class="material-symbols-outlined text-ash" style="font-size:40px">apparel</span></div>
+      <div class="flex justify-between items-center mb-3"><p class="text-sm">The Fourth Man Hoodie</p><span class="font-mono text-sm">$58</span></div>
+      <p class="font-mono text-[11px] text-ash mb-4">S · M · L · XL · XXL</p>
+      <button class="w-full border border-whisper rounded-lg py-2 text-sm hover:bg-forged">Add to cart</button>
+    </div>
+  </div>
+  <p class="text-xs text-ash mt-8 font-mono">CHECKOUT POWERED BY SHOPIFY · EMBEDDED</p>
+</main>
+<script>
+document.querySelectorAll('.size').forEach(function(b){
+  b.addEventListener('click',function(){
+    b.parentElement.querySelectorAll('.size').forEach(function(x){x.className='size border border-whisper rounded px-2 py-1 font-mono text-[11px] text-ash';});
+    b.className='size border border-ember text-ember rounded px-2 py-1 font-mono text-[11px]';
+  });
+});
+</script>
+<script src="nav-wire.js"></script>
+</body></html>
