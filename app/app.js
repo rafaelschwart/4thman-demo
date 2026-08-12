@@ -40,17 +40,46 @@
   if (cb) cb.addEventListener("click", (e) => flash(e.currentTarget, "INVITE-ONLY — ASK YOUR COACH"));
   const bnMore = $("#bn-more"), moreSheet = $("#more-sheet");
   if (bnMore && moreSheet) {
-    const closeMore = () => { moreSheet.classList.add("hidden"); bnMore.setAttribute("aria-expanded", "false"); };
-    bnMore.addEventListener("click", () => {
-      const opening = moreSheet.classList.contains("hidden");
-      moreSheet.classList.toggle("hidden");
-      bnMore.setAttribute("aria-expanded", opening ? "true" : "false");
-      if (opening) anime({ targets: moreSheet, opacity: [0, 1], translateY: [12, 0], duration: D(260), easing: "easeOutQuart" });
-    });
-    moreSheet.addEventListener("click", (e) => { if (e.target.closest("a")) closeMore(); });
+    const msPanel = moreSheet.querySelector(".ms-panel");
+    const msScrim = moreSheet.querySelector(".ms-scrim");
+    const msIcon = bnMore.querySelector(".material-symbols-outlined");
+    let msBusy = false;
+    const openMore = () => {
+      if (msBusy) return;
+      const cur = "#/" + ((location.hash.replace(/^#\//, "").split("/")[0]) || "today");
+      $$(".ms-tiles a", moreSheet).forEach((a) => a.classList.toggle("ms-active", a.getAttribute("href") === cur));
+      moreSheet.classList.remove("hidden");
+      moreSheet.querySelector(".ms-body").scrollTop = 0;
+      bnMore.setAttribute("aria-expanded", "true");
+      if (msIcon) msIcon.textContent = "close";
+      document.body.style.overflow = "hidden";
+      msBusy = true;
+      anime({ targets: msScrim, opacity: [0, 1], duration: D(220), easing: "linear" });
+      anime.timeline({ easing: "easeOutQuart" })
+        .add({ targets: msPanel, translateY: ["104%", "0%"], duration: D(400), complete: () => { msBusy = false; } })
+        .add({ targets: moreSheet.querySelectorAll(".ms-group, .ms-tiles"), opacity: [0, 1], translateY: [10, 0],
+          duration: D(300), delay: anime.stagger(D(35)) }, "-=220");
+    };
+    const closeMore = (instant) => {
+      if (moreSheet.classList.contains("hidden")) return;
+      bnMore.setAttribute("aria-expanded", "false");
+      if (msIcon) msIcon.textContent = "apps";
+      document.body.style.overflow = "";
+      if (instant || reduced) { moreSheet.classList.add("hidden"); msBusy = false; return; }
+      msBusy = true;
+      anime({ targets: msScrim, opacity: 0, duration: D(200), easing: "linear" });
+      anime({ targets: msPanel, translateY: "104%", duration: D(280), easing: "easeInQuad",
+        complete: () => { moreSheet.classList.add("hidden"); msBusy = false; } });
+    };
+    bnMore.addEventListener("click", () => (moreSheet.classList.contains("hidden") ? openMore() : closeMore()));
+    msScrim.addEventListener("click", () => closeMore());
+    const msClose = moreSheet.querySelector(".ms-close");
+    if (msClose) msClose.addEventListener("click", () => closeMore());
+    moreSheet.addEventListener("click", (e) => { if (e.target.closest("a")) closeMore(true); });
     const msOut = moreSheet.querySelector(".more-signout");
-    if (msOut) msOut.addEventListener("click", () => { closeMore(); const so = $("#signout"); if (so) so.click(); });
-    window.addEventListener("hashchange", closeMore);
+    if (msOut) msOut.addEventListener("click", () => { closeMore(true); const so = $("#signout"); if (so) so.click(); });
+    window.addEventListener("hashchange", () => closeMore(true));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMore(); });
   }
   function enterApp() {
     anime({

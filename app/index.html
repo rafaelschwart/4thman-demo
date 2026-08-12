@@ -174,14 +174,38 @@ tailwind.config = {
     #week-tabs { justify-content: flex-start !important; }
   }
 
-  /* ---------- Mobile production layer (agent-audit fixes) ---------- */
-  #more-sheet { position: fixed; left: 0; right: 0; z-index: 59; bottom: calc(58px + env(safe-area-inset-bottom));
-    background: var(--c-glass); backdrop-filter: blur(14px); border-top: 1px solid var(--c-whisper); padding: 14px 12px; }
-  #more-sheet .ms-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-  #more-sheet a, #more-sheet button { display: flex; flex-direction: column; align-items: center; gap: 3px;
-    color: var(--c-ash); font-family: "Geist Mono", monospace; font-size: 10px; letter-spacing: .05em;
-    padding: 9px 4px; border-radius: 10px; min-height: 52px; }
-  #more-sheet a:active, #more-sheet button:active { background: var(--c-forged); }
+  /* ---------- Mobile menu sheet: grouped slide-up map of every section ---------- */
+  #more-sheet { position: fixed; inset: 0; z-index: 59; }
+  #more-sheet.hidden { display: none; }
+  #more-sheet .ms-scrim { position: absolute; inset: 0; background: rgba(10, 10, 12, .55); }
+  html.light #more-sheet .ms-scrim { background: rgba(26, 26, 29, .38); }
+  #more-sheet .ms-panel { position: absolute; left: 0; right: 0;
+    bottom: calc(58px + env(safe-area-inset-bottom));
+    background: var(--c-iron); border-top: 1px solid var(--c-whisper);
+    border-radius: 20px 20px 0 0; max-height: 72dvh;
+    display: flex; flex-direction: column; box-shadow: 0 -18px 48px rgba(0, 0, 0, .35); }
+  #more-sheet .ms-handle { width: 40px; height: 4px; border-radius: 999px;
+    background: var(--c-whisper); margin: 10px auto 0; flex-shrink: 0; }
+  #more-sheet .ms-head { display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 20px 4px; flex-shrink: 0; }
+  #more-sheet .ms-title { font-family: "Geist Mono", monospace; font-size: 10px;
+    letter-spacing: .16em; color: var(--c-ash); }
+  #more-sheet .ms-close { color: var(--c-ash); padding: 10px; margin: -10px; border-radius: 10px; }
+  #more-sheet .ms-body { overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 2px 16px calc(16px + env(safe-area-inset-bottom)); overscroll-behavior: contain; }
+  #more-sheet .ms-group { font-family: "Geist Mono", monospace; font-size: 10px;
+    letter-spacing: .16em; color: var(--c-ash); margin: 16px 4px 8px; }
+  #more-sheet .ms-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  #more-sheet .ms-tiles a, #more-sheet .ms-tiles button { display: flex; align-items: center; gap: 10px;
+    min-height: 50px; padding: 0 12px; border: 1px solid var(--c-whisper); border-radius: 12px;
+    background: var(--c-forged); color: inherit; font-size: 13px; text-align: left;
+    touch-action: manipulation; }
+  #more-sheet .ms-tiles .material-symbols-outlined { font-size: 20px; color: var(--c-ash); flex-shrink: 0; }
+  #more-sheet .ms-tiles a:active, #more-sheet .ms-tiles button:active { background: var(--c-whisper); }
+  #more-sheet .ms-tiles a.ms-active { border-color: rgb(var(--c-ember-rgb) / .5); color: var(--c-ember); }
+  #more-sheet .ms-tiles a.ms-active .material-symbols-outlined { color: var(--c-ember); }
+  #more-sheet .ms-foot { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--c-whisper); }
+  @media (min-width: 1024px) { #more-sheet { display: none; } }
   #bottom-nav a.active { background: transparent; }
 
   @media (max-width: 1023px) {
@@ -368,25 +392,57 @@ tailwind.config = {
     <a class="nav-item" href="#/progress"><span class="material-symbols-outlined" aria-hidden="true">monitoring</span>Progress</a>
     <button class="nav-item" id="bn-more" aria-label="More sections" aria-expanded="false"><span class="material-symbols-outlined" aria-hidden="true">apps</span>More</button>
   </nav>
-  <div id="more-sheet" class="hidden" role="dialog" aria-label="All sections">
-    <div class="ms-grid">
-      <a href="#/overview"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>Overview</a>
-      <a href="#/recipes"><span class="material-symbols-outlined" aria-hidden="true">skillet</span>Meals</a>
-      <a href="#/nutrition"><span class="material-symbols-outlined" aria-hidden="true">restaurant</span>Nutrition</a>
-      <a href="#/community"><span class="material-symbols-outlined" aria-hidden="true">diversity_3</span>Community</a>
-      <a href="#/messages"><span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span>Messages</a>
-      <a href="#/faith"><span class="material-symbols-outlined" aria-hidden="true">menu_book</span>Faith</a>
-      <a href="#/blood"><span class="material-symbols-outlined" aria-hidden="true">labs</span>Blood</a>
-      <a href="#/partners"><span class="material-symbols-outlined" aria-hidden="true">handshake</span>Partners</a>
-      <a href="#/gear"><span class="material-symbols-outlined" aria-hidden="true">apparel</span>Gear</a>
-      <a href="#/coach"><span class="material-symbols-outlined" aria-hidden="true">grid_view</span>Coach</a>
-      <a href="#/account"><span class="material-symbols-outlined" aria-hidden="true">card_membership</span>Plan</a>
-      <button class="more-signout"><span class="material-symbols-outlined" aria-hidden="true">logout</span>Sign out</button>
+  <div id="more-sheet" class="hidden" role="dialog" aria-modal="true" aria-label="All sections">
+    <div class="ms-scrim"></div>
+    <div class="ms-panel">
+      <div class="ms-handle" aria-hidden="true"></div>
+      <div class="ms-head">
+        <p class="ms-title">ALL SECTIONS</p>
+        <button class="ms-close" aria-label="Close menu"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+      </div>
+      <div class="ms-body">
+        <p class="ms-group">START</p>
+        <div class="ms-tiles">
+          <a href="#/walkthrough"><span class="material-symbols-outlined" aria-hidden="true">tour</span>Walk-through</a>
+          <a href="#/overview"><span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>Overview</a>
+        </div>
+        <p class="ms-group">TRAIN</p>
+        <div class="ms-tiles">
+          <a href="#/today"><span class="material-symbols-outlined" aria-hidden="true">bolt</span>Today</a>
+          <a href="#/programs"><span class="material-symbols-outlined" aria-hidden="true">fitness_center</span>Programs</a>
+          <a href="#/workout"><span class="material-symbols-outlined" aria-hidden="true">timer</span>Workout</a>
+          <a href="#/progress"><span class="material-symbols-outlined" aria-hidden="true">monitoring</span>Progress</a>
+          <a href="#/photos"><span class="material-symbols-outlined" aria-hidden="true">photo_library</span>Photos</a>
+          <a href="#/review"><span class="material-symbols-outlined" aria-hidden="true">rate_review</span>Weekly Review</a>
+        </div>
+        <p class="ms-group">ECOSYSTEM · <span class="text-ember">PHASE 2</span></p>
+        <div class="ms-tiles">
+          <a href="#/community"><span class="material-symbols-outlined" aria-hidden="true">diversity_3</span>Community</a>
+          <a href="#/messages"><span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span>Messages</a>
+          <a href="#/nutrition"><span class="material-symbols-outlined" aria-hidden="true">restaurant</span>Nutrition</a>
+          <a href="#/recipes"><span class="material-symbols-outlined" aria-hidden="true">skillet</span>Recipes</a>
+          <a href="#/faith"><span class="material-symbols-outlined" aria-hidden="true">menu_book</span>Faith &amp; Mind</a>
+          <a href="#/blood"><span class="material-symbols-outlined" aria-hidden="true">labs</span>Blood Panel</a>
+          <a href="#/partners"><span class="material-symbols-outlined" aria-hidden="true">handshake</span>Partners</a>
+          <a href="#/gear"><span class="material-symbols-outlined" aria-hidden="true">apparel</span>Gear</a>
+        </div>
+        <p class="ms-group">COACH</p>
+        <div class="ms-tiles">
+          <a href="#/coach"><span class="material-symbols-outlined" aria-hidden="true">grid_view</span>Dashboard</a>
+          <a href="#/client"><span class="material-symbols-outlined" aria-hidden="true">person</span>Client Detail</a>
+          <a href="#/builder"><span class="material-symbols-outlined" aria-hidden="true">design_services</span>Builder</a>
+          <a href="#/billing"><span class="material-symbols-outlined" aria-hidden="true">credit_card</span>Billing</a>
+        </div>
+        <div class="ms-foot ms-tiles">
+          <a href="#/account"><span class="material-symbols-outlined" aria-hidden="true">card_membership</span>Subscription</a>
+          <button class="more-signout"><span class="material-symbols-outlined" aria-hidden="true">logout</span>Sign out</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<script src="exmedia.js?v=22"></script>
-<script src="views.js?v=22"></script>
-<script src="app.js?v=22"></script>
+<script src="exmedia.js?v=23"></script>
+<script src="views.js?v=23"></script>
+<script src="app.js?v=23"></script>
 </body></html>
