@@ -605,9 +605,18 @@ today: { title: "Today", phase2: false, html: () => {
       </div>
     </section>
     <section class="v-stagger">
-      <div class="flex items-baseline justify-between mb-4">
+      <div class="flex items-center justify-between mb-4">
         <p class="font-mono text-xs tracking-widest text-ash">THE DAILY SIX</p>
-        <p class="font-mono text-xs text-ash"><span id="habit-done">3</span>/6</p>
+        <div class="flex items-center gap-2.5">
+          <div class="relative w-9 h-9">
+            <svg viewBox="0 0 36 36" class="-rotate-90 w-9 h-9">
+              <circle cx="18" cy="18" r="15" fill="none" stroke="var(--c-forged)" stroke-width="3.5"/>
+              <circle id="habit-ring" cx="18" cy="18" r="15" fill="none" stroke="var(--c-ember)" stroke-width="3.5"
+                stroke-linecap="round" stroke-dasharray="94.2" stroke-dashoffset="47.1"/>
+            </svg>
+          </div>
+          <p class="font-mono text-xs text-ash"><span id="habit-done">3</span>/6</p>
+        </div>
       </div>
       <div class="grid grid-cols-3 gap-3 mb-5" id="habit-grid">
         ${HABITS.map(([ic,label,done],i)=>`
@@ -981,22 +990,41 @@ workout: {
         <button id="wo-prev" class="press border border-whisper rounded-lg px-5 py-3.5 text-sm hover:bg-forged">Previous</button>
         <button id="wo-next" class="press flex-1 bg-ember text-furnace rounded-lg px-8 py-3.5 text-sm font-semibold">Complete exercise</button>
       </div>
-      <p class="text-xs text-ash mt-4">Finishing the last exercise completes the session and checks the Training habit.</p>
+      <p class="text-xs text-ash mt-4 mb-8">Finishing the last exercise completes the session and checks the Training habit.</p>
+
+      <p class="font-mono text-xs tracking-widest text-ash mb-3">UP NEXT</p>
+      <div id="wo-upnext" class="space-y-2"></div>
     </div>
 
-    <div id="wo-done" class="hidden text-center py-14">
-      <span class="material-symbols-outlined text-ember" style="font-size:56px">task_alt</span>
+    <div id="wo-done" class="hidden text-center py-12">
+      <span class="material-symbols-outlined text-ember inline-block" id="wo-done-ic" style="font-size:56px">task_alt</span>
       <h2 class="text-3xl font-semibold tracking-tight mt-4 mb-2">Session complete</h2>
       <p class="text-ash text-sm mb-2">${d.t} · Week ${p.week || 1}, Day ${di + 1} logged.</p>
       <p class="font-mono text-sm text-ember mb-8">TRAINING HABIT ✓ · STREAK +1</p>
-      <div class="flex items-center justify-center gap-3" id="wo-done-nav"></div>
+      <div class="grid grid-cols-4 gap-3 max-w-lg mx-auto mb-9 rgrid" id="wo-stats">
+        <div class="bg-iron border border-whisper rounded-xl p-4"><p class="font-mono text-2xl" id="ws-ex">0</p><p class="font-mono text-[10px] tracking-widest text-ash mt-1">EXERCISES</p></div>
+        <div class="bg-iron border border-whisper rounded-xl p-4"><p class="font-mono text-2xl" id="ws-sets">0</p><p class="font-mono text-[10px] tracking-widest text-ash mt-1">SETS LOGGED</p></div>
+        <div class="bg-iron border border-whisper rounded-xl p-4"><p class="font-mono text-2xl" id="ws-vol">0</p><p class="font-mono text-[10px] tracking-widest text-ash mt-1">VOLUME LB</p></div>
+        <div class="bg-iron border border-whisper rounded-xl p-4"><p class="font-mono text-2xl"><span id="ws-min">0</span></p><p class="font-mono text-[10px] tracking-widest text-ash mt-1">MINUTES</p></div>
+      </div>
+      <div class="flex items-center justify-center gap-3 flex-wrap" id="wo-done-nav"></div>
     </div>
 
-    <div id="wo-rest" class="hidden fixed bottom-0 left-64 right-0 bg-iron border-t border-whisper p-8 z-50">
-      <div class="max-w-2xl mx-auto flex items-center justify-between">
-        <div><p class="font-mono text-xs tracking-widest text-ash mb-1">REST</p>
-          <p class="font-mono text-5xl" id="wo-rest-time">1:00</p></div>
-        <button id="wo-rest-skip" class="press border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged">Skip rest</button>
+    <div id="wo-rest" class="hidden fixed bottom-0 left-64 right-0 bg-iron border-t border-whisper p-6 z-50">
+      <div class="max-w-2xl mx-auto flex items-center gap-6">
+        <div class="relative w-20 h-20 shrink-0">
+          <svg viewBox="0 0 80 80" class="-rotate-90 w-20 h-20">
+            <circle cx="40" cy="40" r="34" fill="none" stroke="var(--c-forged)" stroke-width="5"/>
+            <circle id="wo-rest-ring" cx="40" cy="40" r="34" fill="none" stroke="var(--c-ember)" stroke-width="5"
+              stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="0"/>
+          </svg>
+          <p class="absolute inset-0 flex items-center justify-center font-mono text-lg" id="wo-rest-time">1:00</p>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="font-mono text-xs tracking-widest text-ash mb-1.5">REST · UP NEXT</p>
+          <div class="flex items-center gap-3" id="wo-rest-next"></div>
+        </div>
+        <button id="wo-rest-skip" class="press border border-whisper rounded-lg px-6 py-3 text-sm hover:bg-forged shrink-0">Skip rest</button>
       </div>
     </div>
   </div>`; },

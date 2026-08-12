@@ -378,11 +378,15 @@
     }
 
     if (key === "today") {
+      const ring0 = $("#habit-ring");
+      if (ring0) anime({ targets: ring0, strokeDashoffset: [94.2, 94.2 * (1 - habitsDone / 6)], duration: D(900), delay: D(300), easing: "easeOutQuart" });
       $$(".habit-tile", view).forEach((t) => t.addEventListener("click", () => {
         const wasDone = t.classList.contains("done");
         t.classList.toggle("done");
         habitsDone += wasDone ? -1 : 1;
         $("#habit-done").textContent = habitsDone;
+        const ring = $("#habit-ring");
+        if (ring) anime({ targets: ring, strokeDashoffset: 94.2 * (1 - habitsDone / 6), duration: D(500), easing: "easeOutQuart" });
         anime({ targets: t, scale: [1, 0.94, 1], duration: D(320), easing: "easeOutQuad" });
         if (!wasDone) pulseStreak();
       }));
@@ -406,8 +410,20 @@
         const sh = $("#wo-rest");
         sh.classList.remove("hidden");
         anime({ targets: sh, translateY: ["100%", "0%"], duration: D(380), easing: "easeOutQuart" });
-        let sec = parseRest(t);
+        const nxt = steps[i];
+        if (nxt) {
+          const nm = exMedia(nxt.e.n, nxt.e.k);
+          $("#wo-rest-next").innerHTML = `
+            <div class="w-12 rounded-lg overflow-hidden bg-forged shrink-0" style="height:34px"><img src="${nm.img}" alt="" class="ig-img"/></div>
+            <p class="text-sm truncate">${nxt.e.n} <span class="font-mono text-xs text-ash ml-1.5">${nxt.e.v}</span></p>`;
+        }
+        const total = parseRest(t);
+        let sec = total;
         $("#wo-rest-time").textContent = t;
+        const RING = 213.6;
+        anime.remove("#wo-rest-ring");
+        $("#wo-rest-ring").style.strokeDashoffset = 0;
+        anime({ targets: "#wo-rest-ring", strokeDashoffset: [0, RING], duration: reduced ? 0 : total * 1000, easing: "linear" });
         clearInterval(restT);
         restT = setInterval(() => {
           sec--;
@@ -447,6 +463,19 @@
         }
         $("#wo-prev").style.visibility = i === 0 ? "hidden" : "visible";
         $("#wo-next").textContent = i === steps.length - 1 ? "Finish session" : "Complete exercise";
+        // Up-next queue (Alive / NTC pattern): the next three movements
+        const up = steps.slice(i + 1, i + 4);
+        $("#wo-upnext").innerHTML = up.length ? up.map((u, k) => {
+          const um = exMedia(u.e.n, u.e.k);
+          return `
+          <div class="wo-up flex items-center gap-3.5 bg-iron border border-whisper rounded-xl px-3 py-2.5 ${k === 0 ? "" : "opacity-60"}">
+            <div class="w-14 rounded-lg overflow-hidden bg-forged shrink-0" style="height:38px"><img src="${um.img}" alt="" class="ig-img" loading="lazy"/></div>
+            <p class="flex-1 text-sm truncate">${u.e.n}</p>
+            <span class="font-mono text-xs text-ash shrink-0">${u.e.v}</span>
+          </div>`;
+        }).join("") : '<p class="text-sm text-ash">Last one — finish strong.</p>';
+        anime({ targets: $$(".wo-up", view), opacity: (el, k) => [0, k === 0 ? 1 : 0.6], translateX: [14, 0],
+          duration: D(360), delay: anime.stagger(D(60)), easing: "easeOutQuart" });
         anime({ targets: ["#wo-block", "#wo-player", "#wo-name", "#wo-cue"], opacity: [0, 1], translateY: [10, 0],
           duration: D(300), delay: anime.stagger(D(40)), easing: "easeOutQuart" });
       };
@@ -468,6 +497,21 @@
         const dn = $("#wo-done");
         dn.classList.remove("hidden");
         anime({ targets: dn, opacity: [0, 1], translateY: [16, 0], duration: D(450), easing: "easeOutQuart" });
+        anime({ targets: "#wo-done-ic", scale: [0, 1.15, 1], rotate: [-30, 0], duration: D(650), easing: "easeOutBack" });
+        // session summary (NTC pattern): counts from the logbook we just wrote
+        const book = FML.day(pid, day);
+        let sets = 0, vol = 0;
+        Object.values(book.entries).forEach((en) => {
+          if (en.sets) { sets += en.sets.length; en.sets.forEach((x) => { vol += (parseInt(x.lb) || 0) * (parseInt(x.reps) || 0); }); }
+        });
+        const mins = PROGRAMS[pid].days[day - 1].min;
+        [["#ws-ex", steps.length], ["#ws-sets", sets], ["#ws-vol", vol], ["#ws-min", mins]].forEach(([sel, val], k) => {
+          const o = { n: 0 };
+          anime({ targets: o, n: val, duration: D(1000), delay: D(250 + k * 120), easing: "easeOutQuint",
+            update: () => { $(sel).textContent = Math.round(o.n).toLocaleString("en-US"); } });
+        });
+        anime({ targets: "#wo-stats > div", opacity: [0, 1], translateY: [14, 0], duration: D(420),
+          delay: anime.stagger(D(90), { start: D(200) }), easing: "easeOutQuart" });
         pulseStreak(true);
       };
       $("#wo-rest-skip").addEventListener("click", closeRestW);
