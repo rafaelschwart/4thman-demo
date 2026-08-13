@@ -176,6 +176,39 @@
     };
     bnMore.addEventListener("click", () => (moreSheet.classList.contains("hidden") ? openMore() : closeMore()));
     msScrim.addEventListener("click", () => closeMore());
+    /* scroll cue: the fold fade disappears once the last group is reached */
+    const msBody = moreSheet.querySelector(".ms-body"), msFade = moreSheet.querySelector(".ms-fade");
+    if (msBody && msFade) {
+      const cue = () => msFade.classList.toggle("gone", msBody.scrollTop + msBody.clientHeight >= msBody.scrollHeight - 12);
+      msBody.addEventListener("scroll", cue, { passive: true });
+      moreSheet.dataset.cue = "1";
+      const obs = new MutationObserver(() => { if (!moreSheet.classList.contains("hidden")) cue(); });
+      obs.observe(moreSheet, { attributes: true, attributeFilter: ["class"] });
+    }
+    /* the handle is honest now: drag the sheet down to dismiss */
+    const msGrab = moreSheet.querySelector(".ms-grab");
+    if (msGrab) {
+      let startY = 0, dy = 0, dragging = false;
+      msGrab.addEventListener("pointerdown", (e) => {
+        if (e.target.closest(".ms-close")) return;
+        dragging = true; startY = e.clientY; dy = 0;
+        msGrab.setPointerCapture(e.pointerId);
+        anime.remove(msPanel);
+      });
+      msGrab.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        dy = Math.max(0, e.clientY - startY);
+        msPanel.style.transform = `translateY(${dy}px)`;
+      });
+      const release = () => {
+        if (!dragging) return;
+        dragging = false;
+        if (dy > 90) { msPanel.style.transform = ""; closeMore(true); }
+        else if (dy > 0) anime({ targets: msPanel, translateY: 0, duration: D(260), easing: "easeOutQuart" });
+      };
+      msGrab.addEventListener("pointerup", release);
+      msGrab.addEventListener("pointercancel", release);
+    }
     const msClose = moreSheet.querySelector(".ms-close");
     if (msClose) msClose.addEventListener("click", () => closeMore());
     moreSheet.addEventListener("click", (e) => { if (e.target.closest("a")) closeMore(true); });

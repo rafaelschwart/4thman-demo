@@ -199,6 +199,15 @@ tailwind.config = {
   #more-sheet .ms-group { font-family: "Geist Mono", monospace; font-size: 10px;
     letter-spacing: .16em; color: var(--c-ash); margin: 16px 4px 8px; }
   #more-sheet .ms-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  /* a lone tile on the last row stretches full width — no hanging half-rows */
+  #more-sheet .ms-tiles > *:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  /* scroll cue: fade at the fold, removed by JS when scrolled to the end */
+  #more-sheet .ms-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 44px;
+    pointer-events: none; border-radius: 0;
+    background: linear-gradient(180deg, transparent, var(--c-iron)); opacity: 1; transition: opacity .25s; }
+  #more-sheet .ms-fade.gone { opacity: 0; }
+  /* the handle is a real control now — draggable to dismiss */
+  #more-sheet .ms-grab { touch-action: none; cursor: grab; padding: 0 0 6px; }
   #more-sheet .ms-tiles a, #more-sheet .ms-tiles button { display: flex; align-items: center; gap: 10px;
     min-height: 50px; padding: 0 12px; border: 1px solid var(--c-whisper); border-radius: 12px;
     background: var(--c-forged); color: inherit; font-size: 13px; text-align: left;
@@ -499,10 +508,12 @@ tailwind.config = {
   <div id="more-sheet" class="hidden" role="dialog" aria-modal="true" aria-label="All sections">
     <div class="ms-scrim"></div>
     <div class="ms-panel">
-      <div class="ms-handle" aria-hidden="true"></div>
-      <div class="ms-head">
-        <p class="ms-title">ALL SECTIONS</p>
-        <button class="ms-close" aria-label="Close menu"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+      <div class="ms-grab">
+        <div class="ms-handle" aria-hidden="true"></div>
+        <div class="ms-head">
+          <p class="ms-title">ALL SECTIONS</p>
+          <button class="ms-close" aria-label="Close menu"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+        </div>
       </div>
       <div class="ms-body">
         <p class="ms-group">START</p>
@@ -543,6 +554,7 @@ tailwind.config = {
           <button class="more-signout"><span class="material-symbols-outlined" aria-hidden="true">logout</span>Sign out</button>
         </div>
       </div>
+      <div class="ms-fade" aria-hidden="true"></div>
     </div>
   </div>
 </div>
